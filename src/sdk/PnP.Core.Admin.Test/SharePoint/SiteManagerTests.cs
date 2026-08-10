@@ -1378,5 +1378,31 @@ namespace PnP.Core.Admin.Test.SharePoint
         }
         #endregion
 
+        [TestMethod]
+        public async Task GetSiteCollectionWithDetails()
+        {
+            TestCommon.Instance.Mocking = false;
+
+            TestCommon.Instance.UseApplicationPermissions = false;
+            try
+            {
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    await context.Web.EnsurePropertiesAsync(
+                        p => p.Title, 
+                        p => p.Description, 
+                        p => p.Language, 
+                        p => p.WebTemplate, 
+                        p => p.WebTemplateConfiguration);
+
+                    var siteCollectionWithDetails = await context.GetSiteCollectionManager().GetSiteCollectionWithDetailsAsync(context.Uri);
+                    Assert.IsNotNull(siteCollectionWithDetails);
+                }
+            }
+            finally
+            {
+                TestCommon.Instance.UseApplicationPermissions = false;
+            }
+        }
     }
 }

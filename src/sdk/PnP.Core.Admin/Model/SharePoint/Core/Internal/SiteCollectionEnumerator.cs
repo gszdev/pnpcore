@@ -89,35 +89,36 @@ namespace PnP.Core.Admin.Model.SharePoint
 
         private async static Task LoadSitesViaTenantAdminHiddenListAsync(PnPContext context, string viewXml, Action<IEnumerable<IListItem>> processResults, VanityUrlOptions vanityUrlOptions, bool allSites = true, int pageSize = 500)
         {
-            string sitesInformationListAllUrl = "DO_NOT_DELETE_SPLIST_TENANTADMIN_ALL_SITES_AGGREGA";
-            string sitesInformationListUrl = "DO_NOT_DELETE_SPLIST_TENANTADMIN_AGGREGATED_SITECO";
-
             using (var tenantAdminContext = await context.GetSharePointAdmin().GetTenantAdminCenterContextAsync(vanityUrlOptions).ConfigureAwait(false))
             {
-                string listToQuery;
+                PnP.Core.Model.SharePoint.IList listToUse = null;
+
                 if (allSites)
                 {
-                    listToQuery = sitesInformationListAllUrl;
+                    const string sitesInformationListAllTitle = "DO_NOT_DELETE_SPLIST_TENANTADMIN_ALL_SITES_AGGREGATED_SITECOLLECTIONS";
+
+                    const string sitesInformationListAllUrlV1 = "DO_NOT_DELETE_SPLIST_TENANTADMIN_ALL_SITES_AGGREGA";
+                    const string sitesInformationListAllUrlV2 = "DO_NOT_DELETE_SPLIST_TENANTADMIN_ALL_SITES_AGGREGATED_SITECOLLECTIONS";
+
+                    listToUse = await GetSiteInformationList(tenantAdminContext, sitesInformationListAllTitle, sitesInformationListAllUrlV1, sitesInformationListAllUrlV2).ConfigureAwait(false);
                 }
                 else
                 {
-                    listToQuery = sitesInformationListUrl;
+                    const string sitesInformationListTitle = "DO_NOT_DELETE_SPLIST_TENANTADMIN_AGGREGATED_SITECOLLECTIONS";
+
+                    const string sitesInformationListUrlV1 = "DO_NOT_DELETE_SPLIST_TENANTADMIN_AGGREGATED_SITECO";
+                    const string sitesInformationListUrlV2 = "DO_NOT_DELETE_SPLIST_TENANTADMIN_AGGREGATED_SITECOLLECTIONS";
+
+                    listToUse = await GetSiteInformationList(tenantAdminContext, sitesInformationListTitle, sitesInformationListUrlV1, sitesInformationListUrlV2).ConfigureAwait(false);
                 }
 
-                var myList = await tenantAdminContext.Web.Lists.GetByServerRelativeUrlAsync(
-                                $"Lists/{listToQuery}",
-                                p => p.Title,
-                                p => p.Fields.QueryProperties(p => p.InternalName,
-                                                              p => p.FieldTypeKind,
-                                                              p => p.TypeAsString,
-                                                              p => p.Title)).ConfigureAwait(false);
-                if (myList != null)
+                if (listToUse != null)
                 {
                     bool paging = true;
                     string nextPage = null;
                     while (paging)
                     {
-                        var output = await myList.LoadListDataAsStreamAsync(new RenderListDataOptions()
+                        var output = await listToUse.LoadListDataAsStreamAsync(new RenderListDataOptions()
                         {
                             ViewXml = viewXml.Replace("%PageSize%", pageSize.ToString()),
                             RenderOptions = RenderListDataOptionsFlags.ListData,
@@ -136,10 +137,96 @@ namespace PnP.Core.Admin.Model.SharePoint
 
                     if (processResults != null)
                     {
-                        processResults.Invoke(myList.Items.AsRequested());
+                        processResults.Invoke(listToUse.Items.AsRequested());
                     }
                 }
             }
+        }
+
+        private static async Task<IList> GetSiteInformationList(PnPContext tenantAdminContext, string sitesInformationListTitle, string sitesInformationListUrlV1, string sitesInformationListUrlV2)
+        {
+            IList listToUse = null;
+
+            var listTitle = sitesInformationListTitle;
+
+            var siteRelativeListUrlV1 = $"{tenantAdminContext.Web.ServerRelativeUrl}Lists/{sitesInformationListUrlV1}";            
+            var siteRelativeListUrlV2 = $"{tenantAdminContext.Web.ServerRelativeUrl}Lists/{sitesInformationListUrlV2}";
+
+            await tenantAdminContext.Web.EnsurePropertiesAsync(x => x.ServerRelativeUrl).ConfigureAwait(false);
+
+            if (listToUse == null
+                && !string.IsNullOrEmpty(listTitle))
+            {
+                try
+                {
+                    listToUse = await tenantAdminContext.Web.Lists.GetByTitleAsync(
+                               listTitle,
+                               p => p.Title,
+                               p => p.Fields.QueryProperties(p => p.InternalName,
+                                                             p => p.FieldTypeKind,
+                                                             p => p.TypeAsString,
+                                                             p => p.Title)).ConfigureAwait(false);
+                }
+                catch (PnP.Core.SharePointRestServiceException spRestEx)
+                {
+                    if (spRestEx.Error is PnP.Core.SharePointRestError spRestError
+                        && (spRestError.HttpResponseCode == 404) // not found
+                        )
+                    {
+                        ;
+                    }
+                }
+            }
+
+            if (listToUse == null
+                && !string.IsNullOrEmpty(siteRelativeListUrlV1))
+            {
+                try
+                {
+                    listToUse = await tenantAdminContext.Web.Lists.GetByServerRelativeUrlAsync(
+                               siteRelativeListUrlV1,
+                               p => p.Title,
+                               p => p.Fields.QueryProperties(p => p.InternalName,
+                                                             p => p.FieldTypeKind,
+                                                             p => p.TypeAsString,
+                                                             p => p.Title)).ConfigureAwait(false);
+                }
+                catch (PnP.Core.SharePointRestServiceException spRestEx)
+                {
+                    if (spRestEx.Error is PnP.Core.SharePointRestError spRestError
+                        && (spRestError.HttpResponseCode == 404) // not found
+                        )
+                    {
+                        ;
+                    }
+                }
+            }
+
+            if (listToUse == null 
+                && !string.IsNullOrEmpty(siteRelativeListUrlV2))
+            {
+                try
+                {
+                    listToUse = await tenantAdminContext.Web.Lists.GetByServerRelativeUrlAsync(
+                       siteRelativeListUrlV2,
+                       p => p.Title,
+                       p => p.Fields.QueryProperties(p => p.InternalName,
+                                                     p => p.FieldTypeKind,
+                                                     p => p.TypeAsString,
+                                                     p => p.Title)).ConfigureAwait(false);
+                }
+                catch (PnP.Core.SharePointRestServiceException spRestEx)
+                {
+                    if (spRestEx.Error is PnP.Core.SharePointRestError spRestError
+                        && (spRestError.HttpResponseCode == 404) // not found
+                        )
+                    {
+                        ;
+                    }
+                }
+            }
+
+            return listToUse;
         }
 
         /// <summary>
