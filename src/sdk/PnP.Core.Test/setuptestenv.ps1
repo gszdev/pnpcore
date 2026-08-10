@@ -46,9 +46,9 @@ param (
   [switch]$AppsAlreadyInCatalog = $false
 )
 
-$ErrorActionPreference = 'Stop'
-
 begin {
+  $ErrorActionPreference = 'Stop'
+
   # Resolve credentials
   $credentials = $null
   $UPN = $null
