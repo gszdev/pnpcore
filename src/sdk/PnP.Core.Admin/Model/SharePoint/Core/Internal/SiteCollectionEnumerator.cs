@@ -149,10 +149,10 @@ namespace PnP.Core.Admin.Model.SharePoint
 
             var listTitle = sitesInformationListTitle;
 
-            var siteRelativeListUrlV1 = $"{tenantAdminContext.Web.ServerRelativeUrl}Lists/{sitesInformationListUrlV1}";            
-            var siteRelativeListUrlV2 = $"{tenantAdminContext.Web.ServerRelativeUrl}Lists/{sitesInformationListUrlV2}";
-
             await tenantAdminContext.Web.EnsurePropertiesAsync(x => x.ServerRelativeUrl).ConfigureAwait(false);
+
+            var siteRelativeListUrlV1 = $"{tenantAdminContext.Web.ServerRelativeUrl}Lists/{sitesInformationListUrlV1}";            
+            var siteRelativeListUrlV2 = $"{tenantAdminContext.Web.ServerRelativeUrl}Lists/{sitesInformationListUrlV2}";            
 
             if (listToUse == null
                 && !string.IsNullOrEmpty(listTitle))
