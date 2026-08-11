@@ -147,82 +147,75 @@ namespace PnP.Core.Admin.Model.SharePoint
         {
             IList listToUse = null;
 
-            var listTitle = sitesInformationListTitle;
-
-            await tenantAdminContext.Web.EnsurePropertiesAsync(x => x.ServerRelativeUrl).ConfigureAwait(false);
-
-            var siteRelativeListUrlV1 = $"{tenantAdminContext.Web.ServerRelativeUrl}Lists/{sitesInformationListUrlV1}";            
-            var siteRelativeListUrlV2 = $"{tenantAdminContext.Web.ServerRelativeUrl}Lists/{sitesInformationListUrlV2}";            
-
             if (listToUse == null
-                && !string.IsNullOrEmpty(listTitle))
+                && !string.IsNullOrEmpty(sitesInformationListTitle))
             {
-                try
-                {
-                    listToUse = await tenantAdminContext.Web.Lists.GetByTitleAsync(
-                               listTitle,
-                               p => p.Title,
-                               p => p.Fields.QueryProperties(p => p.InternalName,
-                                                             p => p.FieldTypeKind,
-                                                             p => p.TypeAsString,
-                                                             p => p.Title)).ConfigureAwait(false);
-                }
-                catch (PnP.Core.SharePointRestServiceException spRestEx)
-                {
-                    if (spRestEx.Error is PnP.Core.SharePointRestError spRestError
-                        && (spRestError.HttpResponseCode == 404) // not found
-                        )
-                    {
-                        ;
-                    }
-                }
+                listToUse = await TryGetSiteInformationListByTitle(tenantAdminContext, listToUse, sitesInformationListTitle).ConfigureAwait(false);
             }
 
             if (listToUse == null
-                && !string.IsNullOrEmpty(siteRelativeListUrlV1))
+                && !string.IsNullOrEmpty(sitesInformationListUrlV1))
             {
-                try
-                {
-                    listToUse = await tenantAdminContext.Web.Lists.GetByServerRelativeUrlAsync(
-                               siteRelativeListUrlV1,
-                               p => p.Title,
-                               p => p.Fields.QueryProperties(p => p.InternalName,
-                                                             p => p.FieldTypeKind,
-                                                             p => p.TypeAsString,
-                                                             p => p.Title)).ConfigureAwait(false);
-                }
-                catch (PnP.Core.SharePointRestServiceException spRestEx)
-                {
-                    if (spRestEx.Error is PnP.Core.SharePointRestError spRestError
-                        && (spRestError.HttpResponseCode == 404) // not found
-                        )
-                    {
-                        ;
-                    }
-                }
+                listToUse = await TryGetSiteInformationListByUrl(tenantAdminContext, listToUse, sitesInformationListUrlV1).ConfigureAwait(false);
             }
 
             if (listToUse == null 
-                && !string.IsNullOrEmpty(siteRelativeListUrlV2))
+                && !string.IsNullOrEmpty(sitesInformationListUrlV2))
             {
-                try
+                listToUse = await TryGetSiteInformationListByUrl(tenantAdminContext, listToUse, sitesInformationListUrlV2).ConfigureAwait(false);
+            }
+
+            return listToUse;
+        }
+
+        private static async Task<IList> TryGetSiteInformationListByUrl(PnPContext tenantAdminContext, IList listToUse, string listUrl)
+        {
+            try
+            {
+                await tenantAdminContext.Web.EnsurePropertiesAsync(x => x.ServerRelativeUrl).ConfigureAwait(false);
+
+                var siteRelativeListUrl = $"{tenantAdminContext.Web.ServerRelativeUrl}Lists/{listUrl}";
+
+                listToUse = await tenantAdminContext.Web.Lists.GetByServerRelativeUrlAsync(
+                           siteRelativeListUrl,
+                           p => p.Title,
+                           p => p.Fields.QueryProperties(p => p.InternalName,
+                                                         p => p.FieldTypeKind,
+                                                         p => p.TypeAsString,
+                                                         p => p.Title)).ConfigureAwait(false);
+            }
+            catch (PnP.Core.SharePointRestServiceException spRestEx)
+            {
+                if (spRestEx.Error is PnP.Core.SharePointRestError spRestError
+                    && (spRestError.HttpResponseCode == 404) // not found
+                    )
                 {
-                    listToUse = await tenantAdminContext.Web.Lists.GetByServerRelativeUrlAsync(
-                       siteRelativeListUrlV2,
-                       p => p.Title,
-                       p => p.Fields.QueryProperties(p => p.InternalName,
-                                                     p => p.FieldTypeKind,
-                                                     p => p.TypeAsString,
-                                                     p => p.Title)).ConfigureAwait(false);
+                    ;
                 }
-                catch (PnP.Core.SharePointRestServiceException spRestEx)
+            }
+
+            return listToUse;
+        }
+
+        private static async Task<IList> TryGetSiteInformationListByTitle(PnPContext tenantAdminContext, IList listToUse, string listTitle)
+        {
+            try
+            {
+                listToUse = await tenantAdminContext.Web.Lists.GetByTitleAsync(
+                           listTitle,
+                           p => p.Title,
+                           p => p.Fields.QueryProperties(p => p.InternalName,
+                                                         p => p.FieldTypeKind,
+                                                         p => p.TypeAsString,
+                                                         p => p.Title)).ConfigureAwait(false);
+            }
+            catch (PnP.Core.SharePointRestServiceException spRestEx)
+            {
+                if (spRestEx.Error is PnP.Core.SharePointRestError spRestError
+                    && (spRestError.HttpResponseCode == 404) // not found
+                    )
                 {
-                    if (spRestEx.Error is PnP.Core.SharePointRestError spRestError
-                        && (spRestError.HttpResponseCode == 404) // not found
-                        )
-                    {
-                        ;
-                    }
+                    ;
                 }
             }
 
