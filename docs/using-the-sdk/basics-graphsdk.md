@@ -7,18 +7,37 @@ While the focus of PnP Core SDK is mainly on SharePoint and Teams features, usin
 In PnP Core SDK a PnPContext is used while in the Microsoft Graph SDK a GraphServiceClient is used. Below sample shows how create a GraphServiceClient for a given PnPContext.
 
 ```csharp
+public class MyAccessTokenProviderAdapterForMsGraphSdk
+    : Microsoft.Kiota.Abstractions.Authentication.IAccessTokenProvider
+  {
+    private readonly PnP.Core.Services.IAuthenticationProvider _pnpCoreAuthenticationProvider;
+    public MyAccessTokenProviderAdapterForMsGraphSdk(PnP.Core.Services.IAuthenticationProvider pnpCoreAuthenticationProvider)
+    {
+      _pnpCoreAuthenticationProvider = pnpCoreAuthenticationProvider;
+      AllowedHostsValidator = new AllowedHostsValidator();
+    }
+
+    public AllowedHostsValidator AllowedHostsValidator { get; }
+
+    public Task<string> GetAuthorizationTokenAsync(Uri uri, Dictionary<string, object>? additionalAuthenticationContext = null, CancellationToken cancellationToken = default)
+    {
+      var result = _pnpCoreAuthenticationProvider.GetAccessTokenAsync(uri);
+      return result;
+    }
+  }
+
 using (var pnpCoreContext = await pnpContextFactory.CreateAsync("SiteToWorkWith"))
 {
     // Use PnP Core SDK (Microsoft Graph / SPO Rest) to load the web title
     var web = pnpCoreContext.Web.Get(p => p.Title);
 
-    // Create a Graph Service client and perform a Graph call using the Microsoft Graph .NET SDK
-    var graphServiceClient = new GraphServiceClient(new DelegateAuthenticationProvider((requestMessage) =>
-    {
-        return pnpCoreContext.AuthenticationProvider.AuthenticateRequestAsync(new Uri("https://graph.microsoft.com"), requestMessage);
-    }));
+    var authenticationProvider = new BaseBearerTokenAuthenticationProvider(new PnpAccessTokenProviderAdapterForMsGraphSdk(context.AuthenticationProvider));
 
-    var me = await graphServiceClient.Me.Request().GetAsync();
+    // Create a Graph Service client and perform a Graph call using the Microsoft Graph .NET SDK
+    using( var graphServiceClient = new GraphServiceClient(authenticationProvider))
+    {
+        var me = await graphServiceClient.Me.Request().GetAsync();
+    }
 }
 ```
 
