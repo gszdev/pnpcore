@@ -70,7 +70,7 @@ namespace PnP.Core.Test.SharePoint
             var followers = context.Social.Following.GetPeopleFollowedBy(testAccountName, p => p.AccountName);
 
             Assert.IsNotNull(followers.Count > 0);
-            Assert.ThrowsException<ClientException>(() => followers[0].PersonalUrl);
+            Assert.ThrowsExactly<ClientException>(() => followers[0].PersonalUrl);
         }
 
         [TestMethod]

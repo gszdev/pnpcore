@@ -81,55 +81,67 @@ namespace PnP.Core.Auth.Test.Providers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
+        // [ExpectedException(typeof(ConfigurationErrorsException))]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task TestUsernamePasswordConstructorNoDI_NullUsername()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            var provider = new UsernamePasswordAuthenticationProvider(
+            await Assert.ThrowsExactlyAsync<ConfigurationErrorsException>(async () =>
+            {
+                var provider = new UsernamePasswordAuthenticationProvider(
                 TestGlobals.FakeClientId,
                 AuthGlobals.OrganizationsTenantId,
                 null,
                 "FakePassword".ToSecureString());
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
+        //[ExpectedException(typeof(ConfigurationErrorsException))]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task TestUsernamePasswordConstructorNoDI_NullPassword()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            var provider = new UsernamePasswordAuthenticationProvider(
+            await Assert.ThrowsExactlyAsync<ConfigurationErrorsException>(async () =>
+            {
+                var provider = new UsernamePasswordAuthenticationProvider(
                 TestGlobals.FakeClientId,
                 AuthGlobals.OrganizationsTenantId,
                 "FakeUsername",
                 null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestUsernamePasswordAuthenticateRequestAsyncNoResource()
         {
-            var provider = new UsernamePasswordAuthenticationProvider(
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = new UsernamePasswordAuthenticationProvider(
                 TestGlobals.FakeClientId,
                 AuthGlobals.OrganizationsTenantId,
                 "FakeUsername",
                 "FakePassword".ToSecureString());
 
-            await provider.AuthenticateRequestAsync(null, null);
+                await provider.AuthenticateRequestAsync(null, null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestUsernamePasswordAuthenticateRequestAsyncNoHttpRequest()
         {
-            var provider = new UsernamePasswordAuthenticationProvider(
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = new UsernamePasswordAuthenticationProvider(
                 TestGlobals.FakeClientId,
                 AuthGlobals.OrganizationsTenantId,
                 "FakeUsername",
                 "FakePassword".ToSecureString());
 
-            await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+                await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+            });
         }
 
         [TestMethod]
@@ -152,46 +164,55 @@ namespace PnP.Core.Auth.Test.Providers
             await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, request);
 
             Assert.IsNotNull(request.Headers.Authorization);
-            Assert.AreEqual(request.Headers.Authorization.Scheme.ToLower(), "bearer");
+            Assert.AreEqual("bearer", request.Headers.Authorization.Scheme.ToLower());
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestUsernamePasswordGetAccessTokenAsyncNullResource()
         {
-            var provider = new UsernamePasswordAuthenticationProvider(
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = new UsernamePasswordAuthenticationProvider(
                 TestGlobals.FakeClientId,
                 AuthGlobals.OrganizationsTenantId,
                 "FakeUsername",
                 "FakePassword".ToSecureString());
 
-            await provider.GetAccessTokenAsync(null);
+                await provider.GetAccessTokenAsync(null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestUsernamePasswordGetAccessTokenAsyncFullNullResource()
         {
-            var provider = new UsernamePasswordAuthenticationProvider(
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = new UsernamePasswordAuthenticationProvider(
                 TestGlobals.FakeClientId,
                 AuthGlobals.OrganizationsTenantId,
                 "FakeUsername",
                 "FakePassword".ToSecureString());
 
-            await provider.GetAccessTokenAsync(null, new string[] { });
+                await provider.GetAccessTokenAsync(null, new string[] { });
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestUsernamePasswordGetAccessTokenAsyncFullNullScopes()
         {
-            var provider = new UsernamePasswordAuthenticationProvider(
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = new UsernamePasswordAuthenticationProvider(
                 TestGlobals.FakeClientId,
                 AuthGlobals.OrganizationsTenantId,
                 "FakeUsername",
                 "FakePassword".ToSecureString());
 
-            await provider.GetAccessTokenAsync(TestGlobals.GraphResource, null);
+                await provider.GetAccessTokenAsync(TestGlobals.GraphResource, null);
+            });
         }
 
         [TestMethod]

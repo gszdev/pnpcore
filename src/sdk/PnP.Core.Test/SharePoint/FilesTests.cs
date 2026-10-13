@@ -4292,36 +4292,39 @@ namespace PnP.Core.Test.SharePoint
             }
         }
 
-        [ExpectedException(typeof(ClientException))]
+        //[ExpectedException(typeof(ClientException))]
         [TestMethod]
         public async Task ConvertFileAsyncExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-
-            IFile testDocument = null;
-            try
+            await Assert.ThrowsExactlyAsync<ClientException>(async () =>
             {
-                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite, 1))
-                {
-                    // Upload image file
-                    string documentName = TestCommon.GetPnPSdkTestAssetName("ConvertImageFileAsyncTest.png");
-                    var parentFolder = await context.Web.Lists.GetByTitle("Documents").RootFolder.GetAsync();
-                    testDocument = await parentFolder.Files.AddAsync(documentName, System.IO.File.OpenRead($".{Path.DirectorySeparatorChar}TestAssets{Path.DirectorySeparatorChar}parker-ms-300.png"), true);
-                    string documentUrl = testDocument.ServerRelativeUrl;
+                //TestCommon.Instance.Mocking = false;
 
-                    IFolder folder = await context.Web.GetFolderByServerRelativeUrlAsync(documentUrl.Replace($"/{documentName}", string.Empty));
-
-                    // Try convert image to PDF...not supported
-                    var jpgContent = await testDocument.ConvertToAsync(new ConvertToOptions { Format = ConvertToFormat.Pdf });
-                }
-            }
-            finally
-            {
-                if (testDocument != null)
+                IFile testDocument = null;
+                try
                 {
-                    await testDocument.DeleteAsync();
+                    using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite, 1))
+                    {
+                        // Upload image file
+                        string documentName = TestCommon.GetPnPSdkTestAssetName("ConvertImageFileAsyncTest.png");
+                        var parentFolder = await context.Web.Lists.GetByTitle("Documents").RootFolder.GetAsync();
+                        testDocument = await parentFolder.Files.AddAsync(documentName, System.IO.File.OpenRead($".{Path.DirectorySeparatorChar}TestAssets{Path.DirectorySeparatorChar}parker-ms-300.png"), true);
+                        string documentUrl = testDocument.ServerRelativeUrl;
+
+                        IFolder folder = await context.Web.GetFolderByServerRelativeUrlAsync(documentUrl.Replace($"/{documentName}", string.Empty));
+
+                        // Try convert image to PDF...not supported
+                        var jpgContent = await testDocument.ConvertToAsync(new ConvertToOptions { Format = ConvertToFormat.Pdf });
+                    }
                 }
-            }
+                finally
+                {
+                    if (testDocument != null)
+                    {
+                        await testDocument.DeleteAsync();
+                    }
+                }
+            });
         }
 
         #endregion

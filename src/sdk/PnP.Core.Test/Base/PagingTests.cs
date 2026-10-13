@@ -177,7 +177,7 @@ namespace PnP.Core.Test.Base
                     try
                     {
                         // Skip is not supported for items of a list
-                        Assert.ThrowsException<InvalidOperationException>(() =>
+                        Assert.ThrowsExactly<InvalidOperationException>(() =>
                         {
                             System.Linq.Queryable.Skip(list.Items, 1).Take(2).ToArray();
                         });
@@ -247,7 +247,7 @@ namespace PnP.Core.Test.Base
                         var list3 = System.Linq.Queryable.Where(context.Web.Lists, p => p.Id == list.Id).FirstOrDefault();
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-                        await Assert.ThrowsExceptionAsync<InvalidOperationException>(async () =>
+                        await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
                         {
                             var queryResult3 = System.Linq.Queryable.Skip(list3.Items, 4).Take(2).ToList();

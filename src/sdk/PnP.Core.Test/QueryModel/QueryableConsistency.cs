@@ -509,7 +509,7 @@ namespace PnP.Core.Test.QueryModel
                 var updatedItem = myList.Items.GetById(listItemId);
 
                 // Check the updated title in the just retrieved item
-                Assert.AreEqual(updatedItem.Title, expectedUpdatedTitle);
+                Assert.AreEqual(expectedUpdatedTitle, updatedItem.Title);
             }
         }
 

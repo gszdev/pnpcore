@@ -98,39 +98,48 @@ namespace PnP.Core.Auth.Test.Providers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
+        //[ExpectedException(typeof(ConfigurationErrorsException))]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task TestX509CertificateConstructorNoDI_NullThumbprint()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            var configuration = TestCommon.GetConfigurationSettings();
-            var storeName = configuration.GetValue<StoreName>($"{TestGlobals.CredentialsConfigurationBasePath}:{x509CertificateConfigurationPath}:X509Certificate:StoreName");
-            var storeLocation = configuration.GetValue<StoreLocation>($"{TestGlobals.CredentialsConfigurationBasePath}:{x509CertificateConfigurationPath}:X509Certificate:StoreLocation");
+            await Assert.ThrowsExactlyAsync<ConfigurationErrorsException>(async () =>
+            {
+                var configuration = TestCommon.GetConfigurationSettings();
+                var storeName = configuration.GetValue<StoreName>($"{TestGlobals.CredentialsConfigurationBasePath}:{x509CertificateConfigurationPath}:X509Certificate:StoreName");
+                var storeLocation = configuration.GetValue<StoreLocation>($"{TestGlobals.CredentialsConfigurationBasePath}:{x509CertificateConfigurationPath}:X509Certificate:StoreLocation");
 
-            var provider = new X509CertificateAuthenticationProvider(
-                TestGlobals.FakeClientId,
-                AuthGlobals.OrganizationsTenantId,
-                storeName,
-                storeLocation,
-                null);
+                var provider = new X509CertificateAuthenticationProvider(
+                    TestGlobals.FakeClientId,
+                    AuthGlobals.OrganizationsTenantId,
+                    storeName,
+                    storeLocation,
+                    null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestX509CertificateAuthenticateRequestAsyncNoResource()
         {
-            var provider = PrepareX509CertificateAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareX509CertificateAuthenticationProvider();
 
-            await provider.AuthenticateRequestAsync(null, null);
+                await provider.AuthenticateRequestAsync(null, null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestX509CertificateAuthenticateRequestAsyncNoHttpRequest()
         {
-            var provider = PrepareX509CertificateAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareX509CertificateAuthenticationProvider();
 
-            await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+                await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+            });
         }
 
         [TestMethod]
@@ -144,34 +153,43 @@ namespace PnP.Core.Auth.Test.Providers
             await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, request);
 
             Assert.IsNotNull(request.Headers.Authorization);
-            Assert.AreEqual(request.Headers.Authorization.Scheme.ToLower(), "bearer");
+            Assert.AreEqual("bearer", request.Headers.Authorization.Scheme.ToLower());
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestX509CertificateGetAccessTokenAsyncNullResource()
         {
-            var provider = PrepareX509CertificateAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareX509CertificateAuthenticationProvider();
 
-            await provider.GetAccessTokenAsync(null);
+                await provider.GetAccessTokenAsync(null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestX509CertificateGetAccessTokenAsyncFullNullResource()
         {
-            var provider = PrepareX509CertificateAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareX509CertificateAuthenticationProvider();
 
-            await provider.GetAccessTokenAsync(null, new string[] { });
+                await provider.GetAccessTokenAsync(null, new string[] { });
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestX509CertificateGetAccessTokenAsyncFullNullScopes()
         {
-            var provider = PrepareX509CertificateAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareX509CertificateAuthenticationProvider();
 
-            await provider.GetAccessTokenAsync(TestGlobals.GraphResource, null);
+                await provider.GetAccessTokenAsync(TestGlobals.GraphResource, null);
+            });
         }
 
         [TestMethod]

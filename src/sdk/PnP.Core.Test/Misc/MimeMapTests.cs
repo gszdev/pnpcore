@@ -38,7 +38,7 @@ namespace PnP.Core.Test.Misc
         [DataRow(null)]
         public void GetMimeMapError(string fileName)
         {
-            Assert.ThrowsException<ArgumentNullException>(() =>
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
                 MimeTypeMap.TryGetMimeType(fileName, out string mimeMap);
             });            

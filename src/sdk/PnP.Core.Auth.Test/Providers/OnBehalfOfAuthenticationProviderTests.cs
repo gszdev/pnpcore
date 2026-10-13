@@ -92,41 +92,47 @@ namespace PnP.Core.Auth.Test.Providers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
+        //[ExpectedException(typeof(ConfigurationErrorsException))]
         public async Task TestOnBehalfOfWithGraphNoUserTokenProvider()
         {
-            if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
-
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSiteOnBehalfOf))
+            await Assert.ThrowsExactlyAsync<ConfigurationErrorsException>(async () =>
             {
-                // Remove any already existing UserTokenProvider
-                var onBehalfTokenProvider = (OnBehalfOfAuthenticationProvider)context.AuthenticationProvider;
-                if (onBehalfTokenProvider.UserTokenProvider != null)
-                {
-                    onBehalfTokenProvider.UserTokenProvider = null;
-                }
+                if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
 
-                await TestCommon.CheckAccessToTargetResource(context);
-            }
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSiteOnBehalfOf))
+                {
+                    // Remove any already existing UserTokenProvider
+                    var onBehalfTokenProvider = (OnBehalfOfAuthenticationProvider)context.AuthenticationProvider;
+                    if (onBehalfTokenProvider.UserTokenProvider != null)
+                    {
+                        onBehalfTokenProvider.UserTokenProvider = null;
+                    }
+
+                    await TestCommon.CheckAccessToTargetResource(context);
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
+        //[ExpectedException(typeof(ConfigurationErrorsException))]
         public async Task TestOnBehalfOfWithSPONoUserTokenProvider()
         {
-            if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
-
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSiteOnBehalfOf))
+            await Assert.ThrowsExactlyAsync<ConfigurationErrorsException>(async () =>
             {
-                // Remove any already existing UserTokenProvider
-                var onBehalfTokenProvider = (OnBehalfOfAuthenticationProvider)context.AuthenticationProvider;
-                if (onBehalfTokenProvider.UserTokenProvider != null)
-                {
-                    onBehalfTokenProvider.UserTokenProvider = null;
-                }
+                if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
 
-                await TestCommon.CheckAccessToTargetResource(context, false);
-            }
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSiteOnBehalfOf))
+                {
+                    // Remove any already existing UserTokenProvider
+                    var onBehalfTokenProvider = (OnBehalfOfAuthenticationProvider)context.AuthenticationProvider;
+                    if (onBehalfTokenProvider.UserTokenProvider != null)
+                    {
+                        onBehalfTokenProvider.UserTokenProvider = null;
+                    }
+
+                    await TestCommon.CheckAccessToTargetResource(context, false);
+                }
+            });
         }
 
         [TestMethod]
@@ -236,77 +242,95 @@ namespace PnP.Core.Auth.Test.Providers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
+        //ExpectedException(typeof(ConfigurationErrorsException))]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task TestOnBehalfOfConstructorNoDIWithCertificate_NullThumbprint()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            var configuration = TestCommon.GetConfigurationSettings();
-            var storeName = configuration.GetValue<StoreName>($"{TestGlobals.CredentialsConfigurationBasePath}:{onBehalfOfConfigurationPath}:OnBehalfOf:StoreName");
-            var storeLocation = configuration.GetValue<StoreLocation>($"{TestGlobals.CredentialsConfigurationBasePath}:{onBehalfOfConfigurationPath}:OnBehalfOf:StoreLocation");
+            await Assert.ThrowsExactlyAsync<ConfigurationErrorsException>(async () =>
+            {
+                var configuration = TestCommon.GetConfigurationSettings();
+                var storeName = configuration.GetValue<StoreName>($"{TestGlobals.CredentialsConfigurationBasePath}:{onBehalfOfConfigurationPath}:OnBehalfOf:StoreName");
+                var storeLocation = configuration.GetValue<StoreLocation>($"{TestGlobals.CredentialsConfigurationBasePath}:{onBehalfOfConfigurationPath}:OnBehalfOf:StoreLocation");
 
-            var provider = new OnBehalfOfAuthenticationProvider(
-                TestGlobals.FakeClientId,
-                AuthGlobals.OrganizationsTenantId,
-                storeName,
-                storeLocation,
-                null,
-                // We get the consumer access token using an InteractiveAuthenticationProvider
-                () => GetUserAccessToken().GetAwaiter().GetResult());
+                var provider = new OnBehalfOfAuthenticationProvider(
+                    TestGlobals.FakeClientId,
+                    AuthGlobals.OrganizationsTenantId,
+                    storeName,
+                    storeLocation,
+                    null,
+                    // We get the consumer access token using an InteractiveAuthenticationProvider
+                    () => GetUserAccessToken().GetAwaiter().GetResult());
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
+        //[ExpectedException(typeof(ConfigurationErrorsException))]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task TestOnBehalfOfConstructorNoDIWithClientSecret_NullClientSecret()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            var configuration = TestCommon.GetConfigurationSettings();
-            var storeName = configuration.GetValue<StoreName>($"{TestGlobals.CredentialsConfigurationBasePath}:{onBehalfOfConfigurationPath}:OnBehalfOf:StoreName");
-            var storeLocation = configuration.GetValue<StoreLocation>($"{TestGlobals.CredentialsConfigurationBasePath}:{onBehalfOfConfigurationPath}:OnBehalfOf:StoreLocation");
+            await Assert.ThrowsExactlyAsync<ConfigurationErrorsException>(async () =>
+            {
+                var configuration = TestCommon.GetConfigurationSettings();
+                var storeName = configuration.GetValue<StoreName>($"{TestGlobals.CredentialsConfigurationBasePath}:{onBehalfOfConfigurationPath}:OnBehalfOf:StoreName");
+                var storeLocation = configuration.GetValue<StoreLocation>($"{TestGlobals.CredentialsConfigurationBasePath}:{onBehalfOfConfigurationPath}:OnBehalfOf:StoreLocation");
 
-            var provider = new OnBehalfOfAuthenticationProvider(
-                TestGlobals.FakeClientId,
-                AuthGlobals.OrganizationsTenantId,
-                clientSecret: null,
-                // We get the consumer access token using an InteractiveAuthenticationProvider
-                () => GetUserAccessToken().GetAwaiter().GetResult());
+                var provider = new OnBehalfOfAuthenticationProvider(
+                    TestGlobals.FakeClientId,
+                    AuthGlobals.OrganizationsTenantId,
+                    clientSecret: null,
+                    // We get the consumer access token using an InteractiveAuthenticationProvider
+                    () => GetUserAccessToken().GetAwaiter().GetResult());
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestOnBehalfOfAuthenticateRequestAsyncNoResourceWithCertificate()
         {
-            var provider = PrepareOnBehalfOfAuthenticationProviderWithCertificate();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareOnBehalfOfAuthenticationProviderWithCertificate();
 
-            await provider.AuthenticateRequestAsync(null, null);
+                await provider.AuthenticateRequestAsync(null, null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestOnBehalfOfAuthenticateRequestAsyncNoResourceWithClientSecret()
         {
-            var provider = PrepareOnBehalfOfAuthenticationProviderWithClientSecret();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareOnBehalfOfAuthenticationProviderWithClientSecret();
 
-            await provider.AuthenticateRequestAsync(null, null);
+                await provider.AuthenticateRequestAsync(null, null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestOnBehalfOfAuthenticateRequestAsyncNoHttpRequestWithCertificate()
         {
-            var provider = PrepareOnBehalfOfAuthenticationProviderWithCertificate();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareOnBehalfOfAuthenticationProviderWithCertificate();
 
-            await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+                await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestOnBehalfOfAuthenticateRequestAsyncNoHttpRequestWithClientSecret()
         {
-            var provider = PrepareOnBehalfOfAuthenticationProviderWithClientSecret();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareOnBehalfOfAuthenticationProviderWithClientSecret();
 
-            await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+                await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+            });
         }
 
         [TestMethod]
@@ -318,7 +342,7 @@ namespace PnP.Core.Auth.Test.Providers
             await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, request);
 
             Assert.IsNotNull(request.Headers.Authorization);
-            Assert.AreEqual(request.Headers.Authorization.Scheme.ToLower(), "bearer");
+            Assert.AreEqual("bearer", request.Headers.Authorization.Scheme.ToLower());
         }
 
         [TestMethod]
@@ -330,61 +354,79 @@ namespace PnP.Core.Auth.Test.Providers
             await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, request);
 
             Assert.IsNotNull(request.Headers.Authorization);
-            Assert.AreEqual(request.Headers.Authorization.Scheme.ToLower(), "bearer");
+            Assert.AreEqual("bearer", request.Headers.Authorization.Scheme.ToLower());
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestOnBehalfOfGetAccessTokenAsyncNullResourceWithCertificate()
         {
-            var provider = PrepareOnBehalfOfAuthenticationProviderWithCertificate();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareOnBehalfOfAuthenticationProviderWithCertificate();
 
-            await provider.GetAccessTokenAsync(null);
+                await provider.GetAccessTokenAsync(null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestOnBehalfOfGetAccessTokenAsyncNullResourceWithClientSecret()
         {
-            var provider = PrepareOnBehalfOfAuthenticationProviderWithClientSecret();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareOnBehalfOfAuthenticationProviderWithClientSecret();
 
-            await provider.GetAccessTokenAsync(null);
+                await provider.GetAccessTokenAsync(null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestOnBehalfOfGetAccessTokenAsyncFullNullResourceWithCertificate()
         {
-            var provider = PrepareOnBehalfOfAuthenticationProviderWithCertificate();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareOnBehalfOfAuthenticationProviderWithCertificate();
 
-            await provider.GetAccessTokenAsync(null, new string[] { });
+                await provider.GetAccessTokenAsync(null, new string[] { });
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestOnBehalfOfGetAccessTokenAsyncFullNullResourceWithClientSecret()
         {
-            var provider = PrepareOnBehalfOfAuthenticationProviderWithClientSecret();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareOnBehalfOfAuthenticationProviderWithClientSecret();
 
-            await provider.GetAccessTokenAsync(null, new string[] { });
+                await provider.GetAccessTokenAsync(null, new string[] { });
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestOnBehalfOfGetAccessTokenAsyncFullNullScopesWithCertificate()
         {
-            var provider = PrepareOnBehalfOfAuthenticationProviderWithCertificate();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareOnBehalfOfAuthenticationProviderWithCertificate();
 
-            await provider.GetAccessTokenAsync(TestGlobals.GraphResource, null);
+                await provider.GetAccessTokenAsync(TestGlobals.GraphResource, null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestOnBehalfOfGetAccessTokenAsyncFullNullScopesWithClientSecret()
         {
-            var provider = PrepareOnBehalfOfAuthenticationProviderWithClientSecret();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareOnBehalfOfAuthenticationProviderWithClientSecret();
 
-            await provider.GetAccessTokenAsync(TestGlobals.GraphResource, null);
+                await provider.GetAccessTokenAsync(TestGlobals.GraphResource, null);
+            });
         }
 
         [TestMethod]

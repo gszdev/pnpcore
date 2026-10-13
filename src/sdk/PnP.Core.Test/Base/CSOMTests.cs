@@ -298,7 +298,7 @@ namespace PnP.Core.Test.Base
                 firstItems = System.Linq.Queryable.Take(list.Items, 4).ToList();
                 foreach (var item in firstItems)
                 {
-                    Assert.AreEqual(item.Title, "Updated!");
+                    Assert.AreEqual("Updated!", item.Title);
                 }
 
                 await list.DeleteAsync();

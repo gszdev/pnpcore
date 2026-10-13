@@ -341,7 +341,7 @@ namespace PnP.Core.Test.Base
                 await channelToDelete.DeleteAsync();
 
                 // Was the channel deleted?
-                Assert.ThrowsException<ClientException>(() =>
+                Assert.ThrowsExactly<ClientException>(() =>
                 {
                     var deletedChannelDescription = channelToDelete.Description;
                 });
@@ -386,7 +386,7 @@ namespace PnP.Core.Test.Base
                 await context.ExecuteAsync();
 
                 // Was the channel deleted?
-                Assert.ThrowsException<ClientException>(() =>
+                Assert.ThrowsExactly<ClientException>(() =>
                 {
                     var deletedChannelDescription = channelToDelete.Description;
                 });
@@ -435,7 +435,7 @@ namespace PnP.Core.Test.Base
                 await context.ExecuteAsync(batch);
 
                 // Was the channel deleted?
-                Assert.ThrowsException<ClientException>(() =>
+                Assert.ThrowsExactly<ClientException>(() =>
                 {
                     var deletedChannelDescription = channelToDelete.Description;
                 });

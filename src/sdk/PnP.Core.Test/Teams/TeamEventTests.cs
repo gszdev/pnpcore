@@ -86,15 +86,15 @@ namespace PnP.Core.Test.Teams
                 var newEvent = await context.Team.Events.AddAsync(eventOptions);
 
                 Assert.AreEqual(eventOptions.Subject, newEvent.Subject);
-                Assert.AreEqual(newEvent.Attendees.Length, 2);
+                Assert.AreEqual(2, newEvent.Attendees.Length);
 
-                Assert.AreEqual(newEvent.Attendees.FirstOrDefault().EmailAddress.Name, firstUser.Title);
-                Assert.AreEqual(newEvent.Attendees.FirstOrDefault().EmailAddress.Address, firstUser.Mail);
-                Assert.AreEqual(newEvent.Attendees.FirstOrDefault().Type, EventAttendeeType.Optional);
+                Assert.AreEqual(firstUser.Title, newEvent.Attendees.FirstOrDefault().EmailAddress.Name);
+                Assert.AreEqual(firstUser.Mail, newEvent.Attendees.FirstOrDefault().EmailAddress.Address);
+                Assert.AreEqual(EventAttendeeType.Optional, newEvent.Attendees.FirstOrDefault().Type);
 
-                Assert.AreEqual(newEvent.Attendees.LastOrDefault().EmailAddress.Name, secondUser.Title);
-                Assert.AreEqual(newEvent.Attendees.LastOrDefault().EmailAddress.Address, secondUser.Mail);
-                Assert.AreEqual(newEvent.Attendees.LastOrDefault().Type, EventAttendeeType.Required);
+                Assert.AreEqual(secondUser.Title, newEvent.Attendees.LastOrDefault().EmailAddress.Name);
+                Assert.AreEqual(secondUser.Mail, newEvent.Attendees.LastOrDefault().EmailAddress.Address);
+                Assert.AreEqual(EventAttendeeType.Required, newEvent.Attendees.LastOrDefault().Type);
 
                 await newEvent.DeleteAsync();
             }
@@ -170,7 +170,7 @@ namespace PnP.Core.Test.Teams
                 var newEvent = await team.Events.AddAsync(eventOptions);
 
                 Assert.AreEqual(eventOptions.Subject, newEvent.Subject);
-                Assert.AreEqual(newEvent.Locations.Length, 2);
+                Assert.AreEqual(2, newEvent.Locations.Length);
 
                 await newEvent.DeleteAsync();
             }
@@ -211,9 +211,9 @@ namespace PnP.Core.Test.Teams
                 var newEvent = await context.Team.Events.AddAsync(eventOptions);
 
                 Assert.AreEqual(eventOptions.Subject, newEvent.Subject);
-                Assert.AreEqual(newEvent.Attendees.Length, 2);
+                Assert.AreEqual(2, newEvent.Attendees.Length);
 
-                Assert.AreEqual(newEvent.HideAttendees, true);
+                Assert.AreEqual(true, newEvent.HideAttendees);
                 
                 // Verified that this was working
 
@@ -262,15 +262,15 @@ namespace PnP.Core.Test.Teams
                 var newEvent = await context.Team.Events.AddAsync(eventOptions);
 
                 Assert.AreEqual(eventOptions.Subject, newEvent.Subject);
-                Assert.AreEqual(newEvent.Attendees.Length, 2);
+                Assert.AreEqual(2, newEvent.Attendees.Length);
 
-                Assert.AreEqual(newEvent.HideAttendees, true);
-                Assert.AreEqual(newEvent.AllowNewTimeProposals, true);
-                Assert.AreEqual(newEvent.IsOnlineMeeting, true);
-                Assert.AreEqual(newEvent.OnlineMeetingProvider, EventOnlineMeetingProvider.TeamsForBusiness);
-                Assert.AreEqual(newEvent.Sensitivity, EventSensitivity.Personal);
-                Assert.AreEqual(newEvent.Importance, EventImportance.High);
-                Assert.AreEqual(newEvent.ShowAs, EventShowAs.Busy);
+                Assert.AreEqual(true, newEvent.HideAttendees);
+                Assert.AreEqual(true, newEvent.AllowNewTimeProposals);
+                Assert.AreEqual(true, newEvent.IsOnlineMeeting);
+                Assert.AreEqual(EventOnlineMeetingProvider.TeamsForBusiness, newEvent.OnlineMeetingProvider);
+                Assert.AreEqual(EventSensitivity.Personal, newEvent.Sensitivity);
+                Assert.AreEqual(EventImportance.High, newEvent.Importance);
+                Assert.AreEqual(EventShowAs.Busy, newEvent.ShowAs);
 
                 Assert.IsNotNull(newEvent.OnlineMeeting.JoinUrl);
                
@@ -321,7 +321,7 @@ namespace PnP.Core.Test.Teams
                 var newEvent = await context.Team.Events.AddAsync(eventOptions);
 
                 Assert.AreEqual(eventOptions.Subject, newEvent.Subject);
-                Assert.AreEqual(eventOptions.IsAllDay, true);
+                Assert.AreEqual(true, eventOptions.IsAllDay);
 
                 await newEvent.DeleteAsync();
             }
@@ -359,7 +359,7 @@ namespace PnP.Core.Test.Teams
                 var newEvent = await context.Team.Events.AddAsync(eventOptions);
 
                 Assert.AreEqual(eventOptions.Subject, newEvent.Subject);
-                Assert.AreEqual(eventOptions.IsAllDay, false);
+                Assert.AreEqual(false, eventOptions.IsAllDay);
                 Assert.AreEqual(eventOptions.Recurrence.Pattern.Type, newEvent.Recurrence.Pattern.Type);
                 Assert.AreEqual(eventOptions.Recurrence.Range.Type, newEvent.Recurrence.Range.Type);
 
@@ -397,7 +397,7 @@ namespace PnP.Core.Test.Teams
                 var newEvent = await context.Team.Events.AddAsync(eventOptions);
 
                 Assert.AreEqual(eventOptions.Subject, newEvent.Subject);
-                Assert.AreEqual(eventOptions.IsAllDay, false);
+                Assert.AreEqual(false, eventOptions.IsAllDay);
                 Assert.AreEqual(eventOptions.Recurrence.Pattern.Type, newEvent.Recurrence.Pattern.Type);
                 Assert.AreEqual(eventOptions.Recurrence.Range.Type, newEvent.Recurrence.Range.Type);
 
@@ -437,7 +437,7 @@ namespace PnP.Core.Test.Teams
                 var newEvent = await context.Team.Events.AddAsync(eventOptions);
 
                 Assert.AreEqual(eventOptions.Subject, newEvent.Subject);
-                Assert.AreEqual(eventOptions.IsAllDay, false);
+                Assert.AreEqual(false, eventOptions.IsAllDay);
                 Assert.AreEqual(eventOptions.Recurrence.Pattern.Type, newEvent.Recurrence.Pattern.Type);
                 Assert.AreEqual(eventOptions.Recurrence.Range.Type, newEvent.Recurrence.Range.Type);
 
@@ -588,10 +588,10 @@ namespace PnP.Core.Test.Teams
                 Assert.AreEqual(updateOptions.Importance, updatedEvent.Importance);
 
                 Assert.AreEqual(updateOptions.ShowAs, updatedEvent.ShowAs);
-                Assert.AreEqual(updatedEvent.IsAllDay, true);
-                Assert.AreEqual(updatedEvent.HideAttendees, true);
-                Assert.AreEqual(updatedEvent.AllowNewTimeProposals, true);
-                Assert.AreEqual(updatedEvent.ResponseRequested, true);
+                Assert.AreEqual(true, updatedEvent.IsAllDay);
+                Assert.AreEqual(true, updatedEvent.HideAttendees);
+                Assert.AreEqual(true, updatedEvent.AllowNewTimeProposals);
+                Assert.AreEqual(true, updatedEvent.ResponseRequested);
 
                 Assert.IsNotNull(updatedEvent.OnlineMeeting.JoinUrl);
 
@@ -605,71 +605,80 @@ namespace PnP.Core.Test.Teams
         #region Exception tests
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        //[ExpectedException(typeof(ArgumentException))]
         public async Task CreateTeamEventRecurrencePatternTypeExceptionTestAsync()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async() =>
             {
-                var eventOptions = new EventCreateOptions
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
                 {
-                    Subject = "CreateTeamEventRecurrencePatternTypeExceptionTestAsync",
-                    Recurrence = new EventRecurrenceOptions
+                    var eventOptions = new EventCreateOptions
                     {
-                        Pattern = new EventRecurrencePatternOptions
+                        Subject = "CreateTeamEventRecurrencePatternTypeExceptionTestAsync",
+                        Recurrence = new EventRecurrenceOptions
                         {
-                            Type = EventRecurrenceType.Daily,
-                            Interval = -10,
+                            Pattern = new EventRecurrencePatternOptions
+                            {
+                                Type = EventRecurrenceType.Daily,
+                                Interval = -10,
+                            }
                         }
-                    }
-                };
-                await context.Team.Events.AddAsync(eventOptions);
-            }
+                    };
+                    await context.Team.Events.AddAsync(eventOptions);
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        //[ExpectedException(typeof(ArgumentException))]
         public async Task CreateTeamEventRecurrenceRangeExceptionTestAsync()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
             {
-                var eventOptions = new EventCreateOptions
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
                 {
-                    Subject = "CreateTeamEventRecurrenceRangeExceptionTestAsync",
-                    Recurrence = new EventRecurrenceOptions
+                    var eventOptions = new EventCreateOptions
                     {
-                        Range = new EventRecurrenceRangeOptions
+                        Subject = "CreateTeamEventRecurrenceRangeExceptionTestAsync",
+                        Recurrence = new EventRecurrenceOptions
                         {
-                            Type = EventRecurrenceRangeType.EndDate,
-                            StartDate = DateTime.Today
+                            Range = new EventRecurrenceRangeOptions
+                            {
+                                Type = EventRecurrenceRangeType.EndDate,
+                                StartDate = DateTime.Today
+                            }
                         }
-                    }
-                };
-                await context.Team.Events.AddAsync(eventOptions);
-            }
+                    };
+                    await context.Team.Events.AddAsync(eventOptions);
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task CreateTeamEventRecurrenceRangeNoStartDateExceptionTestAsync()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var eventOptions = new EventCreateOptions
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
                 {
-                    Subject = "CreateTeamEventRecurrenceRangeNoStartDateExceptionTestAsync",
-                    Recurrence = new EventRecurrenceOptions
+                    var eventOptions = new EventCreateOptions
                     {
-                        Range = new EventRecurrenceRangeOptions
+                        Subject = "CreateTeamEventRecurrenceRangeNoStartDateExceptionTestAsync",
+                        Recurrence = new EventRecurrenceOptions
                         {
-                            Type = EventRecurrenceRangeType.NoEnd
+                            Range = new EventRecurrenceRangeOptions
+                            {
+                                Type = EventRecurrenceRangeType.NoEnd
+                            }
                         }
-                    }
-                };
-                await context.Team.Events.AddAsync(eventOptions);
-            }
+                    };
+                    await context.Team.Events.AddAsync(eventOptions);
+                }
+            });
         }
 
         #endregion

@@ -315,14 +315,14 @@ namespace PnP.Core.Test.Base
                     { "Title", ItemTitleValue }
                 };
 
-                    await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                    await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                     {
                         batch = context.BatchClient.EnsureBatch();
                         var item = myList.Items.AddBatch(batch, null);
                         await context.ExecuteAsync(batch);
                     });
 
-                    await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                    await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                     {
                         var item = await myList.Items.AddAsync(null);
                     });

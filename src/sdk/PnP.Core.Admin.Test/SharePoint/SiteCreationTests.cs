@@ -1525,7 +1525,7 @@ namespace PnP.Core.Admin.Test.SharePoint
             using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
             {
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     SiteCreationOptions siteCreationOptions = new SiteCreationOptions()
                     {
@@ -1537,7 +1537,7 @@ namespace PnP.Core.Admin.Test.SharePoint
                     }
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     CommunicationSiteOptions communicationSiteToCreate = new CommunicationSiteOptions(null, "PnP Core SDK Test")
                     {
@@ -1546,7 +1546,7 @@ namespace PnP.Core.Admin.Test.SharePoint
                     };
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     CommunicationSiteOptions communicationSiteToCreate = new CommunicationSiteOptions(new Uri("https://contoso.sharepoint.com/sites/dummy"), null)
                     {
@@ -1555,42 +1555,42 @@ namespace PnP.Core.Admin.Test.SharePoint
                     };
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     TeamSiteOptions communicationSiteToCreate = new TeamSiteOptions(null, "display name");
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     TeamSiteOptions communicationSiteToCreate = new TeamSiteOptions("alias", null);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     ClassicSiteOptions communicationSiteToCreate = new ClassicSiteOptions(null, "title", "webtemplate", "owner", Language.Default, Model.SharePoint.TimeZone.None);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     ClassicSiteOptions communicationSiteToCreate = new ClassicSiteOptions(new Uri("https://contoso.sharepoint.com/sites/dummy"), "", "webtemplate", "owner", Language.Default, Model.SharePoint.TimeZone.None);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     ClassicSiteOptions communicationSiteToCreate = new ClassicSiteOptions(new Uri("https://contoso.sharepoint.com/sites/dummy"), "title", "", "owner", Language.Default, Model.SharePoint.TimeZone.None);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     ClassicSiteOptions communicationSiteToCreate = new ClassicSiteOptions(new Uri("https://contoso.sharepoint.com/sites/dummy"), "title", "webtemplate", "", Language.Default, Model.SharePoint.TimeZone.None);
                 });
 
-                Assert.ThrowsException<ArgumentException>(() =>
+                Assert.ThrowsExactly<ArgumentException>(() =>
                 {
                     ClassicSiteOptions communicationSiteToCreate = new ClassicSiteOptions(new Uri("https://contoso.sharepoint.com/sites/dummy"), "title", "webtemplate", "owner", Language.Default, Model.SharePoint.TimeZone.None);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     Model.SharePoint.CreationOptions creationOptions = new Model.SharePoint.CreationOptions()
                     {
@@ -1600,27 +1600,27 @@ namespace PnP.Core.Admin.Test.SharePoint
                     context.GetSiteCollectionManager().ConnectSiteCollectionToGroup(null, creationOptions);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     ConnectSiteToGroupOptions communicationSiteToCreate = new ConnectSiteToGroupOptions(null, "alias", "displayname");
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     context.GetSiteCollectionManager().RecycleSiteCollection(null);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     context.GetSiteCollectionManager().RestoreSiteCollection(null);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     context.GetSiteCollectionManager().DeleteSiteCollection(null);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     context.GetSiteCollectionManager().GetSiteCollectionProperties(null);
                 });
@@ -1767,8 +1767,8 @@ namespace PnP.Core.Admin.Test.SharePoint
                             Assert.IsTrue(web.Title == classicSite.Title);
                             Assert.IsTrue(web.Language == (int)classicSite.Language);
 
-                            Assert.ThrowsException<ClientException>(() => newSiteContext.GetSiteCollectionManager().EnableCommunicationSiteFeatures(newSiteContext.Uri, Guid.Empty));
-                            Assert.ThrowsException<ClientException>(() => newSiteContext.GetSiteCollectionManager().EnableCommunicationSiteFeatures(newSiteContext.Uri, Guid.NewGuid()));
+                            Assert.ThrowsExactly<ClientException>(() => newSiteContext.GetSiteCollectionManager().EnableCommunicationSiteFeatures(newSiteContext.Uri, Guid.Empty));
+                            Assert.ThrowsExactly<ClientException>(() => newSiteContext.GetSiteCollectionManager().EnableCommunicationSiteFeatures(newSiteContext.Uri, Guid.NewGuid()));
 
                             // Enable the communication site features on this classic site
                             newSiteContext.GetSiteCollectionManager().EnableCommunicationSiteFeatures(newSiteContext.Uri);

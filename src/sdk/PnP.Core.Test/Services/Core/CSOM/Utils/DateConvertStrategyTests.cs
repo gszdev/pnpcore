@@ -123,33 +123,42 @@ namespace PnP.Core.Test.Services.Core.CSOM.Utils
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FormatException))]
+        //[ExpectedException(typeof(FormatException))]
         public void TestParsingFromDateTimeStrategyNegative2()
         {
-            FromDateTimeStrategy strategy = new FromDateTimeStrategy();
-            string inputString = "/Date(2019,11,A,17,7,26,0)/";
+            Assert.ThrowsExactly<FormatException>(() =>
+            {
+                FromDateTimeStrategy strategy = new FromDateTimeStrategy();
+                string inputString = "/Date(2019,11,A,17,7,26,0)/";
 
-            strategy.ConverDate(inputString);
+                strategy.ConverDate(inputString);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FormatException))]
+        //[ExpectedException(typeof(FormatException))]
         public void TestParsingFromDateTimeStrategyNegative3()
         {
-            FromDateTimeStrategy strategy = new FromDateTimeStrategy();
-            string inputString = "/Date(2019,11,5,17,7,26,0,888)/";
+            Assert.ThrowsExactly<FormatException>(() =>
+            {
+                FromDateTimeStrategy strategy = new FromDateTimeStrategy();
+                string inputString = "/Date(2019,11,5,17,7,26,0,888)/";
 
-            strategy.ConverDate(inputString);
+                strategy.ConverDate(inputString);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        //[ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TestParsingFromDateTimeStrategyNegative4()
         {
-            FromDateTimeStrategy strategy = new FromDateTimeStrategy();
-            string inputString = "/Date(2022,12,29,9,40,58,397)/";
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+            {
+                FromDateTimeStrategy strategy = new FromDateTimeStrategy();
+                string inputString = "/Date(2022,12,29,9,40,58,397)/";
 
-            strategy.ConverDate(inputString);
+                strategy.ConverDate(inputString);
+            });
         }
     }
 }

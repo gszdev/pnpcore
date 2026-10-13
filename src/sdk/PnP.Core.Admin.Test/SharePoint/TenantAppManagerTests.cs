@@ -89,52 +89,64 @@ namespace PnP.Core.Admin.Test.SharePoint
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        //[ExpectedException(typeof(ArgumentException))]
         public async Task AddThrowsArgumentExceptionTitleNullTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
             {
-                var appManager = context.GetTenantAppManager();
-                var app = appManager.Add(null, "filename", true);
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var appManager = context.GetTenantAppManager();
+                    var app = appManager.Add(null, "filename", true);
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(IOException))]
+        //[ExpectedException(typeof(IOException))]
         public async Task AddThrowsExceptionNoneExistingPathTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<IOException>(async () =>
             {
-                var appManager = context.GetTenantAppManager();
-                var app = appManager.Add("none-existing.sppkg", true);
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var appManager = context.GetTenantAppManager();
+                    var app = appManager.Add("none-existing.sppkg", true);
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        //[ExpectedException(typeof(ArgumentException))]
         public async Task AddThrowsArgumentExceptionPathNullTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
             {
-                var appManager = context.GetTenantAppManager();
-                var app = appManager.Add(null, true);
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var appManager = context.GetTenantAppManager();
+                    var app = appManager.Add(null, true);
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        //[ExpectedException(typeof(ArgumentException))]
         public async Task AddThrowsArgumentExceptionFilenameNullTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
             {
-                var bytes = System.IO.File.ReadAllBytes(packagePath);
-                var appManager = context.GetTenantAppManager();
-                var app = appManager.Add(bytes, null, true);
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var bytes = System.IO.File.ReadAllBytes(packagePath);
+                    var appManager = context.GetTenantAppManager();
+                    var app = appManager.Add(bytes, null, true);
+                }
+            });
         }
 
         [TestMethod]
@@ -152,15 +164,18 @@ namespace PnP.Core.Admin.Test.SharePoint
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        //[ExpectedException(typeof(ArgumentException))]
         public async Task GetAppByTitleThrowsArgumentExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
             {
-                var appManager = context.GetTenantAppManager();
-                var app = appManager.GetAvailable(null);
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var appManager = context.GetTenantAppManager();
+                    var app = appManager.GetAvailable(null);
+                }
+            });
         }
 
         [TestMethod]

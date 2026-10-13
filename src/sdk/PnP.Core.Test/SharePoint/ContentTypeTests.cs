@@ -35,7 +35,7 @@ namespace PnP.Core.Test.SharePoint
 
                 IContentType contentType = web.ContentTypes.AsRequested().FirstOrDefault(p => p.Name == "Item");
                 // Test a string property
-                Assert.AreEqual(contentType.Name, "Item");
+                Assert.AreEqual("Item", contentType.Name);
                 // Test a boolean property
                 Assert.IsFalse(contentType.Hidden);
             }
@@ -53,32 +53,32 @@ namespace PnP.Core.Test.SharePoint
 
                 IContentType contentType = web.ContentTypes.AsRequested().FirstOrDefault(p => p.Name == "Item");
                 // Test a string property
-                Assert.AreEqual(contentType.Name, "Item");
+                Assert.AreEqual("Item", contentType.Name);
 
                 //ClientFormCustomFormatter
                 Assert.IsTrue(string.IsNullOrEmpty(contentType.ClientFormCustomFormatter));
-                Assert.AreEqual(contentType.Description, "Create a new list item.");
-                Assert.AreEqual(contentType.DisplayFormTemplateName, "ListForm");
-                Assert.AreEqual(contentType.DisplayFormUrl, "");
-                Assert.AreEqual(contentType.DocumentTemplate, "");
-                Assert.AreEqual(contentType.DocumentTemplateUrl, "");
-                Assert.AreEqual(contentType.EditFormTemplateName, "ListForm");
+                Assert.AreEqual("Create a new list item.", contentType.Description);
+                Assert.AreEqual("ListForm", contentType.DisplayFormTemplateName);
+                Assert.AreEqual("", contentType.DisplayFormUrl);
+                Assert.AreEqual("", contentType.DocumentTemplate);
+                Assert.AreEqual("", contentType.DocumentTemplateUrl);
+                Assert.AreEqual("ListForm", contentType.EditFormTemplateName);
                 Assert.IsTrue(string.IsNullOrEmpty(contentType.EditFormUrl));
-                Assert.AreEqual(contentType.Group, "List Content Types");
-                Assert.AreEqual(contentType.Hidden, false);
-                Assert.AreEqual(contentType.JSLink, "");
-                Assert.AreEqual(contentType.MobileDisplayFormUrl, "");
-                Assert.AreEqual(contentType.MobileEditFormUrl, "");
-                Assert.AreEqual(contentType.MobileNewFormUrl, "");
-                Assert.AreEqual(contentType.Name, "Item");
-                Assert.AreEqual(contentType.NewFormTemplateName, "ListForm");
-                Assert.AreEqual(contentType.NewFormUrl, "");
-                Assert.AreEqual(contentType.ReadOnly, false);
+                Assert.AreEqual("List Content Types", contentType.Group);
+                Assert.AreEqual(false, contentType.Hidden);
+                Assert.AreEqual("", contentType.JSLink);
+                Assert.AreEqual("", contentType.MobileDisplayFormUrl);
+                Assert.AreEqual("", contentType.MobileEditFormUrl);
+                Assert.AreEqual("", contentType.MobileNewFormUrl);
+                Assert.AreEqual("Item", contentType.Name);
+                Assert.AreEqual("ListForm", contentType.NewFormTemplateName);
+                Assert.AreEqual("", contentType.NewFormUrl);
+                Assert.AreEqual(false, contentType.ReadOnly);
                 Assert.IsTrue(!string.IsNullOrEmpty(contentType.SchemaXml));
                 // Testing on site names is not possible as this will fail when the tests are running live again 
                 //Assert.AreEqual(contentType.Scope, "/sites/pnpcoresdktestgroup");
-                Assert.AreEqual(contentType.Sealed, false);
-                Assert.AreEqual(contentType.StringId, "0x01");
+                Assert.AreEqual(false, contentType.Sealed);
+                Assert.AreEqual("0x01", contentType.StringId);
 
                 // Test a boolean property
                 Assert.IsFalse(contentType.Hidden);
@@ -168,7 +168,7 @@ namespace PnP.Core.Test.SharePoint
 
                 Assert.IsNotNull(contentType);
                 // Test Id property
-                Assert.AreEqual(contentType.Id, "0x01");
+                Assert.AreEqual("0x01", contentType.Id);
             }
         }
 
@@ -184,7 +184,7 @@ namespace PnP.Core.Test.SharePoint
 
                 Assert.IsNotNull(contentType);
                 // Test Id property
-                Assert.AreEqual(contentType.Id, "0x01");
+                Assert.AreEqual("0x01", contentType.Id);
 
                 // Load extra properties
                 await contentType.LoadAsync(p => p.Group);
@@ -203,7 +203,7 @@ namespace PnP.Core.Test.SharePoint
 
                 Assert.IsNotNull(contentType);
                 // Test Id property
-                Assert.AreEqual(contentType.Id, "0x01");
+                Assert.AreEqual("0x01", contentType.Id);
                 Assert.IsTrue(!string.IsNullOrWhiteSpace(contentType.Name));
                 Assert.IsTrue(contentType.Fields.Length > 0);
 
@@ -240,27 +240,27 @@ namespace PnP.Core.Test.SharePoint
             using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
             {
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IContentType newContentType = await context.Web.ContentTypes.AddAsync(string.Empty, "TEST ADD", "TESTING", "TESTING");
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IContentType newContentType = await context.Web.ContentTypes.AddAsync("0x0100302EF0D1F1DB4C4EBF58251BCCF5968F", string.Empty, "TESTING", "TESTING");
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IContentType newContentType = await context.Web.ContentTypes.AddAsync(string.Empty, string.Empty, "TESTING", "TESTING");
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IContentType newContentType = await context.Web.ContentTypes.AddBatchAsync("0x0100302EF0D1F1DB4C4EBF58251BCCF5968F", string.Empty, "TESTING", "TESTING");
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IContentType newContentType = await context.Web.ContentTypes.AddBatchAsync(string.Empty, "TEST ADD", "TESTING", "TESTING");
                 });
@@ -556,11 +556,11 @@ namespace PnP.Core.Test.SharePoint
                 myList.ContentTypesEnabled = true;
                 await myList.UpdateAsync();
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     var addedContentType = await myList.ContentTypes.AddAvailableContentTypeAsync(null);
                 });
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     var addedContentType = await myList.ContentTypes.AddAvailableContentTypeBatchAsync(null);
                 });
@@ -801,11 +801,11 @@ namespace PnP.Core.Test.SharePoint
 
                 Assert.IsNotNull(contentType);
                 // Test Id property
-                Assert.AreEqual(contentType.Id, "0x0120D520");
+                Assert.AreEqual("0x0120D520", contentType.Id);
 
                 var documentSet = contentType.AsDocumentSet();
 
-                Assert.AreEqual(documentSet.ContentTypeId, contentType.Id);
+                Assert.AreEqual(contentType.Id, documentSet.ContentTypeId);
                 Assert.IsNotNull(documentSet.DefaultContents);
                 Assert.IsNotNull(documentSet.SharedColumns);
                 Assert.IsNotNull(documentSet.WelcomePageColumns);
@@ -992,28 +992,34 @@ namespace PnP.Core.Test.SharePoint
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        //[ExpectedException(typeof(ArgumentException))]
         public async Task AddContentTypeAsDocumentSetExceptionAsyncTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
             {
-                IDocumentSet newDocumentSet = await context.Web.ContentTypes.AddDocumentSetAsync("0x0101mlalalala", "Document set name");
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    IDocumentSet newDocumentSet = await context.Web.ContentTypes.AddDocumentSetAsync("0x0101mlalalala", "Document set name");
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ClientException))]
+        //[ExpectedException(typeof(ClientException))]
         public async Task GetContentTypeAsDocumentSetExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ClientException>(async () =>
             {
-                IContentType contentType = System.Linq.Queryable.Where(context.Web.ContentTypes, ct => ct.StringId == "0x0101")
-                            .QueryProperties(ct => ct.StringId, ct => ct.Id)
-                            .FirstOrDefault();
-                var documentSet = contentType.AsDocumentSet();
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    IContentType contentType = System.Linq.Queryable.Where(context.Web.ContentTypes, ct => ct.StringId == "0x0101")
+                                .QueryProperties(ct => ct.StringId, ct => ct.Id)
+                                .FirstOrDefault();
+                    var documentSet = contentType.AsDocumentSet();
+                }
+            });
         }
 
         #endregion

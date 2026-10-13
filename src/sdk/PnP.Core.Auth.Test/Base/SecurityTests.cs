@@ -85,28 +85,28 @@ namespace PnP.Core.Auth.Test.Base
         public void X509CertUtilityEncryptNothingTest()
         {
             var certificate = X509CertificateUtility.LoadCertificate(StoreName.My, StoreLocation.CurrentUser, TestCommon.GetX509CertificateThumbprint());
-            Assert.ThrowsException<ArgumentNullException>(() => X509CertificateUtility.Encrypt(null, certificate));
+            Assert.ThrowsExactly<ArgumentNullException>(() => X509CertificateUtility.Encrypt(null, certificate));
         }
 
         [TestMethod]
         public void X509CertUtilityEncryptNoCertTest()
         {
             byte[] encoded = Encoding.UTF8.GetBytes("test");
-            Assert.ThrowsException<ArgumentNullException>(() => X509CertificateUtility.Encrypt(encoded, null));
+            Assert.ThrowsExactly<ArgumentNullException>(() => X509CertificateUtility.Encrypt(encoded, null));
         }
 
         [TestMethod]
         public void X509CertUtilityDecryptNothingTest()
         {
             var certificate = X509CertificateUtility.LoadCertificate(StoreName.My, StoreLocation.CurrentUser, TestCommon.GetX509CertificateThumbprint());
-            Assert.ThrowsException<ArgumentNullException>(() => X509CertificateUtility.Decrypt(null, certificate));
+            Assert.ThrowsExactly<ArgumentNullException>(() => X509CertificateUtility.Decrypt(null, certificate));
         }
 
         [TestMethod]
         public void X509CertUtilityDecryptNoCertTest()
         {
             byte[] encoded = Encoding.UTF8.GetBytes("doesntmatterwhatthisis");
-            Assert.ThrowsException<ArgumentNullException>(() => X509CertificateUtility.Decrypt(encoded, null));
+            Assert.ThrowsExactly<ArgumentNullException>(() => X509CertificateUtility.Decrypt(encoded, null));
         }
 
         #endregion

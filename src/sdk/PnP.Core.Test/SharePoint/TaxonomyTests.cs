@@ -484,17 +484,17 @@ namespace PnP.Core.Test.SharePoint
                 var termStoreUpdated = await context.TermStore.GetAsync(p => p.Groups, o => o.Id);
                 // Extensions
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     termStoreUpdated.Groups.GetByName(string.Empty);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     termStoreUpdated.Groups.GetByName(null);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     termStoreUpdated.Groups.GetById(string.Empty);
                 });
@@ -561,12 +561,12 @@ namespace PnP.Core.Test.SharePoint
 
                 // Add new group
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     await termStore.Groups.AddAsync(string.Empty);
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     await termStore.Groups.AddBatchAsync(string.Empty);
                     await context.ExecuteAsync();
@@ -868,13 +868,13 @@ namespace PnP.Core.Test.SharePoint
                 Assert.IsTrue(newGroup.Name == newGroupName);
 
                 // Add term set
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     var termSet = await newGroup.Sets.AddBatchAsync(string.Empty);
                     await context.ExecuteAsync();
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     var termSet = await newGroup.Sets.AddAsync(string.Empty);
                     await context.ExecuteAsync();
@@ -1286,12 +1286,12 @@ namespace PnP.Core.Test.SharePoint
                 // Add term set
                 var termSet = group.Sets.Add("PnPSet1", "Set description");
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     await termSet.Terms.AddAsync(string.Empty);
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     await termSet.Terms.AddBatchAsync(string.Empty);
                     await context.ExecuteAsync();
@@ -1603,7 +1603,7 @@ namespace PnP.Core.Test.SharePoint
                     // load the terms by custom property
                     var terms = await termsetLoadedViaLinq2.GetTermsByCustomPropertyAsync("property2", "value2");
                     
-                    Assert.AreEqual(terms.Count, 1);
+                    Assert.AreEqual(1, terms.Count);
                     
                     foreach (ITerm term in terms)
                     {
@@ -1611,7 +1611,7 @@ namespace PnP.Core.Test.SharePoint
                     }
                     
                     terms = termsetLoadedViaLinq2.GetTermsByCustomProperty("property1", "value1");
-                    Assert.AreEqual(terms.Count, 1);
+                    Assert.AreEqual(1, terms.Count);
                     
                     foreach (ITerm term in terms)
                     {
@@ -1619,10 +1619,10 @@ namespace PnP.Core.Test.SharePoint
                     }
 
                     terms = await termsetLoadedViaLinq2.GetTermsByCustomPropertyAsync("property2", "value2");
-                    Assert.AreEqual(terms.Count, 0);
+                    Assert.AreEqual(0, terms.Count);
 
                     terms = await termsetLoadedViaLinq2.GetTermsByCustomPropertyAsync("property1", "value1");
-                    Assert.AreEqual(terms.Count, 0);
+                    Assert.AreEqual(0, terms.Count);
                 }
 
                 // Delete term set 

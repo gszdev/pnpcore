@@ -359,7 +359,7 @@ namespace PnP.Core.Test.QueryModel
 
                 Assert.IsNotNull(firstItem);
                 Assert.AreEqual(1, firstItem.Id);
-                Assert.AreEqual(firstItem.Title, expectedTitle);
+                Assert.AreEqual(expectedTitle, firstItem.Title);
             }
         }
 
@@ -379,7 +379,7 @@ namespace PnP.Core.Test.QueryModel
 
                 Assert.IsNotNull(firstItem);
                 Assert.AreEqual(1, firstItem.Id);
-                Assert.AreEqual(firstItem.Title, expectedTitle);
+                Assert.AreEqual(expectedTitle, firstItem.Title);
 
                 var firstItemAgain = await library.Items.GetByIdAsync(1);
 

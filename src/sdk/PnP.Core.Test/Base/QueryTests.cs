@@ -169,7 +169,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>());
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "sites/{hostname}:{serverrelativepath}", true);
+            Assert.AreEqual("sites/{hostname}:{serverrelativepath}", requests[0], true);
         }
 
         [TestMethod]
@@ -177,7 +177,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(graphFirst: false));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web", true);
+            Assert.AreEqual("_api/web", requests[0], true);
         }
 
         [TestMethod]
@@ -185,7 +185,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(new Expression<Func<IWeb, object>>[] { p => p.Title }));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "sites/{hostname}:{serverrelativepath}?$select=sharepointIds%2cdisplayName%2cid", true);
+            Assert.AreEqual("sites/{hostname}:{serverrelativepath}?$select=sharepointIds%2cdisplayName%2cid", requests[0], true);
         }
 
         [TestMethod]
@@ -193,7 +193,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(new Expression<Func<IWeb, object>>[] { p => p.Title }, graphFirst: false));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web?$select=Id%2cTitle", true);
+            Assert.AreEqual("_api/web?$select=Id%2cTitle", requests[0], true);
         }
 
         [TestMethod]
@@ -201,7 +201,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(new Expression<Func<IWeb, object>>[] { p => p.Title, p => p.Description }));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "sites/{hostname}:{serverrelativepath}?$select=sharepointIds%2cdisplayName%2cdescription%2cid", true);
+            Assert.AreEqual("sites/{hostname}:{serverrelativepath}?$select=sharepointIds%2cdisplayName%2cdescription%2cid", requests[0], true);
         }
 
         [TestMethod]
@@ -209,7 +209,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(new Expression<Func<IWeb, object>>[] { p => p.Title, p => p.Description }, graphFirst: false));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web?$select=Id%2cTitle%2cDescription", true);
+            Assert.AreEqual("_api/web?$select=Id%2cTitle%2cDescription", requests[0], true);
         }
 
         [TestMethod]
@@ -217,7 +217,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(new Expression<Func<IWeb, object>>[] { p => p.Id }));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "sites/{hostname}:{serverrelativepath}?$select=sharepointIds%2cid", true);
+            Assert.AreEqual("sites/{hostname}:{serverrelativepath}?$select=sharepointIds%2cid", requests[0], true);
         }
 
         [TestMethod]
@@ -225,7 +225,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(new Expression<Func<IWeb, object>>[] { p => p.Id }, graphFirst: false));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web?$select=Id", true);
+            Assert.AreEqual("_api/web?$select=Id", requests[0], true);
         }
 
         [TestMethod]
@@ -233,7 +233,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(new Expression<Func<IWeb, object>>[] { p => p.Title, p => p.Description, p => p.Id }));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "sites/{hostname}:{serverrelativepath}?$select=sharepointIds%2cdisplayName%2cdescription%2cid", true);
+            Assert.AreEqual("sites/{hostname}:{serverrelativepath}?$select=sharepointIds%2cdisplayName%2cdescription%2cid", requests[0], true);
         }
 
         [TestMethod]
@@ -241,7 +241,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(new Expression<Func<IWeb, object>>[] { p => p.Title, p => p.Description, p => p.Id }, graphFirst: false));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web?$select=Id%2cTitle%2cDescription", true);
+            Assert.AreEqual("_api/web?$select=Id%2cTitle%2cDescription", requests[0], true);
         }
 
         [TestMethod]
@@ -249,7 +249,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(new Expression<Func<IWeb, object>>[] { p => p.Lists }));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web?$select=Id%2cLists&$expand=Lists", true);
+            Assert.AreEqual("_api/web?$select=Id%2cLists&$expand=Lists", requests[0], true);
         }
 
         [TestMethod]
@@ -257,7 +257,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(new Expression<Func<IWeb, object>>[] { p => p.Lists }, graphFirst: false));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web?$select=Id%2cLists&$expand=Lists", true);
+            Assert.AreEqual("_api/web?$select=Id%2cLists&$expand=Lists", requests[0], true);
         }
 
         [TestMethod]
@@ -265,7 +265,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(new Expression<Func<IWeb, object>>[] { p => p.Title, p => p.Description, p => p.Lists }));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web?$select=Id%2cTitle%2cDescription%2cLists&$expand=Lists", true);
+            Assert.AreEqual("_api/web?$select=Id%2cTitle%2cDescription%2cLists&$expand=Lists", requests[0], true);
         }
 
         [TestMethod]
@@ -273,7 +273,7 @@ namespace PnP.Core.Test.Base
         {
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(new Expression<Func<IWeb, object>>[] { p => p.Title, p => p.Description, p => p.Lists }, graphFirst: false));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web?$select=Id%2cTitle%2cDescription%2cLists&$expand=Lists", true);
+            Assert.AreEqual("_api/web?$select=Id%2cTitle%2cDescription%2cLists&$expand=Lists", requests[0], true);
         }
 
         [TestMethod]
@@ -284,7 +284,7 @@ namespace PnP.Core.Test.Base
                 p=>p.Title, p=>p.TemplateType)
             }));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web?$select=Id%2cTitle%2cDescription%2cLists%2fTitle%2cLists%2fBaseTemplate%2cLists%2fId&$expand=Lists", true);
+            Assert.AreEqual("_api/web?$select=Id%2cTitle%2cDescription%2cLists%2fTitle%2cLists%2fBaseTemplate%2cLists%2fId&$expand=Lists", requests[0], true);
         }
 
         [TestMethod]
@@ -295,7 +295,7 @@ namespace PnP.Core.Test.Base
                 p=>p.Title, p=>p.TemplateType, p=>p.Id)
             }));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web?$select=Id%2cTitle%2cDescription%2cLists%2fTitle%2cLists%2fBaseTemplate%2cLists%2fId&$expand=Lists", true);
+            Assert.AreEqual("_api/web?$select=Id%2cTitle%2cDescription%2cLists%2fTitle%2cLists%2fBaseTemplate%2cLists%2fId&$expand=Lists", requests[0], true);
         }
 
         [TestMethod]
@@ -306,7 +306,7 @@ namespace PnP.Core.Test.Base
                 p => p.Title, p => p.TemplateType, p=>p.ContentTypes.QueryProperties(p=>p.Name, p=>p.FieldLinks.QueryProperties(p=> p.Name, p=> p.Hidden)))
             }));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web?$select=Id%2cTitle%2cDescription%2cLists%2fTitle%2cLists%2fBaseTemplate%2cLists%2fId%2cLists%2fContentTypes%2fName%2cLists%2fContentTypes%2fStringId%2cLists%2fContentTypes%2fFieldLinks%2fName%2cLists%2fContentTypes%2fFieldLinks%2fHidden%2cLists%2fContentTypes%2fFieldLinks%2fId&$expand=Lists%2cLists%2fContentTypes%2cLists%2fContentTypes%2fFieldLinks", true);
+            Assert.AreEqual("_api/web?$select=Id%2cTitle%2cDescription%2cLists%2fTitle%2cLists%2fBaseTemplate%2cLists%2fId%2cLists%2fContentTypes%2fName%2cLists%2fContentTypes%2fStringId%2cLists%2fContentTypes%2fFieldLinks%2fName%2cLists%2fContentTypes%2fFieldLinks%2fHidden%2cLists%2fContentTypes%2fFieldLinks%2fId&$expand=Lists%2cLists%2fContentTypes%2cLists%2fContentTypes%2fFieldLinks", requests[0], true);
         }
 
         [TestMethod]
@@ -317,7 +317,7 @@ namespace PnP.Core.Test.Base
                 p => p.Title, p => p.TemplateType, p=>p.Id, p=> p.ContentTypes.QueryProperties(p=>p.Name, p=>p.StringId, p=>p.FieldLinks.QueryProperties(p=>p.Id, p=> p.Name, p=> p.Hidden)))
             }));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web?$select=Id%2cTitle%2cDescription%2cLists%2fTitle%2cLists%2fBaseTemplate%2cLists%2fId%2cLists%2fContentTypes%2fName%2cLists%2fContentTypes%2fStringId%2cLists%2fContentTypes%2fFieldLinks%2fId%2cLists%2fContentTypes%2fFieldLinks%2fName%2cLists%2fContentTypes%2fFieldLinks%2fHidden&$expand=Lists%2cLists%2fContentTypes%2cLists%2fContentTypes%2fFieldLinks", true);
+            Assert.AreEqual("_api/web?$select=Id%2cTitle%2cDescription%2cLists%2fTitle%2cLists%2fBaseTemplate%2cLists%2fId%2cLists%2fContentTypes%2fName%2cLists%2fContentTypes%2fStringId%2cLists%2fContentTypes%2fFieldLinks%2fId%2cLists%2fContentTypes%2fFieldLinks%2fName%2cLists%2fContentTypes%2fFieldLinks%2fHidden&$expand=Lists%2cLists%2fContentTypes%2cLists%2fContentTypes%2fFieldLinks", requests[0], true);
         }
 
         [TestMethod]
@@ -334,7 +334,7 @@ namespace PnP.Core.Test.Base
 
             var requests = await GetAPICallTestAsync(BuildModel<Web, IWeb>(propsToLoad.ToArray()));
             Assert.IsTrue(requests.Count == 1);
-            Assert.AreEqual(requests[0], "_api/web?$select=Id%2cUrl%2cCustomMasterUrl%2cFields%2cLists%2fTitle%2cLists%2fId%2cLists%2fRootFolder%2fServerRelativeUrl%2cLists%2fRootFolder%2fUniqueId%2cFeatures%2cRegionalSettings%2f*%2cRegionalSettings%2fDateFormat&$expand=Fields%2cLists%2cLists%2fRootFolder%2cFeatures%2cRegionalSettings%2cRegionalSettings%2fTimeZone", true);
+            Assert.AreEqual("_api/web?$select=Id%2cUrl%2cCustomMasterUrl%2cFields%2cLists%2fTitle%2cLists%2fId%2cLists%2fRootFolder%2fServerRelativeUrl%2cLists%2fRootFolder%2fUniqueId%2cFeatures%2cRegionalSettings%2f*%2cRegionalSettings%2fDateFormat&$expand=Fields%2cLists%2cLists%2fRootFolder%2cFeatures%2cRegionalSettings%2cRegionalSettings%2fTimeZone", requests[0], true);
         }
 
         [TestMethod]

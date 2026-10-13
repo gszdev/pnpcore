@@ -53,7 +53,7 @@ namespace PnP.Core.Test.Teams
 
                 var channel = await team.Channels.GetByDisplayNameAsync("General");
 
-                Assert.AreEqual(channel.MembershipType, TeamChannelMembershipType.Standard);
+                Assert.AreEqual(TeamChannelMembershipType.Standard, channel.MembershipType);
                 Assert.IsNotNull(channel.WebUrl);
             }
         }
@@ -69,7 +69,7 @@ namespace PnP.Core.Test.Teams
 
                 var channel = team.Channels.GetByDisplayName("General");
 
-                Assert.AreEqual(channel.MembershipType, TeamChannelMembershipType.Standard);
+                Assert.AreEqual(TeamChannelMembershipType.Standard, channel.MembershipType);
                 Assert.IsNotNull(channel.WebUrl);
             }
         }
@@ -86,70 +86,82 @@ namespace PnP.Core.Test.Teams
                 var channel = team.Channels.FirstOrDefault(i => i.DisplayName == "General"); ;
 
                 Assert.IsNotNull(channel);
-                Assert.AreEqual(channel.MembershipType, TeamChannelMembershipType.Standard);
+                Assert.AreEqual(TeamChannelMembershipType.Standard, channel.MembershipType);
                 Assert.IsNotNull(channel.WebUrl);
 
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void GetChannelNameExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var team = context.Team.Get(o => o.Channels);
-                Assert.IsTrue(team.Channels.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var team = context.Team.Get(o => o.Channels);
+                    Assert.IsTrue(team.Channels.Length > 0);
 
-                var channel = team.Channels.GetByDisplayName(null);
+                    var channel = team.Channels.GetByDisplayName(null);
 
-            }
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task GetChannelNameExceptionAsyncTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async() =>
             {
-                var team = await context.Team.GetAsync(o => o.Channels);
-                Assert.IsTrue(team.Channels.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var team = await context.Team.GetAsync(o => o.Channels);
+                    Assert.IsTrue(team.Channels.Length > 0);
 
-                var channel = await team.Channels.GetByDisplayNameAsync("");
+                    var channel = await team.Channels.GetByDisplayNameAsync("");
 
-            }
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChannelNameExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var team = context.Team.Get(o => o.Channels);
-                Assert.IsTrue(team.Channels.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var team = context.Team.Get(o => o.Channels);
+                    Assert.IsTrue(team.Channels.Length > 0);
 
-                var channel = team.Channels.Add("");
+                    var channel = team.Channels.Add("");
 
-            }
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChannelNameBatchExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var team = context.Team.Get(o => o.Channels);
-                Assert.IsTrue(team.Channels.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var team = context.Team.Get(o => o.Channels);
+                    Assert.IsTrue(team.Channels.Length > 0);
 
-                var channel = team.Channels.AddBatch("");
+                    var channel = team.Channels.AddBatch("");
 
-            }
+                }
+            });
         }
 
         [TestMethod]

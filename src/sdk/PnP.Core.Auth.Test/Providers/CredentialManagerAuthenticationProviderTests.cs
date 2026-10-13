@@ -83,57 +83,69 @@ namespace PnP.Core.Auth.Test.Providers
 //        }
 
         [TestMethod]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
+        //[ExpectedException(typeof(ConfigurationErrorsException))]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task TestCredentialManagerConstructorNoDI_NullCredentialManagerName()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            var configuration = TestCommon.GetConfigurationSettings();
-            var clientId = configuration.GetValue<string>($"{TestGlobals.CredentialsConfigurationBasePath}:{credentialManagerConfigurationPath}:ClientId");
-            var tenantId = configuration.GetValue<string>($"{TestGlobals.CredentialsConfigurationBasePath}:{credentialManagerConfigurationPath}:TenantId");
+            await Assert.ThrowsExactlyAsync<ConfigurationErrorsException>(async () =>
+            {
+                var configuration = TestCommon.GetConfigurationSettings();
+                var clientId = configuration.GetValue<string>($"{TestGlobals.CredentialsConfigurationBasePath}:{credentialManagerConfigurationPath}:ClientId");
+                var tenantId = configuration.GetValue<string>($"{TestGlobals.CredentialsConfigurationBasePath}:{credentialManagerConfigurationPath}:TenantId");
 
-            var provider = new CredentialManagerAuthenticationProvider(
-                clientId,
-                tenantId,
-                credentialManagerName: null);
+                var provider = new CredentialManagerAuthenticationProvider(
+                    clientId,
+                    tenantId,
+                    credentialManagerName: null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
+        //[ExpectedException(typeof(ConfigurationErrorsException))]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task TestCredentialManagerConstructorNoDI_NotValidCredentialManagerName()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            var configuration = TestCommon.GetConfigurationSettings();
-            var clientId = configuration.GetValue<string>($"{TestGlobals.CredentialsConfigurationBasePath}:{credentialManagerConfigurationPath}:ClientId");
-            var tenantId = configuration.GetValue<string>($"{TestGlobals.CredentialsConfigurationBasePath}:{credentialManagerConfigurationPath}:TenantId");
+            await Assert.ThrowsExactlyAsync<ConfigurationErrorsException>(async () =>
+            {
+                var configuration = TestCommon.GetConfigurationSettings();
+                var clientId = configuration.GetValue<string>($"{TestGlobals.CredentialsConfigurationBasePath}:{credentialManagerConfigurationPath}:ClientId");
+                var tenantId = configuration.GetValue<string>($"{TestGlobals.CredentialsConfigurationBasePath}:{credentialManagerConfigurationPath}:TenantId");
 
-            var provider = new CredentialManagerAuthenticationProvider(
-                clientId,
-                tenantId,
-                "invalid");
+                var provider = new CredentialManagerAuthenticationProvider(
+                    clientId,
+                    tenantId,
+                    "invalid");
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestCredentialManagerAuthenticateRequestAsyncNoResource()
         {
-            if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
 
-            var provider = PrepareCredentialManagerAuthenticationProvider();
+                var provider = PrepareCredentialManagerAuthenticationProvider();
 
-            await provider.AuthenticateRequestAsync(null, null);
+                await provider.AuthenticateRequestAsync(null, null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestCredentialManagerAuthenticateRequestAsyncNoHttpRequest()
         {
-            if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
 
-            var provider = PrepareCredentialManagerAuthenticationProvider();
+                var provider = PrepareCredentialManagerAuthenticationProvider();
 
-            await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+                await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+            });
         }
 
         [TestMethod]
@@ -147,29 +159,35 @@ namespace PnP.Core.Auth.Test.Providers
             await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, request);
 
             Assert.IsNotNull(request.Headers.Authorization);
-            Assert.AreEqual(request.Headers.Authorization.Scheme.ToLower(), "bearer");
+            Assert.AreEqual("bearer", request.Headers.Authorization.Scheme.ToLower());
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestCredentialManagerGetAccessTokenAsyncNullResource()
         {
-            if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
 
-            var provider = PrepareCredentialManagerAuthenticationProvider();
+                var provider = PrepareCredentialManagerAuthenticationProvider();
 
-            await provider.GetAccessTokenAsync(null);
+                await provider.GetAccessTokenAsync(null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestCredentialManagerGetAccessTokenAsyncFullNullResource()
         {
-            if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
 
-            var provider = PrepareCredentialManagerAuthenticationProvider();
+                var provider = PrepareCredentialManagerAuthenticationProvider();
 
-            await provider.GetAccessTokenAsync(null, new string[] { });
+                await provider.GetAccessTokenAsync(null, new string[] { });
+            });
         }
 
         [TestMethod]

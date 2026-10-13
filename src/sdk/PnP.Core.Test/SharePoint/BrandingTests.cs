@@ -402,7 +402,7 @@ namespace PnP.Core.Test.SharePoint
                 try
                 {
                     // Header layout is not set to extended, so exception will be thrown.
-                    Assert.ThrowsException<ClientException>(() =>
+                    Assert.ThrowsExactly<ClientException>(() =>
                     {
                         // Set the header
                         chrome.Header.SetHeaderBackgroundImage("pageheader.jpg", File.OpenRead($".{Path.DirectorySeparatorChar}TestAssets{Path.DirectorySeparatorChar}pageheader.jpg"), 0, 0, true);
@@ -439,7 +439,7 @@ namespace PnP.Core.Test.SharePoint
                 try
                 {
                     // Header layout is not set to extended, so exception will be thrown.
-                    Assert.ThrowsException<ClientException>(() =>
+                    Assert.ThrowsExactly<ClientException>(() =>
                     {
                         // Set the header
                         chrome.Header.SetHeaderBackgroundImage("pageheader.jpg", File.OpenRead($".{Path.DirectorySeparatorChar}TestAssets{Path.DirectorySeparatorChar}pageheader.jpg"), 0, 0, true);

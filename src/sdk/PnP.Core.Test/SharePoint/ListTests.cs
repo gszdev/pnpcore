@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json.Linq;
+//using Newtonsoft.Json.Linq;
 using PnP.Core.Model;
 using PnP.Core.Model.SharePoint;
 using PnP.Core.QueryModel;
@@ -324,46 +324,46 @@ namespace PnP.Core.Test.SharePoint
                     if (list2 != null)
                     {
                         // Commented now that the GetBy methods are actual methods on the interface versus extention methods
-                        //await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => {
+                        //await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => {
                         //    IListCollection list = null;
                         //    await list.GetByIdAsync(listGuid);
                         //});
 
-                        await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                        await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                         {
                             await context2.Web.Lists.GetByIdAsync(Guid.Empty, p => p.TemplateType, p => p.Title);
                         });
 
                         // Commented now that the GetBy methods are actual methods on the interface versus extention methods
-                        //Assert.ThrowsException<ArgumentNullException>(() => {
+                        //Assert.ThrowsExactly<ArgumentNullException>(() => {
                         //    IListCollection list = null;
                         //    list.GetById(listGuid);
                         //});
 
-                        Assert.ThrowsException<ArgumentNullException>(() =>
+                        Assert.ThrowsExactly<ArgumentNullException>(() =>
                         {
                             context2.Web.Lists.GetById(Guid.Empty, p => p.TemplateType, p => p.Title);
                         });
 
                         // Commented now that the GetBy methods are actual methods on the interface versus extention methods
-                        //Assert.ThrowsException<ArgumentNullException>(() => {
+                        //Assert.ThrowsExactly<ArgumentNullException>(() => {
                         //    IListCollection list = null;
                         //    list.GetByTitle(listTitle);
                         //});
 
-                        Assert.ThrowsException<ArgumentNullException>(() =>
+                        Assert.ThrowsExactly<ArgumentNullException>(() =>
                         {
                             context2.Web.Lists.GetByTitle(null);
                         });
 
                         // Commented now that the GetBy methods are actual methods on the interface versus extention methods
-                        //await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => {
+                        //await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => {
                         //    IListCollection list = null;
                         //    await list.GetByTitleAsync(listTitle);
                         //});
 
                         // Commented now that the GetBy methods are actual methods on the interface versus extention methods
-                        //await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => {
+                        //await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => {
                         //    IListCollection list = null;
                         //    await list.GetByTitleAsync(null);
                         //});
@@ -537,12 +537,12 @@ namespace PnP.Core.Test.SharePoint
                     var list2 = context2.Web.Lists.GetByTitle(listTitle);
                     if (list2 != null)
                     {
-                        Assert.ThrowsException<ArgumentNullException>(() =>
+                        Assert.ThrowsExactly<ArgumentNullException>(() =>
                         {
                             list2.LoadItemsByCamlQuery(queryOptions: null);
                         });
 
-                        Assert.ThrowsException<ArgumentNullException>(() =>
+                        Assert.ThrowsExactly<ArgumentNullException>(() =>
                         {
                             list2.LoadItemsByCamlQuery(query: null);
                         });
@@ -964,7 +964,7 @@ namespace PnP.Core.Test.SharePoint
                 var list = await context.Web.Lists.GetByServerRelativeUrlAsync($"{context.Uri.LocalPath}/shared%20documents", p => p.Title, p => p.ListExperience);
 
                 Assert.IsTrue(list.Requested);
-                Assert.AreEqual(list.Title, "documents", true);
+                Assert.AreEqual("documents", list.Title, true);
 
             }
         }
@@ -978,7 +978,7 @@ namespace PnP.Core.Test.SharePoint
                 var list = context.Web.Lists.GetByServerRelativeUrl($"{context.Uri.LocalPath}/shared%20documents", p => p.Title, p => p.ListExperience);
 
                 Assert.IsTrue(list.Requested);
-                Assert.AreEqual(list.Title, "documents", true);
+                Assert.AreEqual("documents", list.Title, true);
 
             }
         }
@@ -992,7 +992,7 @@ namespace PnP.Core.Test.SharePoint
                 var list = await context.Web.Lists.GetByTitleAsync("Documents", p => p.Title, p => p.ListExperience);
 
                 Assert.IsTrue(list.Requested);
-                Assert.AreEqual(list.Title, "documents", true);
+                Assert.AreEqual("documents", list.Title, true);
 
             }
         }
@@ -1006,7 +1006,7 @@ namespace PnP.Core.Test.SharePoint
                 var list = context.Web.Lists.GetByTitle("Documents", p => p.Title, p => p.Items, p => p.Fields.QueryProperties(p => p.InternalName, p => p.FieldTypeKind, p => p.TypeAsString, p => p.Title));
 
                 Assert.IsTrue(list.Requested);
-                Assert.AreEqual(list.Title, "documents", true);
+                Assert.AreEqual("documents", list.Title, true);
             }
         }
 
@@ -1019,7 +1019,7 @@ namespace PnP.Core.Test.SharePoint
                 var list = context.Web.Lists.GetByTitle("Documents", p => p.Title, p => p.ListExperience);
 
                 Assert.IsTrue(list.Requested);
-                Assert.AreEqual(list.Title, "documents", true);
+                Assert.AreEqual("documents", list.Title, true);
             }
         }
 
@@ -1032,7 +1032,7 @@ namespace PnP.Core.Test.SharePoint
                 var list = context.Web.Lists.GetByTitle("Documents", p => p.Title, p => p.ContentTypes);
 
                 Assert.IsTrue(list.Requested);
-                Assert.AreEqual(list.Title, "documents", true);
+                Assert.AreEqual("documents", list.Title, true);
                 Assert.IsTrue(list.ContentTypes.Requested);
                 Assert.IsTrue(list.ContentTypes.AsRequested().First().IsPropertyAvailable(p => p.Id));
                 Assert.IsTrue(list.ContentTypes.AsRequested().First().IsPropertyAvailable(p => p.Description));
@@ -1048,7 +1048,7 @@ namespace PnP.Core.Test.SharePoint
                 var list = await context.Web.Lists.GetByTitleAsync("Documents", p => p.Title, p => p.ListExperience, p => p.ContentTypes.QueryProperties(p => p.Id, p => p.Name));
 
                 Assert.IsTrue(list.Requested);
-                Assert.AreEqual(list.Title, "documents", true);
+                Assert.AreEqual("documents", list.Title, true);
                 Assert.IsTrue(list.ContentTypes.Requested);
                 Assert.IsTrue(list.ContentTypes.AsRequested().First().IsPropertyAvailable(p => p.Id));
                 Assert.IsTrue(list.ContentTypes.AsRequested().First().IsPropertyAvailable(p => p.Name));
@@ -1066,7 +1066,7 @@ namespace PnP.Core.Test.SharePoint
                         p => p.FieldLinks.QueryProperties(p => p.Id, p => p.Name)));
 
                 Assert.IsTrue(list.Requested);
-                Assert.AreEqual(list.Title, "documents", true);
+                Assert.AreEqual("documents", list.Title, true);
                 Assert.IsTrue(list.ContentTypes.Requested);
 
                 var firstContentType = list.ContentTypes.AsRequested().First();
@@ -1092,12 +1092,12 @@ namespace PnP.Core.Test.SharePoint
                     p => p.Created, p => p.LastItemDeletedDate, p => p.LastItemModifiedDate, p => p.LastItemUserModifiedDate);
 
                 Assert.IsTrue(list.Requested);
-                Assert.AreEqual(list.IsApplicationList, false);
-                Assert.AreEqual(list.IsCatalog, false);
-                Assert.AreEqual(list.IsDefaultDocumentLibrary, true);
-                Assert.AreEqual(list.IsPrivate, false);
-                Assert.AreEqual(list.IsSiteAssetsLibrary, false);
-                Assert.AreEqual(list.IsSystemList, false);
+                Assert.AreEqual(false, list.IsApplicationList);
+                Assert.AreEqual(false, list.IsCatalog);
+                Assert.AreEqual(true, list.IsDefaultDocumentLibrary);
+                Assert.AreEqual(false, list.IsPrivate);
+                Assert.AreEqual(false, list.IsSiteAssetsLibrary);
+                Assert.AreEqual(false, list.IsSystemList);
                 Assert.IsTrue(list.Created > DateTime.MinValue && list.Created < DateTime.Now);
                 Assert.IsTrue(list.LastItemDeletedDate > DateTime.MinValue && list.LastItemDeletedDate < DateTime.Now);
                 Assert.IsTrue(list.LastItemModifiedDate > DateTime.MinValue && list.LastItemModifiedDate < DateTime.Now);
@@ -1107,12 +1107,12 @@ namespace PnP.Core.Test.SharePoint
                     p => p.IsCatalog, p => p.IsDefaultDocumentLibrary, p => p.IsPrivate, p => p.IsSiteAssetsLibrary, p => p.IsSystemList);
 
                 Assert.IsTrue(list.Requested);
-                Assert.AreEqual(list.IsApplicationList, true);
-                Assert.AreEqual(list.IsCatalog, true);
-                Assert.AreEqual(list.IsDefaultDocumentLibrary, false);
-                Assert.AreEqual(list.IsPrivate, false);
-                Assert.AreEqual(list.IsSiteAssetsLibrary, false);
-                Assert.AreEqual(list.IsSystemList, true);
+                Assert.AreEqual(true, list.IsApplicationList);
+                Assert.AreEqual(true, list.IsCatalog);
+                Assert.AreEqual(false, list.IsDefaultDocumentLibrary);
+                Assert.AreEqual(false, list.IsPrivate);
+                Assert.AreEqual(false, list.IsSiteAssetsLibrary);
+                Assert.AreEqual(true, list.IsSystemList);
             }
         }
 
@@ -1776,7 +1776,7 @@ namespace PnP.Core.Test.SharePoint
                 await list.LoadAsync(l => l.EventReceivers);
 
                 Assert.IsNotNull(list.EventReceivers);
-                Assert.AreEqual(list.EventReceivers.Requested, true);
+                Assert.AreEqual(true, list.EventReceivers.Requested);
             }
         }
 
@@ -1801,9 +1801,9 @@ namespace PnP.Core.Test.SharePoint
                 var newReceiver = await list.EventReceivers.AddAsync(eventReceiverOptions);
 
                 Assert.IsNotNull(newReceiver);
-                Assert.AreEqual(newReceiver.Synchronization, EventReceiverSynchronization.Synchronous);
-                Assert.AreEqual(newReceiver.ReceiverName, "PnP Test Receiver");
-                Assert.AreEqual(newReceiver.EventType, EventReceiverType.ItemAdding);
+                Assert.AreEqual(EventReceiverSynchronization.Synchronous, newReceiver.Synchronization);
+                Assert.AreEqual("PnP Test Receiver", newReceiver.ReceiverName);
+                Assert.AreEqual(EventReceiverType.ItemAdding, newReceiver.EventType);
 
                 await newReceiver.DeleteAsync();
             }
@@ -1823,7 +1823,7 @@ namespace PnP.Core.Test.SharePoint
                 await context.ExecuteAsync();
 
                 Assert.IsNotNull(list.EventReceivers);
-                Assert.AreEqual(list.EventReceivers.Requested, true);
+                Assert.AreEqual(true, list.EventReceivers.Requested);
             }
         }
 
@@ -1849,92 +1849,104 @@ namespace PnP.Core.Test.SharePoint
                 await context.ExecuteAsync();
 
                 Assert.IsNotNull(newReceiver);
-                Assert.AreEqual(newReceiver.Synchronization, EventReceiverSynchronization.Synchronous);
-                Assert.AreEqual(newReceiver.ReceiverName, "PnP Test Receiver");
-                Assert.AreEqual(newReceiver.EventType, EventReceiverType.ItemAdding);
+                Assert.AreEqual(EventReceiverSynchronization.Synchronous, newReceiver.Synchronization);
+                Assert.AreEqual("PnP Test Receiver", newReceiver.ReceiverName);
+                Assert.AreEqual(EventReceiverType.ItemAdding, newReceiver.EventType);
 
                 await newReceiver.DeleteAsync();
             }
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         [TestMethod]
         public async Task AddListEventReceiverAsyncNoEventTypeExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var list = await context.Web.Lists.GetByTitleAsync("Documents");
-                await list.LoadAsync(l => l.EventReceivers);
-
-                var eventReceiverOptions = new EventReceiverOptions
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
                 {
+                    var list = await context.Web.Lists.GetByTitleAsync("Documents");
+                    await list.LoadAsync(l => l.EventReceivers);
 
-                };
+                    var eventReceiverOptions = new EventReceiverOptions
+                    {
 
-                await list.EventReceivers.AddAsync(eventReceiverOptions);
-            }
+                    };
+
+                    await list.EventReceivers.AddAsync(eventReceiverOptions);
+                }
+            });
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         [TestMethod]
         public async Task AddListEventReceiverAsyncNoEventReceiverNameExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var list = await context.Web.Lists.GetByTitleAsync("Documents");
-                await list.LoadAsync(l => l.EventReceivers);
-
-                var eventReceiverOptions = new EventReceiverOptions
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
                 {
-                    EventType = EventReceiverType.ItemAdding
-                };
+                    var list = await context.Web.Lists.GetByTitleAsync("Documents");
+                    await list.LoadAsync(l => l.EventReceivers);
 
-                await list.EventReceivers.AddAsync(eventReceiverOptions);
-            }
+                    var eventReceiverOptions = new EventReceiverOptions
+                    {
+                        EventType = EventReceiverType.ItemAdding
+                    };
+
+                    await list.EventReceivers.AddAsync(eventReceiverOptions);
+                }
+            });
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         [TestMethod]
         public async Task AddListEventReceiverAsyncNoEventReceiverUrlExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var list = await context.Web.Lists.GetByTitleAsync("Documents");
-                await list.LoadAsync(l => l.EventReceivers);
-
-                var eventReceiverOptions = new EventReceiverOptions
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
                 {
-                    EventType = EventReceiverType.ItemAdding,
-                    ReceiverName = "PnP Event Receiver Test"
-                };
+                    var list = await context.Web.Lists.GetByTitleAsync("Documents");
+                    await list.LoadAsync(l => l.EventReceivers);
 
-                await list.EventReceivers.AddAsync(eventReceiverOptions);
-            }
+                    var eventReceiverOptions = new EventReceiverOptions
+                    {
+                        EventType = EventReceiverType.ItemAdding,
+                        ReceiverName = "PnP Event Receiver Test"
+                    };
+
+                    await list.EventReceivers.AddAsync(eventReceiverOptions);
+                }
+            });
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         [TestMethod]
         public async Task AddListEventReceiverAsyncNoEventReceiverSequenceNumberExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var list = await context.Web.Lists.GetByTitleAsync("Documents");
-                await list.LoadAsync(l => l.EventReceivers);
-
-                var eventReceiverOptions = new EventReceiverOptions
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
                 {
-                    EventType = EventReceiverType.ItemAdding,
-                    ReceiverName = "PnP Event Receiver Test",
-                    ReceiverUrl = "https://pnp.github.io",
-                    Synchronization = EventReceiverSynchronization.Synchronous
-                };
+                    var list = await context.Web.Lists.GetByTitleAsync("Documents");
+                    await list.LoadAsync(l => l.EventReceivers);
 
-                await list.EventReceivers.AddAsync(eventReceiverOptions);
-            }
+                    var eventReceiverOptions = new EventReceiverOptions
+                    {
+                        EventType = EventReceiverType.ItemAdding,
+                        ReceiverName = "PnP Event Receiver Test",
+                        ReceiverUrl = "https://pnp.github.io",
+                        Synchronization = EventReceiverSynchronization.Synchronous
+                    };
+
+                    await list.EventReceivers.AddAsync(eventReceiverOptions);
+                }
+            });
         }
 
         #endregion
@@ -1974,17 +1986,20 @@ namespace PnP.Core.Test.SharePoint
             }
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         [TestMethod]
         public async Task CheckIfUserHasPermissionsExceptionAsyncTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var list = await context.Web.Lists.GetByTitleAsync("Documents");
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var list = await context.Web.Lists.GetByTitleAsync("Documents");
 
-                var hasPermissions = await list.CheckIfUserHasPermissionsAsync(null, PermissionKind.AddListItems);
-            }
+                    var hasPermissions = await list.CheckIfUserHasPermissionsAsync(null, PermissionKind.AddListItems);
+                }
+            });
         }
 
         #endregion

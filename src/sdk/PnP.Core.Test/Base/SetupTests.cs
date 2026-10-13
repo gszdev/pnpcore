@@ -34,7 +34,7 @@ namespace PnP.Core.Test.Base
             Assert.IsInstanceOfType(provider.GetRequiredService<IPnPContextFactory>(), typeof(IPnPContextFactory));
             Assert.IsInstanceOfType(provider.GetRequiredService<IAuthenticationProvider>(), typeof(IAuthenticationProvider));
 
-            Assert.ThrowsException<ArgumentNullException>(() =>
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
                 ServiceCollection services = null;
                 services.AddPnPCore();
@@ -75,13 +75,13 @@ namespace PnP.Core.Test.Base
 
             Assert.IsInstanceOfType(provider.GetRequiredService<IPnPContextFactory>(), typeof(IPnPContextFactory));
 
-            Assert.ThrowsException<ArgumentNullException>(() =>
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
                 ServiceCollection services = null;
                 services.AddPnPContextFactory();
             });
 
-            Assert.ThrowsException<ArgumentNullException>(() =>
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
                 ServiceCollection services = null;
                 services.AddPnPContextFactory((options) =>
@@ -90,7 +90,7 @@ namespace PnP.Core.Test.Base
                 });
             });
 
-            Assert.ThrowsException<ArgumentNullException>(() =>
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
                 ServiceCollection services = new ServiceCollection();
                 services.AddPnPContextFactory(null, null, null);

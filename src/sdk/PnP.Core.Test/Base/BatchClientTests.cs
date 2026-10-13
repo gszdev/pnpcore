@@ -485,7 +485,7 @@ namespace PnP.Core.Test.Base
                         result = await list3.LoadListDataAsStreamAsync(new RenderListDataOptions() { ViewXml = "<View><ViewFields><FieldRef Name='Title' /></ViewFields></View>", RenderOptions = RenderListDataOptionsFlags.ListData });
                         foreach (var item in list3.Items.AsRequested())
                         {
-                            Assert.AreEqual(item.Title, "Updated");
+                            Assert.AreEqual("Updated", item.Title);
                         }
                     }
                 }
@@ -580,7 +580,7 @@ namespace PnP.Core.Test.Base
                     Interactive = true
                 };
 
-                await Assert.ThrowsExceptionAsync<ClientException>(async () =>
+                await Assert.ThrowsExactlyAsync<ClientException>(async () =>
                 {
                     try
                     {

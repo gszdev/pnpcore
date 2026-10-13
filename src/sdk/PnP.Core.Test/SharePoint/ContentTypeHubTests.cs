@@ -210,7 +210,7 @@ namespace PnP.Core.Test.SharePoint
                 {
                     newContentType = await context.ContentTypeHub.ContentTypes.AddAsync("0x0100302EF0D1F1DB4C4EBF58251BCCF5968D", "TEST ADD Unpublish", "TESTING", "TESTING");
 
-                    await Assert.ThrowsExceptionAsync<Exception>(async () =>
+                    await Assert.ThrowsExactlyAsync<Exception>(async () =>
                     {
                         await newContentType.UnpublishAsync();
                     });
@@ -239,7 +239,7 @@ namespace PnP.Core.Test.SharePoint
                 {
                     newContentType = await context.Web.ContentTypes.AddAsync("0x0100302EF0D1F1DB4C4EBF58251BCCF5968D", "TEST ADD Publish", "TESTING", "TESTING");
 
-                    await Assert.ThrowsExceptionAsync<InvalidOperationException>(async () =>
+                    await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
                     {
                         await newContentType.PublishAsync();
                     });
@@ -662,28 +662,34 @@ namespace PnP.Core.Test.SharePoint
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        //[ExpectedException(typeof(ArgumentException))]
         public async Task AddContentTypeAsDocumentSetExceptionAsyncTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
             {
-                IDocumentSet newDocumentSet = await context.Web.ContentTypes.AddDocumentSetAsync("0x0101mlalalala", "Document set name");
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    IDocumentSet newDocumentSet = await context.Web.ContentTypes.AddDocumentSetAsync("0x0101mlalalala", "Document set name");
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ClientException))]
+        //[ExpectedException(typeof(ClientException))]
         public async Task GetContentTypeAsDocumentSetExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ClientException>(async () =>
             {
-                IContentType contentType = System.Linq.Queryable.Where(context.Web.ContentTypes, ct => ct.StringId == "0x0101")
-                            .QueryProperties(ct => ct.StringId, ct => ct.Id)
-                            .FirstOrDefault();
-                var documentSet = contentType.AsDocumentSet();
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    IContentType contentType = System.Linq.Queryable.Where(context.Web.ContentTypes, ct => ct.StringId == "0x0101")
+                                .QueryProperties(ct => ct.StringId, ct => ct.Id)
+                                .FirstOrDefault();
+                    var documentSet = contentType.AsDocumentSet();
+                }
+            });
         }
 
         #endregion

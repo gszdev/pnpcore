@@ -41,7 +41,7 @@ namespace PnP.Core.Test.Misc
         [TestMethod()]
         public void CombineWithNullPathTest()
         {
-            Assert.ThrowsException<UriFormatException>(() =>
+            Assert.ThrowsExactly<UriFormatException>(() =>
             {
                 UrlUtility.Combine((string)null, "sites/foo");
             });
@@ -90,7 +90,7 @@ namespace PnP.Core.Test.Misc
         [TestMethod()]
         public void EnsureAbsoluteUrlWithInvalidAbsoluteResourceUrlTest()
         {
-            Assert.ThrowsException<ArgumentException>(() =>
+            Assert.ThrowsExactly<ArgumentException>(() =>
             {
                 Uri webUrl = new Uri("https://contoso.sharepoint.com/sites/foo");
                 string resourceUrl = "https://contoso.sharepoint.com/sites/bar/library/doc.docx";

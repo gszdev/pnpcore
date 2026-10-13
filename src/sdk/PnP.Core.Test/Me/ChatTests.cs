@@ -125,20 +125,22 @@ namespace PnP.Core.Test.Me
                 await chat.LoadAsync(y => y.Members);
 
                 Assert.IsNotNull(chat);
-                Assert.AreEqual(chat.Members.Length, 3);
+                Assert.AreEqual(3, chat.Members.Length);
                 Assert.AreEqual(chat.Topic, topic);
-                Assert.AreEqual(chat.ChatType, ChatTypeConstants.Group);
+                Assert.AreEqual(ChatTypeConstants.Group, chat.ChatType);
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        //[ExpectedException(typeof(InvalidOperationException))]
         public async Task AddChatMeetingExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
             {
-                var chatMemberOptions = new List<ChatMemberOptions>
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var chatMemberOptions = new List<ChatMemberOptions>
                 {
                     new ChatMemberOptions()
                     {
@@ -146,26 +148,30 @@ namespace PnP.Core.Test.Me
                         UserId = UserId1
                     }
                 };
-                var chat = context.Me.Chats.Add(new ChatOptions
-                {
-                    ChatType = ChatType.Meeting,
-                    Members = chatMemberOptions,
-                });
-            }
+                    var chat = context.Me.Chats.Add(new ChatOptions
+                    {
+                        ChatType = ChatType.Meeting,
+                        Members = chatMemberOptions,
+                    });
+                }
+            });
         }
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task AddChatNoMembersExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var chat = context.Me.Chats.Add(new ChatOptions
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
                 {
-                    ChatType = ChatType.Meeting,
-                    Members = null,
-                });
-            }
+                    var chat = context.Me.Chats.Add(new ChatOptions
+                    {
+                        ChatType = ChatType.Meeting,
+                        Members = null,
+                    });
+                }
+            });
         }
     }
 

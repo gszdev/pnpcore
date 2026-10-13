@@ -55,7 +55,7 @@ namespace PnP.Core.Test.SharePoint
             var profile = context.Social.UserProfile.GetMyProperties(p => p.DisplayName);
 
             Assert.IsTrue(!string.IsNullOrEmpty(profile.DisplayName));
-            Assert.ThrowsException<ClientException>(() => profile.UserProfileProperties);
+            Assert.ThrowsExactly<ClientException>(() => profile.UserProfileProperties);
         }
 
         [TestMethod]
@@ -65,7 +65,7 @@ namespace PnP.Core.Test.SharePoint
 
             using var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite);
 
-            Assert.ThrowsException<ClientException>(() => context.Social.UserProfile.GetMyProperties(p => p.DisplayName.Contains("123")));
+            Assert.ThrowsExactly<ClientException>(() => context.Social.UserProfile.GetMyProperties(p => p.DisplayName.Contains("123")));
         }
 
         [TestMethod]

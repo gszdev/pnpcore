@@ -15,7 +15,7 @@ namespace PnP.Core.Test.QueryModel
             var query = System.Linq.Queryable.Where(new ListItemCollection(null, null), i => i.Title.IndexOf("Value") == 0)
                 as QueryableDataModelCollection<IListItem>;
 
-            Assert.ThrowsException<NotSupportedException>(() => query.ToString());
+            Assert.ThrowsExactly<NotSupportedException>(() => query.ToString());
         }
 
         [TestMethod]
@@ -24,7 +24,7 @@ namespace PnP.Core.Test.QueryModel
             var query = System.Linq.Queryable.Where(new ListItemCollection(null, null), i => ((DateTime)i.Values["Date"]).Ticks == 0)
                 as QueryableDataModelCollection<IListItem>;
 
-            Assert.ThrowsException<NotSupportedException>(() => query.ToString());
+            Assert.ThrowsExactly<NotSupportedException>(() => query.ToString());
         }
 
         [TestMethod]
@@ -33,7 +33,7 @@ namespace PnP.Core.Test.QueryModel
             var query = System.Linq.Queryable.Where(new ListItemCollection(null, null), i => i.Title.Equals("Value"))
                 as QueryableDataModelCollection<IListItem>;
 
-            Assert.ThrowsException<NotSupportedException>(() => query.ToString());
+            Assert.ThrowsExactly<NotSupportedException>(() => query.ToString());
         }
 
         [TestMethod]

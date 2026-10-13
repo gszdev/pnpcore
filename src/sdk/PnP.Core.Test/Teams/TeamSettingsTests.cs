@@ -166,7 +166,7 @@ namespace PnP.Core.Test.Teams
 
                 team = await context.Team.GetAsync(x => x.FunSettings);
 
-                Assert.AreEqual(team.FunSettings.GiphyContentRating, TeamGiphyContentRating.Moderate);
+                Assert.AreEqual(TeamGiphyContentRating.Moderate, team.FunSettings.GiphyContentRating);
                 Assert.IsTrue(team.FunSettings.AllowStickersAndMemes);
                 Assert.IsTrue(team.FunSettings.AllowCustomMemes);
                 Assert.IsTrue(team.FunSettings.AllowGiphy);

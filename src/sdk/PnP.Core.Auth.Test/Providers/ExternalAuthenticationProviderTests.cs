@@ -70,41 +70,48 @@ namespace PnP.Core.Auth.Test.Providers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
+        //[ExpectedException(typeof(ConfigurationErrorsException))]
         public async Task TestExternalWithGraphNoUserTokenProvider()
         {
-            if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
-
-            using (var context = await GetTestSiteExternalContext())
+            await Assert.ThrowsExactlyAsync<ConfigurationErrorsException>(async () =>
             {
-                // Remove any already existing AccessTokenProvider
-                var externalTokenProvider = (ExternalAuthenticationProvider)context.AuthenticationProvider;
-                if (externalTokenProvider.AccessTokenProvider != null)
-                {
-                    externalTokenProvider.AccessTokenProvider = null;
-                }
+                if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
 
-                await TestCommon.CheckAccessToTargetResource(context);
-            }
+                using (var context = await GetTestSiteExternalContext())
+                {
+                    // Remove any already existing AccessTokenProvider
+                    var externalTokenProvider = (ExternalAuthenticationProvider)context.AuthenticationProvider;
+                    if (externalTokenProvider.AccessTokenProvider != null)
+                    {
+                        externalTokenProvider.AccessTokenProvider = null;
+                    }
+
+                    await TestCommon.CheckAccessToTargetResource(context);
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
+        //[ExpectedException(typeof(ConfigurationErrorsException))]
         public async Task TestExternalWithSPONoUserTokenProvider()
         {
-            if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
-
-            using (var context = await GetTestSiteExternalContext())
+            //ConfigurationErrorsException
+            await Assert.ThrowsExactlyAsync<ConfigurationErrorsException>(async () =>
             {
-                // Remove any already existing AccessTokenProvider
-                var externalTokenProvider = (ExternalAuthenticationProvider)context.AuthenticationProvider;
-                if (externalTokenProvider.AccessTokenProvider != null)
-                {
-                    externalTokenProvider.AccessTokenProvider = null;
-                }
+                if (TestCommon.RunningInGitHubWorkflow()) Assert.Inconclusive("Skipping live test because we're running inside a GitHub action");
 
-                await TestCommon.CheckAccessToTargetResource(context, false);
-            }
+                using (var context = await GetTestSiteExternalContext())
+                {
+                    // Remove any already existing AccessTokenProvider
+                    var externalTokenProvider = (ExternalAuthenticationProvider)context.AuthenticationProvider;
+                    if (externalTokenProvider.AccessTokenProvider != null)
+                    {
+                        externalTokenProvider.AccessTokenProvider = null;
+                    }
+
+                    await TestCommon.CheckAccessToTargetResource(context, false);
+                }
+            });
         }
 
         [TestMethod]
@@ -119,21 +126,27 @@ namespace PnP.Core.Auth.Test.Providers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestExternalAuthenticateRequestAsyncNoResource()
         {
-            var provider = PrepareExternalAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareExternalAuthenticationProvider();
 
-            await provider.AuthenticateRequestAsync(null, null);
+                await provider.AuthenticateRequestAsync(null, null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestExternalAuthenticateRequestAsyncNoHttpRequest()
         {
-            var provider = PrepareExternalAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareExternalAuthenticationProvider();
 
-            await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+                await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+            });
         }
 
         [TestMethod]
@@ -145,34 +158,43 @@ namespace PnP.Core.Auth.Test.Providers
             await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, request);
 
             Assert.IsNotNull(request.Headers.Authorization);
-            Assert.AreEqual(request.Headers.Authorization.Scheme.ToLower(), "bearer");
+            Assert.AreEqual("bearer", request.Headers.Authorization.Scheme.ToLower());
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestExternalGetAccessTokenAsyncNullResource()
         {
-            var provider = PrepareExternalAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareExternalAuthenticationProvider();
 
-            await provider.GetAccessTokenAsync(null);
+                await provider.GetAccessTokenAsync(null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestExternalGetAccessTokenAsyncFullNullResource()
         {
-            var provider = PrepareExternalAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareExternalAuthenticationProvider();
 
-            await provider.GetAccessTokenAsync(null, new string[] { });
+                await provider.GetAccessTokenAsync(null, new string[] { });
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestExternalGetAccessTokenAsyncFullNullScopes()
         {
-            var provider = PrepareExternalAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareExternalAuthenticationProvider();
 
-            await provider.GetAccessTokenAsync(TestGlobals.GraphResource, null);
+                await provider.GetAccessTokenAsync(TestGlobals.GraphResource, null);
+            });
         }
 
         [TestMethod]

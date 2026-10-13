@@ -1118,14 +1118,17 @@ namespace PnP.Core.Test.SharePoint
         }
 
         [TestMethod]
-        [ExpectedException(typeof(SharePointRestServiceException))]
+        //[ExpectedException(typeof(SharePointRestServiceException))]
         public async Task GetUserMissingTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<SharePointRestServiceException>(async () =>
             {
-                var foundUser = await context.Web.GetUserByIdAsync(890879070);
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var foundUser = await context.Web.GetUserByIdAsync(890879070);
+                }
+            });
         }
 
         [TestMethod]
@@ -1304,11 +1307,11 @@ namespace PnP.Core.Test.SharePoint
                     InheritPermissions = false
                 });
                 Assert.IsTrue(addedWeb != null);
-                Assert.AreEqual(addedWeb.Title, webTitle);
-                Assert.AreEqual(addedWeb.Description, "Description of the sub web");
-                Assert.AreEqual(addedWeb.WebTemplate, "STS");
-                Assert.AreEqual(addedWeb.Language, 1043);
-                Assert.AreEqual(addedWeb.Url, new Uri($"{context.Uri}/{webTitle}"));
+                Assert.AreEqual(webTitle, addedWeb.Title);
+                Assert.AreEqual("Description of the sub web", addedWeb.Description);
+                Assert.AreEqual("STS", addedWeb.WebTemplate);
+                Assert.AreEqual(1043, addedWeb.Language);
+                Assert.AreEqual(new Uri($"{context.Uri}/{webTitle}"), addedWeb.Url);
 
                 using (var context2 = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite, 1))
                 {
@@ -1316,11 +1319,11 @@ namespace PnP.Core.Test.SharePoint
                     var createdWeb = context2.Web.Webs.AsRequested().FirstOrDefault(p => p.Title == webTitle);
                     Assert.IsTrue(createdWeb != null);
 
-                    Assert.AreEqual(createdWeb.Title, webTitle);
-                    Assert.AreEqual(createdWeb.Description, "Description of the sub web");
-                    Assert.AreEqual(createdWeb.WebTemplate, "STS");
-                    Assert.AreEqual(createdWeb.Language, 1043);
-                    Assert.AreEqual(createdWeb.Url, new Uri($"{context.Uri}/{webTitle}"));
+                    Assert.AreEqual(webTitle, createdWeb.Title);
+                    Assert.AreEqual("Description of the sub web", createdWeb.Description);
+                    Assert.AreEqual("STS", createdWeb.WebTemplate);
+                    Assert.AreEqual(1043, createdWeb.Language);
+                    Assert.AreEqual(new Uri($"{context.Uri}/{webTitle}"), createdWeb.Url);
 
                     // Delete the created web again
                     await createdWeb.DeleteAsync();
@@ -1345,7 +1348,7 @@ namespace PnP.Core.Test.SharePoint
                     var createdWeb = context2.Web.Webs.AsRequested().FirstOrDefault(p => p.Title == webTitle);
                     Assert.IsTrue(createdWeb != null);
 
-                    await Assert.ThrowsExceptionAsync<ClientException>(async () =>
+                    await Assert.ThrowsExactlyAsync<ClientException>(async () =>
                     {
                         // Delete the created web again...should result in an exception
                         await createdWeb.DeleteBatchAsync();
@@ -1521,11 +1524,11 @@ namespace PnP.Core.Test.SharePoint
                     Assert.IsTrue((changes.Last() as IChangeContentType).WebId != Guid.Empty);
 
                     Assert.IsTrue(changes.Last().IsPropertyAvailable<IChangeContentType>(p => p.ContentTypeId));
-                    Assert.ThrowsException<ClientException>(() =>
+                    Assert.ThrowsExactly<ClientException>(() =>
                     {
                         changes.Last().IsPropertyAvailable<IChangeContentType>(p => p.ContentTypeId.Name);
                     });
-                    Assert.ThrowsException<ArgumentNullException>(() =>
+                    Assert.ThrowsExactly<ArgumentNullException>(() =>
                     {
                         changes.Last().IsPropertyAvailable<IChangeContentType>(null);
                     });
@@ -1610,7 +1613,7 @@ namespace PnP.Core.Test.SharePoint
 
             using (var context = TestCommon.Instance.GetContext(TestCommon.TestSubSite))
             {
-                Assert.ThrowsException<ClientException>(() =>
+                Assert.ThrowsExactly<ClientException>(() =>
                 {
                     context.Web.EnsurePageScheduling();
                 });
@@ -1833,7 +1836,7 @@ namespace PnP.Core.Test.SharePoint
                 var webTemplates = context.Web.GetWebTemplates(1043);
 
                 Assert.IsNotNull(webTemplates);
-                Assert.AreEqual(webTemplates.FirstOrDefault().Lcid, 1043);
+                Assert.AreEqual(1043, webTemplates.FirstOrDefault().Lcid);
             }
         }
 
@@ -1878,15 +1881,18 @@ namespace PnP.Core.Test.SharePoint
             }
         }
 
-        [ExpectedException(typeof(ClientException))]
+        //[ExpectedException(typeof(ClientException))]
         [TestMethod]
         public async Task GetWebTemplateByNameTestNoResultException()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ClientException>(async () =>
             {
-                var webTemplate = await context.Web.GetWebTemplateByNameAsync("PnP Rocks!");
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var webTemplate = await context.Web.GetWebTemplateByNameAsync("PnP Rocks!");
+                }
+            });
         }
 
         #region Event Receivers
@@ -1900,7 +1906,7 @@ namespace PnP.Core.Test.SharePoint
                 await context.Web.LoadAsync(p => p.EventReceivers);
 
                 Assert.IsNotNull(context.Web.EventReceivers);
-                Assert.AreEqual(context.Web.EventReceivers.Requested, true);
+                Assert.AreEqual(true, context.Web.EventReceivers.Requested);
             }
         }
 
@@ -1922,9 +1928,9 @@ namespace PnP.Core.Test.SharePoint
                 var newReceiver = await context.Web.EventReceivers.AddAsync(eventReceiverOptions);
 
                 Assert.IsNotNull(newReceiver);
-                Assert.AreEqual(newReceiver.Synchronization, EventReceiverSynchronization.Synchronous);
-                Assert.AreEqual(newReceiver.ReceiverName, "PnP Test Receiver");
-                Assert.AreEqual(newReceiver.EventType, EventReceiverType.WebMoving);
+                Assert.AreEqual(EventReceiverSynchronization.Synchronous, newReceiver.Synchronization);
+                Assert.AreEqual("PnP Test Receiver", newReceiver.ReceiverName);
+                Assert.AreEqual(EventReceiverType.WebMoving, newReceiver.EventType);
 
                 await newReceiver.DeleteAsync();
             }
@@ -1941,7 +1947,7 @@ namespace PnP.Core.Test.SharePoint
                 await context.ExecuteAsync();
 
                 Assert.IsNotNull(context.Web.EventReceivers);
-                Assert.AreEqual(context.Web.EventReceivers.Requested, true);
+                Assert.AreEqual(true, context.Web.EventReceivers.Requested);
             }
         }
 
@@ -1964,76 +1970,88 @@ namespace PnP.Core.Test.SharePoint
                 await context.ExecuteAsync();
 
                 Assert.IsNotNull(newReceiver);
-                Assert.AreEqual(newReceiver.Synchronization, EventReceiverSynchronization.Synchronous);
-                Assert.AreEqual(newReceiver.ReceiverName, "PnP Test Receiver");
-                Assert.AreEqual(newReceiver.EventType, EventReceiverType.WebMoving);
+                Assert.AreEqual(EventReceiverSynchronization.Synchronous, newReceiver.Synchronization);
+                Assert.AreEqual("PnP Test Receiver", newReceiver.ReceiverName);
+                Assert.AreEqual(EventReceiverType.WebMoving, newReceiver.EventType);
 
                 await newReceiver.DeleteAsync();
             }
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         [TestMethod]
         public async Task AddWebEventReceiverAsyncNoEventTypeExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var eventReceiverOptions = new EventReceiverOptions
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
                 {
+                    var eventReceiverOptions = new EventReceiverOptions
+                    {
 
-                };
-                await context.Web.EventReceivers.AddAsync(eventReceiverOptions);
-            }
+                    };
+                    await context.Web.EventReceivers.AddAsync(eventReceiverOptions);
+                }
+            });
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         [TestMethod]
         public async Task AddWebEventReceiverAsyncNoEventReceiverNameExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var eventReceiverOptions = new EventReceiverOptions
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
                 {
-                    EventType = EventReceiverType.WebMoving
-                };
-                await context.Web.EventReceivers.AddAsync(eventReceiverOptions);
-            }
+                    var eventReceiverOptions = new EventReceiverOptions
+                    {
+                        EventType = EventReceiverType.WebMoving
+                    };
+                    await context.Web.EventReceivers.AddAsync(eventReceiverOptions);
+                }
+            });
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         [TestMethod]
         public async Task AddWebEventReceiverAsyncNoEventReceiverUrlExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var eventReceiverOptions = new EventReceiverOptions
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
                 {
-                    EventType = EventReceiverType.WebMoving,
-                    ReceiverName = "PnP Event Receiver Test"
-                };
-                await context.Web.EventReceivers.AddAsync(eventReceiverOptions);
-            }
+                    var eventReceiverOptions = new EventReceiverOptions
+                    {
+                        EventType = EventReceiverType.WebMoving,
+                        ReceiverName = "PnP Event Receiver Test"
+                    };
+                    await context.Web.EventReceivers.AddAsync(eventReceiverOptions);
+                }
+            });
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         [TestMethod]
         public async Task AddWebEventReceiverAsyncNoEventReceiverSequenceNumberExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var eventReceiverOptions = new EventReceiverOptions
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
                 {
-                    EventType = EventReceiverType.WebMoving,
-                    ReceiverName = "PnP Event Receiver Test",
-                    ReceiverUrl = "https://pnp.github.io",
-                    Synchronization = EventReceiverSynchronization.Synchronous
-                };
-                await context.Web.EventReceivers.AddAsync(eventReceiverOptions);
-            }
+                    var eventReceiverOptions = new EventReceiverOptions
+                    {
+                        EventType = EventReceiverType.WebMoving,
+                        ReceiverName = "PnP Event Receiver Test",
+                        ReceiverUrl = "https://pnp.github.io",
+                        Synchronization = EventReceiverSynchronization.Synchronous
+                    };
+                    await context.Web.EventReceivers.AddAsync(eventReceiverOptions);
+                }
+            });
         }
 
         #endregion
@@ -2093,7 +2111,7 @@ namespace PnP.Core.Test.SharePoint
             //TestCommon.Instance.Mocking = false;
             using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
             {
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     await context.Web.SetAccessRequestAsync(AccessRequestOption.SpecificMail, "");
                 });
@@ -2106,7 +2124,7 @@ namespace PnP.Core.Test.SharePoint
             //TestCommon.Instance.Mocking = false;
             using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
             {
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     await context.Web.SetAccessRequestAsync(AccessRequestOption.SpecificMail, null);
                 });
@@ -2119,7 +2137,7 @@ namespace PnP.Core.Test.SharePoint
             //TestCommon.Instance.Mocking = false;
             using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
             {
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     await context.Web.SetAccessRequestAsync(AccessRequestOption.Disabled, "pnp@rocks.com");
                 });
@@ -2281,15 +2299,18 @@ namespace PnP.Core.Test.SharePoint
             }
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         [TestMethod]
         public async Task CheckIfUserHasPermissionsExceptionAsyncTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var hasPermissions = await context.Web.CheckIfUserHasPermissionsAsync(null, PermissionKind.AddListItems);
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var hasPermissions = await context.Web.CheckIfUserHasPermissionsAsync(null, PermissionKind.AddListItems);
+                }
+            });
         }
 
         #endregion

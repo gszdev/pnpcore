@@ -1364,12 +1364,12 @@ namespace PnP.Core.Admin.Test.SharePoint
 
             using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
             {
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     context.GetSiteCollectionManager().GetSiteCollectionAdmins(null);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     context.GetSiteCollectionManager().SetSiteCollectionAdmins(null);
                 });

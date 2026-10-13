@@ -477,42 +477,42 @@ namespace PnP.Core.Test.SharePoint
 
                 page.AddSection(CanvasSectionTemplate.OneColumn, 1);
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     page.AddControl(null);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     page.AddControl(page.NewTextPart("<h2>Heading1</h2><p>Normal</p>"), null as ICanvasSection);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     page.AddControl(null, page.Sections[0]);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     page.AddControl(null, 10);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     page.AddControl(null, page.Sections[0], 20);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     page.AddControl(page.NewTextPart("<h2>Heading1</h2><p>Normal</p>"), null as ICanvasSection, 20);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     page.AddControl(null, page.Sections[0].Columns[0], 30);
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     page.AddControl(page.NewTextPart("<h3>Heading3</h3><p>Normal</p>"), null as ICanvasColumn, 30);
                 });
@@ -1477,8 +1477,8 @@ namespace PnP.Core.Test.SharePoint
                 var textPart = page.NewTextPart("");
 
                 // Input validation
-                Assert.ThrowsException<ArgumentNullException>(() => { page.GetInlineImage(null, "/sites/prov-2/siteassets/__siteicon__.png"); });
-                Assert.ThrowsException<ArgumentNullException>(() => { page.GetInlineImage(textPart, null); });
+                Assert.ThrowsExactly<ArgumentNullException>(() => { page.GetInlineImage(null, "/sites/prov-2/siteassets/__siteicon__.png"); });
+                Assert.ThrowsExactly<ArgumentNullException>(() => { page.GetInlineImage(textPart, null); });
 
                 var html1 = page.GetInlineImage(textPart, "/sites/prov-2/siteassets/__siteicon__.png");
                 var html2 = page.GetInlineImage(textPart, "/sites/prov-2/siteassets/__siteicon__.png", new PageImageOptions() { Alignment = PageImageAlignment.Left });
@@ -1501,7 +1501,7 @@ namespace PnP.Core.Test.SharePoint
                 page.AddSection(CanvasSectionTemplate.TwoColumn, 2);
 
                 // Input validation
-                Assert.ThrowsException<ArgumentNullException>(() => { page.GetImageWebPart(null); });
+                Assert.ThrowsExactly<ArgumentNullException>(() => { page.GetImageWebPart(null); });
 
                 page.AddControl(page.GetImageWebPart("/sites/prov-2/siteassets/__siteicon__.png", new PageImageOptions { Alignment = PageImageAlignment.Left }), page.Sections[1].Columns[0]);
                 page.AddControl(page.GetImageWebPart("/sites/prov-2/siteassets/__siteicon__.png"), page.Sections[1].Columns[1]);
@@ -3112,12 +3112,12 @@ namespace PnP.Core.Test.SharePoint
                 var addedComment = comments.Add($"This is great {comments.GetAtMentioningString("Bert", currentUser.UserPrincipalName)}!");
 
                 // verify exception handling of GetAtMentioningString
-                Assert.ThrowsException<ArgumentException>(() =>
+                Assert.ThrowsExactly<ArgumentException>(() =>
                 {
                     comments.GetAtMentioningString(null, currentUser.UserPrincipalName);
                 });
 
-                Assert.ThrowsException<ArgumentException>(() =>
+                Assert.ThrowsExactly<ArgumentException>(() =>
                 {
                     comments.GetAtMentioningString("Bert", null);
                 });

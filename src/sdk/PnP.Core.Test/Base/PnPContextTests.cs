@@ -365,7 +365,7 @@ namespace PnP.Core.Test.Base
 
                 await context.Web.LoadAsync(p => p.Title);
 
-                Assert.ThrowsException<ArgumentException>(() => context.Clone(Guid.Empty));
+                Assert.ThrowsExactly<ArgumentException>(() => context.Clone(Guid.Empty));
 
                 using (var clonedContext = context.Clone(contextForSiteWithGroup.Site.GroupId))
                 {
@@ -420,7 +420,7 @@ namespace PnP.Core.Test.Base
             {
                 await context.Web.LoadAsync(p => p.Title);
 
-                Assert.ThrowsException<ArgumentException>(() => context.Clone(Guid.Empty));
+                Assert.ThrowsExactly<ArgumentException>(() => context.Clone(Guid.Empty));
 
                 using (var clonedContext = context.Clone(context.Site.GroupId))
                 {
@@ -522,7 +522,7 @@ namespace PnP.Core.Test.Base
                 Assert.IsNotNull(context.Site);
 
                 Assert.IsTrue(context.Properties.ContainsKey("MyProperty"));
-                Assert.AreEqual(context.Properties["MyProperty"].ToString(), "PnP Rocks!");
+                Assert.AreEqual("PnP Rocks!", context.Properties["MyProperty"].ToString());
             }
         }
 

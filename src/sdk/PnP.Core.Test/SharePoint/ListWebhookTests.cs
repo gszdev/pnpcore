@@ -238,33 +238,39 @@ namespace PnP.Core.Test.SharePoint
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        //[ExpectedException(typeof(ArgumentOutOfRangeException))]
         public async Task WebhookArgumentOutOfRangeTest()
         {
-            //TestCommon.Instance.Mocking = false;
-
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentOutOfRangeException>(async () =>
             {
-                var list = context.Web.Lists.GetByServerRelativeUrl($"{context.Uri.LocalPath}/Shared Documents");
-                var webhook = list.Webhooks.Add($"{webhookHost}/api/HandleEvent", DateTime.UtcNow.AddMonths(7));
+                //TestCommon.Instance.Mocking = false;
 
-                Assert.Fail("Should throw expected exception");
-            }
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var list = context.Web.Lists.GetByServerRelativeUrl($"{context.Uri.LocalPath}/Shared Documents");
+                    var webhook = list.Webhooks.Add($"{webhookHost}/api/HandleEvent", DateTime.UtcNow.AddMonths(7));
+
+                    Assert.Fail("Should throw expected exception");
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task WebhookNotificationNullExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var list = context.Web.Lists.GetByServerRelativeUrl($"{context.Uri.LocalPath}/Shared Documents");
-                var webhook = list.Webhooks.Add(string.Empty, DateTime.UtcNow.AddMonths(1));
+                //TestCommon.Instance.Mocking = false;
 
-                Assert.Fail("Should throw expected exception");
-            }
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var list = context.Web.Lists.GetByServerRelativeUrl($"{context.Uri.LocalPath}/Shared Documents");
+                    var webhook = list.Webhooks.Add(string.Empty, DateTime.UtcNow.AddMonths(1));
+
+                    Assert.Fail("Should throw expected exception");
+                }
+            });
         }
 
         [TestMethod]

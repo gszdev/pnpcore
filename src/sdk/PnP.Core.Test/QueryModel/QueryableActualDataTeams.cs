@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PnP.Core.Test.Utilities;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -33,21 +34,24 @@ namespace PnP.Core.Test.QueryModel
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ClientException))]
+        //[ExpectedException(typeof(ClientException))]
         public async Task TestQueryTeamChannelMessages()
         {
-            var expectedDisplayName = "General";
-
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ClientException>(async () =>
             {
-                var query = context.Team.Channels.GetByDisplayName(expectedDisplayName).Messages;
+                var expectedDisplayName = "General";
 
-                var queryResult = query.ToList();
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var query = context.Team.Channels.GetByDisplayName(expectedDisplayName).Messages;
 
-                Assert.IsNotNull(queryResult);
-                Assert.IsTrue(queryResult.Count >= 1);
-            }
+                    var queryResult = query.ToList();
+
+                    Assert.IsNotNull(queryResult);
+                    Assert.IsTrue(queryResult.Count >= 1);
+                }
+            });
         }
     }
 }

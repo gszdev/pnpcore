@@ -138,21 +138,27 @@ namespace PnP.Core.Auth.Test.Providers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestDeviceCodeAuthenticateRequestAsyncNoResource()
         {
-            var provider = PrepareDeviceCodeAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareDeviceCodeAuthenticationProvider();
 
-            await provider.AuthenticateRequestAsync(null, null);
+                await provider.AuthenticateRequestAsync(null, null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestDeviceCodeAuthenticateRequestAsyncNoHttpRequest()
         {
-            var provider = PrepareDeviceCodeAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareDeviceCodeAuthenticationProvider();
 
-            await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+                await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, null);
+            });
         }
 
         [TestMethod]
@@ -166,34 +172,43 @@ namespace PnP.Core.Auth.Test.Providers
             await provider.AuthenticateRequestAsync(TestGlobals.GraphResource, request);
 
             Assert.IsNotNull(request.Headers.Authorization);
-            Assert.AreEqual(request.Headers.Authorization.Scheme.ToLower(), "bearer");
+            Assert.AreEqual("bearer", request.Headers.Authorization.Scheme.ToLower());
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestDeviceCodeGetAccessTokenAsyncNullResource()
         {
-            var provider = PrepareDeviceCodeAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareDeviceCodeAuthenticationProvider();
 
-            await provider.GetAccessTokenAsync(null);
+                await provider.GetAccessTokenAsync(null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestDeviceCodeGetAccessTokenAsyncFullNullResource()
         {
-            var provider = PrepareDeviceCodeAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareDeviceCodeAuthenticationProvider();
 
-            await provider.GetAccessTokenAsync(null, new string[] { });
+                await provider.GetAccessTokenAsync(null, new string[] { });
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task TestDeviceCodeGetAccessTokenAsyncFullNullScopes()
         {
-            var provider = PrepareDeviceCodeAuthenticationProvider();
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var provider = PrepareDeviceCodeAuthenticationProvider();
 
-            var accessToken = await provider.GetAccessTokenAsync(TestGlobals.GraphResource, null);
+                await provider.GetAccessTokenAsync(TestGlobals.GraphResource, null);
+            });
         }
 
         [TestMethod]

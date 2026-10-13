@@ -122,7 +122,7 @@ namespace PnP.Core.Test.Base
                 Assert.IsTrue(myListToCheck.Id != Guid.Empty);
                 Assert.IsTrue(web.Lists.Length == listCount + 1);
                 Assert.IsFalse(myListToCheck.ContentTypesEnabled);
-                Assert.AreEqual(myListToCheck.Direction, ListReadingDirection.None);
+                Assert.AreEqual(ListReadingDirection.None, myListToCheck.Direction);
                 Assert.IsNull(myListToCheck.DocumentTemplate);
                 Assert.AreEqual(DraftVisibilityType.Reader, myListToCheck.DraftVersionVisibility);
                 Assert.AreEqual("TEST DESCRIPTION", myListToCheck.Description);
@@ -136,7 +136,7 @@ namespace PnP.Core.Test.Base
                 Assert.IsFalse(myListToCheck.IrmExpire);
                 Assert.IsFalse(myListToCheck.IrmReject);
                 Assert.IsFalse(myListToCheck.IsApplicationList);
-                Assert.AreEqual(myListToCheck.ListExperience, ListExperience.ClassicExperience);
+                Assert.AreEqual(ListExperience.ClassicExperience, myListToCheck.ListExperience);
                 Assert.AreEqual(20, myListToCheck.MinorVersionLimit);
                 Assert.AreEqual(400, myListToCheck.MaxVersionLimit);
                 Assert.AreEqual(new Guid("00bfea71-de22-43b2-a848-c05709900100"), myListToCheck.TemplateFeatureId);
@@ -205,12 +205,12 @@ namespace PnP.Core.Test.Base
 
                 var listCount = web.Lists.Length;
                 // Add a new list
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     myList = web.Lists.Add(null, ListTemplateType.GenericList);
                 });
 
-                Assert.ThrowsException<ArgumentException>(() =>
+                Assert.ThrowsExactly<ArgumentException>(() =>
                 {
                     myList = web.Lists.Add(listTitle, ListTemplateType.NoListTemplate);
                 });
@@ -235,12 +235,12 @@ namespace PnP.Core.Test.Base
 
                 var listCount = web.Lists.Length;
                 // Add a new list
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     myList = web.Lists.AddBatch(null, ListTemplateType.GenericList);
                 });
 
-                Assert.ThrowsException<ArgumentException>(() =>
+                Assert.ThrowsExactly<ArgumentException>(() =>
                 {
                     // x BERT: Why should we get an exception here?
                     myList = web.Lists.AddBatch(listTitle, ListTemplateType.NoListTemplate);

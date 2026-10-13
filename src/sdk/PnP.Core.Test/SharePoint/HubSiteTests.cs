@@ -197,22 +197,25 @@ namespace PnP.Core.Test.SharePoint
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ClientException))]
+        //[ExpectedException(typeof(ClientException))]
         public async Task UnRegisterHubSiteExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ClientException>(async () =>
             {
-                ISite site = await context.Site.GetAsync(
-                    p => p.HubSiteId,
-                    p => p.IsHubSite);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    ISite site = await context.Site.GetAsync(
+                        p => p.HubSiteId,
+                        p => p.IsHubSite);
 
-                Assert.IsNotNull(site);
-                Assert.AreEqual(default, site.HubSiteId);
-                Assert.IsFalse(site.IsHubSite);
+                    Assert.IsNotNull(site);
+                    Assert.AreEqual(default, site.HubSiteId);
+                    Assert.IsFalse(site.IsHubSite);
 
-                await site.UnregisterHubSiteAsync();
-            }
+                    await site.UnregisterHubSiteAsync();
+                }
+            });
         }
 
         [TestMethod]
@@ -232,7 +235,7 @@ namespace PnP.Core.Test.SharePoint
                 var result = await site.RegisterHubSiteAsync();
                 Assert.IsNotNull(result);
 
-                await Assert.ThrowsExceptionAsync<ClientException>(async () =>
+                await Assert.ThrowsExactlyAsync<ClientException>(async () =>
                 {
 
                     // Check this is updated

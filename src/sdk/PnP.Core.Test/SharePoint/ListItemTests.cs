@@ -303,7 +303,7 @@ namespace PnP.Core.Test.SharePoint
                     await list.Items.AddBatchAsync(propItem);
                 }
 
-                await Assert.ThrowsExceptionAsync<SharePointRestServiceException>(async () =>
+                await Assert.ThrowsExactlyAsync<SharePointRestServiceException>(async () =>
                 {
                     await context.ExecuteAsync();
                 });
@@ -465,7 +465,7 @@ namespace PnP.Core.Test.SharePoint
                             firstItem.Values["Title"] = "No";
                             firstItem.Values["MyDateField"] = "2024-33-33";
 
-                            await Assert.ThrowsExceptionAsync<SharePointRestServiceException>(async () =>
+                            await Assert.ThrowsExactlyAsync<SharePointRestServiceException>(async () =>
                             {
                                 await firstItem.UpdateAsync();
                             });
@@ -551,7 +551,7 @@ namespace PnP.Core.Test.SharePoint
                             var batch = context.NewBatch();
                             await firstItem.UpdateBatchAsync(batch);
 
-                            await Assert.ThrowsExceptionAsync<SharePointRestServiceException>(async () =>
+                            await Assert.ThrowsExactlyAsync<SharePointRestServiceException>(async () =>
                             {
                                 var batchResults = await context.ExecuteAsync(batch);
                             });
@@ -662,7 +662,7 @@ namespace PnP.Core.Test.SharePoint
                 // load the current user
                 var currentUser = await context.Web.GetCurrentUserAsync();
 
-                await Assert.ThrowsExceptionAsync<ClientException>(async () =>
+                await Assert.ThrowsExactlyAsync<ClientException>(async () =>
                 {
                     var addedListItem = await list.Items.AddAsync(new Dictionary<string, object>
                     {
@@ -4068,7 +4068,7 @@ namespace PnP.Core.Test.SharePoint
                     Assert.IsFalse(listItem.ContentType.ReadOnly);
                     Assert.IsFalse(listItem.ContentType.Sealed);
 
-                    Assert.ThrowsException<ClientException>(() => listItem.Folder.ServerRelativeUrl);
+                    Assert.ThrowsExactly<ClientException>(() => listItem.Folder.ServerRelativeUrl);
 
                     Assert.AreEqual(file.Length, listItem.File.Length);
                     Assert.AreEqual(file.ServerRelativeUrl, listItem.File.ServerRelativeUrl);
@@ -4132,7 +4132,7 @@ namespace PnP.Core.Test.SharePoint
                     Assert.IsFalse(listItem.ContentType.ReadOnly);
                     Assert.IsTrue(listItem.ContentType.Sealed);
 
-                    Assert.ThrowsException<ClientException>(() => listItem.File.ServerRelativeUrl);
+                    Assert.ThrowsExactly<ClientException>(() => listItem.File.ServerRelativeUrl);
 
                     Assert.AreEqual(mockFolder.Name, listItem.Folder.Name);
                     Assert.AreEqual(mockFolder.ServerRelativeUrl, listItem.Folder.ServerRelativeUrl);
@@ -5642,28 +5642,31 @@ namespace PnP.Core.Test.SharePoint
             }
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         [TestMethod]
         public async Task CheckIfUserHasPermissionsExceptionAsyncTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var listTitle = TestCommon.GetPnPSdkTestAssetName("CheckIfUserHasPermissionsExceptionAsyncTest");
-                IList list = null;
-
-                try
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
                 {
-                    list = await context.Web.Lists.AddAsync(listTitle, ListTemplateType.GenericList);
-                    var item = await list.Items.AddAsync(new Dictionary<string, object> { { "Title", "This is an item" } });
+                    var listTitle = TestCommon.GetPnPSdkTestAssetName("CheckIfUserHasPermissionsExceptionAsyncTest");
+                    IList list = null;
 
-                    var hasPermissions = await item.CheckIfUserHasPermissionsAsync(null, PermissionKind.AddListItems);
+                    try
+                    {
+                        list = await context.Web.Lists.AddAsync(listTitle, ListTemplateType.GenericList);
+                        var item = await list.Items.AddAsync(new Dictionary<string, object> { { "Title", "This is an item" } });
+
+                        var hasPermissions = await item.CheckIfUserHasPermissionsAsync(null, PermissionKind.AddListItems);
+                    }
+                    finally
+                    {
+                        await list.DeleteAsync();
+                    }
                 }
-                finally
-                {
-                    await list.DeleteAsync();
-                }
-            }
+            });
         }
 
         #endregion

@@ -984,88 +984,96 @@ namespace PnP.Core.Test.Me
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChatMessageBatchOptionsOneOnOneExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var batch = context.NewBatch();
-                var me = context.Me.GetBatch(batch, o => o.Chats);
-                context.Execute(batch);
-                Assert.IsTrue(me.Result.Chats.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var batch = context.NewBatch();
+                    var me = context.Me.GetBatch(batch, o => o.Chats);
+                    context.Execute(batch);
+                    Assert.IsTrue(me.Result.Chats.Length > 0);
 
-                var chatQuery = me.Result.Chats.FirstOrDefault(i => i.ChatType == ChatTypeConstants.OneOnOne);
-                Assert.IsNotNull(chatQuery);
+                    var chatQuery = me.Result.Chats.FirstOrDefault(i => i.ChatType == ChatTypeConstants.OneOnOne);
+                    Assert.IsNotNull(chatQuery);
 
-                var chat = chatQuery.GetBatch(batch, o => o.Messages);
-                context.Execute(batch);
-                var chatMessages = chat.Result.Messages;
+                    var chat = chatQuery.GetBatch(batch, o => o.Messages);
+                    context.Execute(batch);
+                    var chatMessages = chat.Result.Messages;
 
-                Assert.IsNotNull(chatMessages);
+                    Assert.IsNotNull(chatMessages);
 
-                // assume as if there are no chat messages
-                // There appears to be no remove option yet in this feature - so add a recognisable message
-                var body = string.Empty;
-                chatMessages.AddBatch(batch, options: null);
-                context.Execute(batch);
-
-            }
+                    // assume as if there are no chat messages
+                    // There appears to be no remove option yet in this feature - so add a recognisable message
+                    var body = string.Empty;
+                    chatMessages.AddBatch(batch, options: null);
+                    context.Execute(batch);
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChatMessageBatchOneOnOneExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var batch = context.NewBatch();
-                var me = context.Me.GetBatch(batch, o => o.Chats);
-                context.Execute(batch);
-                Assert.IsTrue(me.Result.Chats.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var batch = context.NewBatch();
+                    var me = context.Me.GetBatch(batch, o => o.Chats);
+                    context.Execute(batch);
+                    Assert.IsTrue(me.Result.Chats.Length > 0);
 
-                var chatQuery = me.Result.Chats.FirstOrDefault(i => i.ChatType == ChatTypeConstants.OneOnOne);
-                Assert.IsNotNull(chatQuery);
+                    var chatQuery = me.Result.Chats.FirstOrDefault(i => i.ChatType == ChatTypeConstants.OneOnOne);
+                    Assert.IsNotNull(chatQuery);
 
-                var chat = chatQuery.GetBatch(batch, o => o.Messages);
-                context.Execute(batch);
-                var chatMessages = chat.Result.Messages;
+                    var chat = chatQuery.GetBatch(batch, o => o.Messages);
+                    context.Execute(batch);
+                    var chatMessages = chat.Result.Messages;
 
-                Assert.IsNotNull(chatMessages);
+                    Assert.IsNotNull(chatMessages);
 
-                // assume as if there are no chat messages
-                // There appears to be no remove option yet in this feature - so add a recognisable message
-                var body = string.Empty;
-                chatMessages.AddBatch(batch, body);
-                context.Execute(batch);
+                    // assume as if there are no chat messages
+                    // There appears to be no remove option yet in this feature - so add a recognisable message
+                    var body = string.Empty;
+                    chatMessages.AddBatch(batch, body);
+                    context.Execute(batch);
 
-            }
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChatMessageOneOnOneExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var me = context.Me.Get(o => o.Chats);
-                Assert.IsTrue(me.Chats.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var me = context.Me.Get(o => o.Chats);
+                    Assert.IsTrue(me.Chats.Length > 0);
 
-                var chat = me.Chats.AsRequested().FirstOrDefault(i => i.ChatType == ChatTypeConstants.OneOnOne);
-                Assert.IsNotNull(chat);
+                    var chat = me.Chats.AsRequested().FirstOrDefault(i => i.ChatType == ChatTypeConstants.OneOnOne);
+                    Assert.IsNotNull(chat);
 
-                chat.Load(o => o.Messages);
-                var chatMessages = chat.Messages;
+                    chat.Load(o => o.Messages);
+                    var chatMessages = chat.Messages;
 
-                Assert.IsNotNull(chatMessages);
+                    Assert.IsNotNull(chatMessages);
 
-                // assume as if there are no chat messages
-                // There appears to be no remove option yet in this feature - so add a recognisable message
-                var body = string.Empty;
-                chatMessages.Add(body);
-            }
+                    // assume as if there are no chat messages
+                    // There appears to be no remove option yet in this feature - so add a recognisable message
+                    var body = string.Empty;
+                    chatMessages.Add(body);
+                }
+            });
         }
 
         [TestMethod]
@@ -2028,88 +2036,95 @@ namespace PnP.Core.Test.Me
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChatMessageBatchOptionsGroupExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var batch = context.NewBatch();
-                var me = context.Me.GetBatch(batch, o => o.Chats);
-                context.Execute(batch);
-                Assert.IsTrue(me.Result.Chats.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var batch = context.NewBatch();
+                    var me = context.Me.GetBatch(batch, o => o.Chats);
+                    context.Execute(batch);
+                    Assert.IsTrue(me.Result.Chats.Length > 0);
 
-                var chatQuery = me.Result.Chats.FirstOrDefault(i => i.ChatType == ChatTypeConstants.Group && i.Topic == GroupChatTopic);
-                Assert.IsNotNull(chatQuery);
+                    var chatQuery = me.Result.Chats.FirstOrDefault(i => i.ChatType == ChatTypeConstants.Group && i.Topic == GroupChatTopic);
+                    Assert.IsNotNull(chatQuery);
 
-                var chat = chatQuery.GetBatch(batch, o => o.Messages);
-                context.Execute(batch);
-                var chatMessages = chat.Result.Messages;
+                    var chat = chatQuery.GetBatch(batch, o => o.Messages);
+                    context.Execute(batch);
+                    var chatMessages = chat.Result.Messages;
 
-                Assert.IsNotNull(chatMessages);
+                    Assert.IsNotNull(chatMessages);
 
-                // assume as if there are no chat messages
-                // There appears to be no remove option yet in this feature - so add a recognisable message
-                var body = string.Empty;
-                chatMessages.AddBatch(batch, options: null);
-                context.Execute(batch);
-
-            }
+                    // assume as if there are no chat messages
+                    // There appears to be no remove option yet in this feature - so add a recognisable message
+                    var body = string.Empty;
+                    chatMessages.AddBatch(batch, options: null);
+                    context.Execute(batch);
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChatMessageBatchGroupExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var batch = context.NewBatch();
-                var me = context.Me.GetBatch(batch, o => o.Chats);
-                context.Execute(batch);
-                Assert.IsTrue(me.Result.Chats.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var batch = context.NewBatch();
+                    var me = context.Me.GetBatch(batch, o => o.Chats);
+                    context.Execute(batch);
+                    Assert.IsTrue(me.Result.Chats.Length > 0);
 
-                var chatQuery = me.Result.Chats.FirstOrDefault(i => i.ChatType == ChatTypeConstants.Group && i.Topic == GroupChatTopic);
-                Assert.IsNotNull(chatQuery);
+                    var chatQuery = me.Result.Chats.FirstOrDefault(i => i.ChatType == ChatTypeConstants.Group && i.Topic == GroupChatTopic);
+                    Assert.IsNotNull(chatQuery);
 
-                var chat = chatQuery.GetBatch(batch, o => o.Messages);
-                context.Execute(batch);
-                var chatMessages = chat.Result.Messages;
+                    var chat = chatQuery.GetBatch(batch, o => o.Messages);
+                    context.Execute(batch);
+                    var chatMessages = chat.Result.Messages;
 
-                Assert.IsNotNull(chatMessages);
+                    Assert.IsNotNull(chatMessages);
 
-                // assume as if there are no chat messages
-                // There appears to be no remove option yet in this feature - so add a recognisable message
-                var body = string.Empty;
-                chatMessages.AddBatch(batch, body);
-                context.Execute(batch);
-
-            }
+                    // assume as if there are no chat messages
+                    // There appears to be no remove option yet in this feature - so add a recognisable message
+                    var body = string.Empty;
+                    chatMessages.AddBatch(batch, body);
+                    context.Execute(batch);
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChatMessageGroupExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var me = context.Me.Get(o => o.Chats);
-                Assert.IsTrue(me.Chats.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var me = context.Me.Get(o => o.Chats);
+                    Assert.IsTrue(me.Chats.Length > 0);
 
-                var chat = me.Chats.AsRequested().FirstOrDefault(i => i.ChatType == ChatTypeConstants.Group && i.Topic == GroupChatTopic);
-                Assert.IsNotNull(chat);
+                    var chat = me.Chats.AsRequested().FirstOrDefault(i => i.ChatType == ChatTypeConstants.Group && i.Topic == GroupChatTopic);
+                    Assert.IsNotNull(chat);
 
-                chat.Load(o => o.Messages);
-                var chatMessages = chat.Messages;
+                    chat.Load(o => o.Messages);
+                    var chatMessages = chat.Messages;
 
-                Assert.IsNotNull(chatMessages);
+                    Assert.IsNotNull(chatMessages);
 
-                // assume as if there are no chat messages
-                // There appears to be no remove option yet in this feature - so add a recognisable message
-                var body = string.Empty;
-                chatMessages.Add(body);
-            }
+                    // assume as if there are no chat messages
+                    // There appears to be no remove option yet in this feature - so add a recognisable message
+                    var body = string.Empty;
+                    chatMessages.Add(body);
+                }
+            });
         }
 
         [TestMethod]
@@ -3072,88 +3087,95 @@ namespace PnP.Core.Test.Me
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChatMessageBatchOptionsMeetingExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var batch = context.NewBatch();
-                var me = context.Me.GetBatch(batch, o => o.Chats);
-                context.Execute(batch);
-                Assert.IsTrue(me.Result.Chats.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var batch = context.NewBatch();
+                    var me = context.Me.GetBatch(batch, o => o.Chats);
+                    context.Execute(batch);
+                    Assert.IsTrue(me.Result.Chats.Length > 0);
 
-                var chatQuery = me.Result.Chats.FirstOrDefault(i => i.ChatType == ChatTypeConstants.Meeting);
-                Assert.IsNotNull(chatQuery);
+                    var chatQuery = me.Result.Chats.FirstOrDefault(i => i.ChatType == ChatTypeConstants.Meeting);
+                    Assert.IsNotNull(chatQuery);
 
-                var chat = chatQuery.GetBatch(batch, o => o.Messages);
-                context.Execute(batch);
-                var chatMessages = chat.Result.Messages;
+                    var chat = chatQuery.GetBatch(batch, o => o.Messages);
+                    context.Execute(batch);
+                    var chatMessages = chat.Result.Messages;
 
-                Assert.IsNotNull(chatMessages);
+                    Assert.IsNotNull(chatMessages);
 
-                // assume as if there are no chat messages
-                // There appears to be no remove option yet in this feature - so add a recognisable message
-                var body = string.Empty;
-                chatMessages.AddBatch(batch, options: null);
-                context.Execute(batch);
-
-            }
+                    // assume as if there are no chat messages
+                    // There appears to be no remove option yet in this feature - so add a recognisable message
+                    var body = string.Empty;
+                    chatMessages.AddBatch(batch, options: null);
+                    context.Execute(batch);
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChatMessageBatchMeetingExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var batch = context.NewBatch();
-                var me = context.Me.GetBatch(batch, o => o.Chats);
-                context.Execute(batch);
-                Assert.IsTrue(me.Result.Chats.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var batch = context.NewBatch();
+                    var me = context.Me.GetBatch(batch, o => o.Chats);
+                    context.Execute(batch);
+                    Assert.IsTrue(me.Result.Chats.Length > 0);
 
-                var chatQuery = me.Result.Chats.FirstOrDefault(i => i.ChatType == ChatTypeConstants.Meeting);
-                Assert.IsNotNull(chatQuery);
+                    var chatQuery = me.Result.Chats.FirstOrDefault(i => i.ChatType == ChatTypeConstants.Meeting);
+                    Assert.IsNotNull(chatQuery);
 
-                var chat = chatQuery.GetBatch(batch, o => o.Messages);
-                context.Execute(batch);
-                var chatMessages = chat.Result.Messages;
+                    var chat = chatQuery.GetBatch(batch, o => o.Messages);
+                    context.Execute(batch);
+                    var chatMessages = chat.Result.Messages;
 
-                Assert.IsNotNull(chatMessages);
+                    Assert.IsNotNull(chatMessages);
 
-                // assume as if there are no chat messages
-                // There appears to be no remove option yet in this feature - so add a recognisable message
-                var body = string.Empty;
-                chatMessages.AddBatch(batch, body);
-                context.Execute(batch);
-
-            }
+                    // assume as if there are no chat messages
+                    // There appears to be no remove option yet in this feature - so add a recognisable message
+                    var body = string.Empty;
+                    chatMessages.AddBatch(batch, body);
+                    context.Execute(batch);
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChatMessageMeetingExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var me = context.Me.Get(o => o.Chats);
-                Assert.IsTrue(me.Chats.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var me = context.Me.Get(o => o.Chats);
+                    Assert.IsTrue(me.Chats.Length > 0);
 
-                var chat = me.Chats.AsRequested().FirstOrDefault(i => i.ChatType == ChatTypeConstants.Meeting);
-                Assert.IsNotNull(chat);
+                    var chat = me.Chats.AsRequested().FirstOrDefault(i => i.ChatType == ChatTypeConstants.Meeting);
+                    Assert.IsNotNull(chat);
 
-                chat.Load(o => o.Messages);
-                var chatMessages = chat.Messages;
+                    chat.Load(o => o.Messages);
+                    var chatMessages = chat.Messages;
 
-                Assert.IsNotNull(chatMessages);
+                    Assert.IsNotNull(chatMessages);
 
-                // assume as if there are no chat messages
-                // There appears to be no remove option yet in this feature - so add a recognisable message
-                var body = string.Empty;
-                chatMessages.Add(body);
-            }
+                    // assume as if there are no chat messages
+                    // There appears to be no remove option yet in this feature - so add a recognisable message
+                    var body = string.Empty;
+                    chatMessages.Add(body);
+                }
+            });
         }
     }
 }

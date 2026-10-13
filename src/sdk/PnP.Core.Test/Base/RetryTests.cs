@@ -166,7 +166,7 @@ namespace PnP.Core.Test.Base
                 response = await invoker.SendAsync(httpRequestMessage, new CancellationToken());
                 Assert.AreEqual(response, secondResponse);
                 response.RequestMessage.Headers.TryGetValues(RETRY_ATTEMPT, out IEnumerable<string> values);
-                Assert.AreEqual(values.First(), "1");
+                Assert.AreEqual("1", values.First());
                 Assert.IsTrue(retryEventSent);
             }
         }

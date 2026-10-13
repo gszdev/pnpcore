@@ -177,8 +177,8 @@ namespace PnP.Core.Test.Security
                     siteGroup = await PnP.Core.QueryModel.QueryableExtensions.FirstOrDefaultAsync(context.Web.SiteGroups, g => g.Title == groupName);
 
                     Assert.IsTrue(siteGroup.Requested);
-                    Assert.AreEqual(siteGroup.Description.Length, 511);
-                    Assert.AreEqual(siteGroup.Description, "GitHub - pnp/pnpcore: The PnP Core SDK is a modern .NET SDK designed to work for Microsoft 365. It provides a unified object model for working with SharePoint Online and Teams which is agnostic to the underlying API's being called. GitHub - pnp/pnpcore: The PnP Core SDK is a modern .NET SDK designed to work for Microsoft 365. It provides a unified object model for working with SharePoint Online and Teams which is agnostic to the underlying API's being called. GitHub - pnp/pnpcore: The PnP Core SDK is a mod");
+                    Assert.AreEqual(511, siteGroup.Description.Length);
+                    Assert.AreEqual("GitHub - pnp/pnpcore: The PnP Core SDK is a modern .NET SDK designed to work for Microsoft 365. It provides a unified object model for working with SharePoint Online and Teams which is agnostic to the underlying API's being called. GitHub - pnp/pnpcore: The PnP Core SDK is a modern .NET SDK designed to work for Microsoft 365. It provides a unified object model for working with SharePoint Online and Teams which is agnostic to the underlying API's being called. GitHub - pnp/pnpcore: The PnP Core SDK is a mod", siteGroup.Description);
                 }
                 finally
                 {
@@ -222,18 +222,18 @@ namespace PnP.Core.Test.Security
                         p => p.CanCurrentUserManageGroup, p => p.CanCurrentUserViewMembership).FirstOrDefaultAsync(g => g.Title == "test group");
 
                     Assert.IsTrue(addedGroup.Requested);
-                    Assert.AreEqual(addedGroup.Title, "test group");
-                    Assert.AreEqual(addedGroup.Description, "just a sample test group");
-                    Assert.AreEqual(addedGroup.IsHiddenInUI, false);
-                    Assert.AreEqual(addedGroup.AllowMembersEditMembership, true);
-                    Assert.AreEqual(addedGroup.AllowRequestToJoinLeave, true);
-                    Assert.AreEqual(addedGroup.OnlyAllowMembersViewMembership, true);
-                    Assert.AreEqual(addedGroup.AutoAcceptRequestToJoinLeave, true);
-                    Assert.AreEqual(addedGroup.CanCurrentUserEditMembership, true);
-                    Assert.AreEqual(addedGroup.CanCurrentUserManageGroup, true);
-                    Assert.AreEqual(addedGroup.CanCurrentUserViewMembership, true);
+                    Assert.AreEqual("test group", addedGroup.Title);
+                    Assert.AreEqual("just a sample test group", addedGroup.Description);
+                    Assert.AreEqual(false, addedGroup.IsHiddenInUI);
+                    Assert.AreEqual(true, addedGroup.AllowMembersEditMembership);
+                    Assert.AreEqual(true, addedGroup.AllowRequestToJoinLeave);
+                    Assert.AreEqual(true, addedGroup.OnlyAllowMembersViewMembership);
+                    Assert.AreEqual(true, addedGroup.AutoAcceptRequestToJoinLeave);
+                    Assert.AreEqual(true, addedGroup.CanCurrentUserEditMembership);
+                    Assert.AreEqual(true, addedGroup.CanCurrentUserManageGroup);
+                    Assert.AreEqual(true, addedGroup.CanCurrentUserViewMembership);
                     Assert.IsTrue(!string.IsNullOrEmpty(addedGroup.OwnerTitle));
-                    Assert.AreEqual(addedGroup.RequestToJoinLeaveEmailSetting, "joe@contoso.sharepoint.com");
+                    Assert.AreEqual("joe@contoso.sharepoint.com", addedGroup.RequestToJoinLeaveEmailSetting);
 
                 }
                 finally

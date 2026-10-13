@@ -1042,89 +1042,97 @@ namespace PnP.Core.Test.Teams
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChatMessageBatchOptionsExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var batch = context.NewBatch();
-                var team = context.Team.GetBatch(batch, o => o.Channels);
-                context.Execute(batch);
-                Assert.IsTrue(team.Result.Channels.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var batch = context.NewBatch();
+                    var team = context.Team.GetBatch(batch, o => o.Channels);
+                    context.Execute(batch);
+                    Assert.IsTrue(team.Result.Channels.Length > 0);
 
-                var channelQuery = team.Result.Channels.FirstOrDefault(i => i.DisplayName == "General");
-                Assert.IsNotNull(channelQuery);
+                    var channelQuery = team.Result.Channels.FirstOrDefault(i => i.DisplayName == "General");
+                    Assert.IsNotNull(channelQuery);
 
-                var channel = channelQuery.GetBatch(batch, o => o.Messages);
-                context.Execute(batch);
-                var chatMessages = channel.Result.Messages;
+                    var channel = channelQuery.GetBatch(batch, o => o.Messages);
+                    context.Execute(batch);
+                    var chatMessages = channel.Result.Messages;
 
-                Assert.IsNotNull(chatMessages);
+                    Assert.IsNotNull(chatMessages);
 
-                // assume as if there are no chat messages
-                // There appears to be no remove option yet in this feature - so add a recognisable message
-                var body = string.Empty;
-                chatMessages.AddBatch(batch, options: null);
-                context.Execute(batch);
+                    // assume as if there are no chat messages
+                    // There appears to be no remove option yet in this feature - so add a recognisable message
+                    var body = string.Empty;
+                    chatMessages.AddBatch(batch, options: null);
+                    context.Execute(batch);
 
-            }
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChatMessageBatchExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var batch = context.NewBatch();
-                var team = context.Team.GetBatch(batch, o => o.Channels);
-                context.Execute(batch);
-                Assert.IsTrue(team.Result.Channels.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var batch = context.NewBatch();
+                    var team = context.Team.GetBatch(batch, o => o.Channels);
+                    context.Execute(batch);
+                    Assert.IsTrue(team.Result.Channels.Length > 0);
 
-                var channelQuery = team.Result.Channels.FirstOrDefault(i => i.DisplayName == "General");
-                Assert.IsNotNull(channelQuery);
+                    var channelQuery = team.Result.Channels.FirstOrDefault(i => i.DisplayName == "General");
+                    Assert.IsNotNull(channelQuery);
 
-                var channel = channelQuery.GetBatch(batch, o => o.Messages);
-                context.Execute(batch);
-                var chatMessages = channel.Result.Messages;
+                    var channel = channelQuery.GetBatch(batch, o => o.Messages);
+                    context.Execute(batch);
+                    var chatMessages = channel.Result.Messages;
 
-                Assert.IsNotNull(chatMessages);
+                    Assert.IsNotNull(chatMessages);
 
-                // assume as if there are no chat messages
-                // There appears to be no remove option yet in this feature - so add a recognisable message
-                var body = string.Empty;
-                chatMessages.AddBatch(batch, body);
-                context.Execute(batch);
+                    // assume as if there are no chat messages
+                    // There appears to be no remove option yet in this feature - so add a recognisable message
+                    var body = string.Empty;
+                    chatMessages.AddBatch(batch, body);
+                    context.Execute(batch);
 
-            }
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public void AddChatMessageExceptionTest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var team = context.Team.Get(o => o.Channels);
-                Assert.IsTrue(team.Channels.Length > 0);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = TestCommon.Instance.GetContext(TestCommon.TestSite))
+                {
+                    var team = context.Team.Get(o => o.Channels);
+                    Assert.IsTrue(team.Channels.Length > 0);
 
-                var channel = team.Channels.FirstOrDefault(i => i.DisplayName == "General");
-                Assert.IsNotNull(channel);
+                    var channel = team.Channels.FirstOrDefault(i => i.DisplayName == "General");
+                    Assert.IsNotNull(channel);
 
-                channel = channel.Get(o => o.Messages);
-                var chatMessages = channel.Messages;
+                    channel = channel.Get(o => o.Messages);
+                    var chatMessages = channel.Messages;
 
-                Assert.IsNotNull(chatMessages);
+                    Assert.IsNotNull(chatMessages);
 
-                // assume as if there are no chat messages
-                // There appears to be no remove option yet in this feature - so add a recognisable message
-                var body = string.Empty;
-                chatMessages.Add(body);
-
-            }
+                    // assume as if there are no chat messages
+                    // There appears to be no remove option yet in this feature - so add a recognisable message
+                    var body = string.Empty;
+                    chatMessages.Add(body);
+                }
+            });
         }
 
         [TestMethod]
@@ -1638,8 +1646,8 @@ namespace PnP.Core.Test.Teams
                 Assert.IsNotNull(message.Replies);
                 Assert.IsNotNull(firstReply);
 
-                Assert.AreEqual(message.Replies.Length, 1);
-                Assert.AreEqual(firstReply.Body.Content, replyContent);
+                Assert.AreEqual(1, message.Replies.Length);
+                Assert.AreEqual(replyContent, firstReply.Body.Content);
             }
         }
 
@@ -1728,9 +1736,9 @@ namespace PnP.Core.Test.Teams
                 Assert.IsNotNull(message.Replies);
                 Assert.IsNotNull(firstReply);
 
-                Assert.AreEqual(message.Replies.Length, 1);
+                Assert.AreEqual(1, message.Replies.Length);
                 Assert.AreEqual(firstReply.Body.Content, firstReply.Body.Content);
-                Assert.AreEqual(firstReply.Mentions.Length, 1);
+                Assert.AreEqual(1, firstReply.Mentions.Length);
 
                 if (hasToDelete)
                 {
@@ -1816,7 +1824,7 @@ namespace PnP.Core.Test.Teams
                 Assert.IsNotNull(message.Replies);
                 Assert.IsNotNull(firstReply);
 
-                Assert.AreEqual(message.Replies.Length, 1);
+                Assert.AreEqual(1, message.Replies.Length);
                 Assert.AreEqual(firstReply.Body.Content, firstReply.Body.Content);
                 Assert.IsTrue(firstReply.Mentions.Length == 2);
                 Assert.IsTrue(firstReply.Mentions.FirstOrDefault().Mentioned.Conversation.Id == channel.Id);
@@ -1897,7 +1905,7 @@ namespace PnP.Core.Test.Teams
                 Assert.IsNotNull(message.Replies);
                 Assert.IsNotNull(firstReply);
 
-                Assert.AreEqual(message.Replies.Length, 1);
+                Assert.AreEqual(1, message.Replies.Length);
                 Assert.AreEqual(firstReply.Body.Content, firstReply.Body.Content);
                 Assert.IsTrue(firstReply.Attachments.Length == 1);
                 Assert.IsTrue(firstReply.Attachments.FirstOrDefault().Name == existingFile.Name);
@@ -1957,7 +1965,7 @@ namespace PnP.Core.Test.Teams
                 Assert.IsNotNull(message.Replies);
                 Assert.IsNotNull(firstReply);
 
-                Assert.AreEqual(message.Replies.Length, 1);
+                Assert.AreEqual(1, message.Replies.Length);
                 Assert.AreEqual(firstReply.Body.Content, firstReply.Body.Content);
             }
         }
@@ -2007,7 +2015,7 @@ namespace PnP.Core.Test.Teams
                 Assert.IsNotNull(message.Replies);
                 Assert.IsNotNull(firstReply);
 
-                Assert.AreEqual(message.Replies.Length, 1);
+                Assert.AreEqual(1, message.Replies.Length);
                 Assert.AreEqual(firstReply.Body.Content, replyContent);
             }
         }
@@ -2064,8 +2072,8 @@ namespace PnP.Core.Test.Teams
                 Assert.IsNotNull(message.Replies);
                 Assert.IsNotNull(firstReply);
 
-                Assert.AreEqual(message.Replies.Length, 1);
-                Assert.AreEqual(firstReply.Body.Content, messageOptions.Content);
+                Assert.AreEqual(1, message.Replies.Length);
+                Assert.AreEqual(messageOptions.Content, firstReply.Body.Content);
                 Assert.AreEqual(firstReply.Subject, messageOptions.Subject);
             }
         }
@@ -2147,7 +2155,7 @@ namespace PnP.Core.Test.Teams
                 Assert.IsNotNull(message.Replies);
                 Assert.IsNotNull(firstReply);
 
-                Assert.AreEqual(message.Replies.Length, 1);
+                Assert.AreEqual(1, message.Replies.Length);
                 Assert.AreEqual(firstReply.Attachments.Length, messageOptions.Attachments.Count);
                 Assert.AreEqual(firstReply.Attachments.FirstOrDefault().Name, messageOptions.Attachments.FirstOrDefault().Name);
             }

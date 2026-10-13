@@ -90,53 +90,62 @@ namespace PnP.Core.Test.SharePoint
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task AddNavigationItemWithoutNavigationOptions()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var parentNode = await context.Web.Navigation.TopNavigationBar.AddAsync(null);
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var parentNode = await context.Web.Navigation.TopNavigationBar.AddAsync(null);
 
-                // Delete newly created parent node, this will delete the children too.
-                await parentNode.DeleteAsync();
-            }
+                    // Delete newly created parent node, this will delete the children too.
+                    await parentNode.DeleteAsync();
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task AddNavigationItemWithoutTitle()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var parentNode = await context.Web.Navigation.TopNavigationBar.AddAsync(
-                  new NavigationNodeOptions
-                  {
-                      Url = context.Uri.AbsoluteUri,
-                  });
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var parentNode = await context.Web.Navigation.TopNavigationBar.AddAsync(
+                      new NavigationNodeOptions
+                      {
+                          Url = context.Uri.AbsoluteUri,
+                      });
 
-                // Delete newly created parent node, this will delete the children too.
-                await parentNode.DeleteAsync();
-            }
+                    // Delete newly created parent node, this will delete the children too.
+                    await parentNode.DeleteAsync();
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        //[ExpectedException(typeof(ArgumentNullException))]
         public async Task AddNavigationItemWithoutUrl()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
-                var parentNode = await context.Web.Navigation.TopNavigationBar.AddAsync(
-                  new NavigationNodeOptions
-                  {
-                      Title = "Test node",
-                  });
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    var parentNode = await context.Web.Navigation.TopNavigationBar.AddAsync(
+                      new NavigationNodeOptions
+                      {
+                          Title = "Test node",
+                      });
 
-                // Delete newly created parent node, this will delete the children too.
-                await parentNode.DeleteAsync();
-            }
+                    // Delete newly created parent node, this will delete the children too.
+                    await parentNode.DeleteAsync();
+                }
+            });
         }
 
         [TestMethod]
@@ -164,7 +173,7 @@ namespace PnP.Core.Test.SharePoint
                         });
 
                     var childNodes = parentNode.GetChildNodes();
-                    Assert.AreEqual(childNodes.Count, 1);
+                    Assert.AreEqual(1, childNodes.Count);
                     Assert.AreEqual(childNodes.First().Title, newNode.Title);
                     parentNode = newNode;
                 }
@@ -221,7 +230,7 @@ namespace PnP.Core.Test.SharePoint
                 await context.Web.Navigation.TopNavigationBar.DeleteAllNodesAsync();
 
                 await context.Web.Navigation.LoadAsync(y => y.TopNavigationBar);
-                Assert.AreEqual(context.Web.Navigation.TopNavigationBar.RequestedItems.Cast<NavigationNode>().Count(), 0);
+                Assert.AreEqual(0, context.Web.Navigation.TopNavigationBar.RequestedItems.Cast<NavigationNode>().Count());
             }
         }
 
@@ -245,7 +254,7 @@ namespace PnP.Core.Test.SharePoint
                 await context.ExecuteAsync().ConfigureAwait(false);
                 
                 await context.Web.Navigation.LoadAsync(y => y.TopNavigationBar);
-                Assert.AreEqual(context.Web.Navigation.TopNavigationBar.RequestedItems.Cast<NavigationNode>().Count(), 0);
+                Assert.AreEqual(0, context.Web.Navigation.TopNavigationBar.RequestedItems.Cast<NavigationNode>().Count());
             }
         }
 

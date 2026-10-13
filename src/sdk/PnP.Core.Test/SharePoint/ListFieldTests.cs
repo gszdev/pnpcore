@@ -484,7 +484,7 @@ namespace PnP.Core.Test.SharePoint
                 var documents = context.Web.Lists.FirstOrDefault(p => p.Title == "Documents");
 
                 // Empty Title Test
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IField addedField = await documents.Fields.AddTextBatchAsync(string.Empty, new FieldTextOptions()
                     {
@@ -506,7 +506,7 @@ namespace PnP.Core.Test.SharePoint
                 var documents = context.Web.Lists.FirstOrDefault(p => p.Title == "Documents");
 
                 // Empty Title Test
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IField addedField = await documents.Fields.AddTextAsync(string.Empty, new FieldTextOptions()
                     {
@@ -2268,7 +2268,7 @@ namespace PnP.Core.Test.SharePoint
                 Assert.IsTrue(addedField.Required);
                 Assert.IsTrue(addedField.AllowDisplay);
                 Assert.IsFalse(addedField.AllowMultipleValues);
-                Assert.AreEqual(addedField.SelectionMode, FieldUserSelectionMode.PeopleAndGroups);
+                Assert.AreEqual(FieldUserSelectionMode.PeopleAndGroups, addedField.SelectionMode);
                 // TODO Must be tested when support for SharePoint groups is implemented
                 //Assert.AreEqual(addedField.SelectionGroup, 1);
 
@@ -2299,7 +2299,7 @@ namespace PnP.Core.Test.SharePoint
                 Assert.IsTrue(addedField.Required);
                 Assert.IsTrue(addedField.AllowDisplay);
                 Assert.IsFalse(addedField.AllowMultipleValues);
-                Assert.AreEqual(addedField.SelectionMode, FieldUserSelectionMode.PeopleAndGroups);
+                Assert.AreEqual(FieldUserSelectionMode.PeopleAndGroups, addedField.SelectionMode);
 
                 await addedField.DeleteAsync();
             }
@@ -2329,7 +2329,7 @@ namespace PnP.Core.Test.SharePoint
                 Assert.IsTrue(addedField.Required);
                 Assert.IsTrue(addedField.AllowDisplay);
                 Assert.IsFalse(addedField.AllowMultipleValues);
-                Assert.AreEqual(addedField.SelectionMode, FieldUserSelectionMode.PeopleAndGroups);
+                Assert.AreEqual(FieldUserSelectionMode.PeopleAndGroups, addedField.SelectionMode);
 
                 await addedField.DeleteAsync();
             }
@@ -2359,7 +2359,7 @@ namespace PnP.Core.Test.SharePoint
                 Assert.IsTrue(addedField.Required);
                 Assert.IsTrue(addedField.AllowDisplay);
                 Assert.IsFalse(addedField.AllowMultipleValues);
-                Assert.AreEqual(addedField.SelectionMode, FieldUserSelectionMode.PeopleAndGroups);
+                Assert.AreEqual(FieldUserSelectionMode.PeopleAndGroups, addedField.SelectionMode);
 
                 await addedField.DeleteAsync();
             }
@@ -2390,7 +2390,7 @@ namespace PnP.Core.Test.SharePoint
                 Assert.IsTrue(addedField.Required);
                 Assert.IsTrue(addedField.AllowDisplay);
                 Assert.IsFalse(addedField.AllowMultipleValues);
-                Assert.AreEqual(addedField.SelectionMode, FieldUserSelectionMode.PeopleAndGroups);
+                Assert.AreEqual(FieldUserSelectionMode.PeopleAndGroups, addedField.SelectionMode);
 
                 await addedField.DeleteAsync();
             }
@@ -2421,7 +2421,7 @@ namespace PnP.Core.Test.SharePoint
                 Assert.IsTrue(addedField.Required);
                 Assert.IsTrue(addedField.AllowDisplay);
                 Assert.IsFalse(addedField.AllowMultipleValues);
-                Assert.AreEqual(addedField.SelectionMode, FieldUserSelectionMode.PeopleAndGroups);
+                Assert.AreEqual(FieldUserSelectionMode.PeopleAndGroups, addedField.SelectionMode);
 
                 await addedField.DeleteAsync();
             }

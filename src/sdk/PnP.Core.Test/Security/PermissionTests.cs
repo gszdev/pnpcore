@@ -100,7 +100,7 @@ namespace PnP.Core.Test.Security
                 var permission = file.CreateOrganizationalSharingLink(shareLinkRequestOptions);
                 
                 Assert.IsNotNull(permission.Id);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Organization);
+                Assert.AreEqual(ShareScope.Organization, permission.Link.Scope);
 
                 var newSharingLinks = await file.GetShareLinksAsync();
 
@@ -133,10 +133,10 @@ namespace PnP.Core.Test.Security
                 Assert.IsNotNull(permission.Id);
                 Assert.IsNotNull(permission.Link.WebUrl);
 
-                Assert.AreEqual(permission.Link.Type, ShareType.Edit);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Anonymous);
-                Assert.AreEqual(permission.Link.PreventsDownload, false);
-                Assert.AreEqual(permission.HasPassword, true);
+                Assert.AreEqual(ShareType.Edit, permission.Link.Type);
+                Assert.AreEqual(ShareScope.Anonymous, permission.Link.Scope);
+                Assert.AreEqual(false, permission.Link.PreventsDownload);
+                Assert.AreEqual(true, permission.HasPassword);
 
                 var newSharingLinks = await file.GetShareLinksAsync();
 
@@ -168,10 +168,10 @@ namespace PnP.Core.Test.Security
 
                 Assert.IsNotNull(permission.Id);
                 Assert.IsNotNull(permission.Link.WebUrl);
-                Assert.AreEqual(permission.Link.Type, ShareType.View);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Anonymous);
-                Assert.AreEqual(permission.HasPassword, false);
-                Assert.AreEqual(permission.Link.PreventsDownload, true);
+                Assert.AreEqual(ShareType.View, permission.Link.Type);
+                Assert.AreEqual(ShareScope.Anonymous, permission.Link.Scope);
+                Assert.AreEqual(false, permission.HasPassword);
+                Assert.AreEqual(true, permission.Link.PreventsDownload);
 
                 var newSharingLinks = await file.GetShareLinksAsync();
 
@@ -223,10 +223,10 @@ namespace PnP.Core.Test.Security
                 Assert.IsNotNull(permission.Id);
                 Assert.IsNotNull(permission.Link.WebUrl);
 
-                Assert.AreEqual(permission.Link.Type, ShareType.View);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Anonymous);
-                Assert.AreEqual(permission.Link.PreventsDownload, false);
-                Assert.AreEqual(permission.HasPassword, true);
+                Assert.AreEqual(ShareType.View, permission.Link.Type);
+                Assert.AreEqual(ShareScope.Anonymous, permission.Link.Scope);
+                Assert.AreEqual(false, permission.Link.PreventsDownload);
+                Assert.AreEqual(true, permission.HasPassword);
                 Assert.AreEqual(permission.ExpirationDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture), shareLinkRequestOptions.ExpirationDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
                 var newSharingLinks = await file.GetShareLinksAsync();
 
@@ -259,10 +259,10 @@ namespace PnP.Core.Test.Security
                 Assert.IsNotNull(permission.Id);
                 Assert.IsNotNull(permission.Link.WebUrl);
                 
-                Assert.AreEqual(permission.Link.Type, ShareType.Review);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Anonymous);
-                Assert.AreEqual(permission.HasPassword, false);
-                Assert.AreEqual(permission.Link.PreventsDownload, false);
+                Assert.AreEqual(ShareType.Review, permission.Link.Type);
+                Assert.AreEqual(ShareScope.Anonymous, permission.Link.Scope);
+                Assert.AreEqual(false, permission.HasPassword);
+                Assert.AreEqual(false, permission.Link.PreventsDownload);
 
                 var newSharingLinks = await file.GetShareLinksAsync();
 
@@ -303,10 +303,10 @@ namespace PnP.Core.Test.Security
                 Assert.IsNotNull(permission.Id);
                 Assert.IsNotNull(permission.Link.WebUrl);
 
-                Assert.AreEqual(permission.Link.Type, ShareType.View);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Users);
-                Assert.AreEqual(permission.Link.PreventsDownload, true);
-                Assert.AreEqual(permission.HasPassword, false);
+                Assert.AreEqual(ShareType.View, permission.Link.Type);
+                Assert.AreEqual(ShareScope.Users, permission.Link.Scope);
+                Assert.AreEqual(true, permission.Link.PreventsDownload);
+                Assert.AreEqual(false, permission.HasPassword);
                 Assert.AreEqual(permission.GrantedToIdentitiesV2.FirstOrDefault().SiteUser.Email, shareLinkRequestOptions.Recipients.First().Email);
                 var newSharingLinks = await file.GetShareLinksAsync();
 
@@ -366,7 +366,7 @@ namespace PnP.Core.Test.Security
                     Type = ShareType.CreateOnly
                 };
 
-                await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
                 {
                     await file.CreateAnonymousSharingLinkAsync(shareLinkRequestOptions);
                 });
@@ -389,7 +389,7 @@ namespace PnP.Core.Test.Security
                     Type = ShareType.CreateOnly
                 };
 
-                await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
                 {
                     await file.CreateUserSharingLinkAsync(shareLinkRequestOptions);
                 });
@@ -411,7 +411,7 @@ namespace PnP.Core.Test.Security
                 {
                     Type = ShareType.View
                 };
-                await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
                 {
                     await file.CreateUserSharingLinkAsync(shareLinkRequestOptions);
                 });
@@ -484,7 +484,7 @@ namespace PnP.Core.Test.Security
                     Type = ShareType.CreateOnly
                 };
 
-                await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
                 {
                     await file.CreateOrganizationalSharingLinkAsync(shareLinkRequestOptions);
                 });
@@ -525,16 +525,16 @@ namespace PnP.Core.Test.Security
                 Assert.IsNotNull(permission.Id);
                 Assert.IsNotNull(permission.Link.WebUrl);
 
-                Assert.AreEqual(permission.Link.Type, ShareType.View);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Users);
-                Assert.AreEqual(permission.Link.PreventsDownload, true);
-                Assert.AreEqual(permission.HasPassword, false);
-                Assert.AreEqual(permission.GrantedToIdentitiesV2.Count, 2);
+                Assert.AreEqual(ShareType.View, permission.Link.Type);
+                Assert.AreEqual(ShareScope.Users, permission.Link.Scope);
+                Assert.AreEqual(true, permission.Link.PreventsDownload);
+                Assert.AreEqual(false, permission.HasPassword);
+                Assert.AreEqual(2, permission.GrantedToIdentitiesV2.Count);
 
                 driveRecipients.RemoveAt(0);
                 permission = permission.RemoveUserPermissions(driveRecipients);
 
-                Assert.AreEqual(permission.GrantedToIdentitiesV2.Count, 1);
+                Assert.AreEqual(1, permission.GrantedToIdentitiesV2.Count);
             }
 
             await TestAssets.CleanupTestDocumentAsync(2);
@@ -572,11 +572,11 @@ namespace PnP.Core.Test.Security
                 Assert.IsNotNull(permission.Id);
                 Assert.IsNotNull(permission.Link.WebUrl);
 
-                Assert.AreEqual(permission.Link.Type, ShareType.View);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Users);
-                Assert.AreEqual(permission.Link.PreventsDownload, true);
-                Assert.AreEqual(permission.HasPassword, false);
-                Assert.AreEqual(permission.GrantedToIdentitiesV2.Count, 1);
+                Assert.AreEqual(ShareType.View, permission.Link.Type);
+                Assert.AreEqual(ShareScope.Users, permission.Link.Scope);
+                Assert.AreEqual(true, permission.Link.PreventsDownload);
+                Assert.AreEqual(false, permission.HasPassword);
+                Assert.AreEqual(1, permission.GrantedToIdentitiesV2.Count);
 
                 driveRecipients = new List<IDriveRecipient>()
                 {
@@ -584,7 +584,7 @@ namespace PnP.Core.Test.Security
                 };
                 permission = permission.GrantUserPermissions(driveRecipients);
 
-                Assert.AreEqual(permission.GrantedToIdentitiesV2.Count, 2);
+                Assert.AreEqual(2, permission.GrantedToIdentitiesV2.Count);
             }
 
             await TestAssets.CleanupTestDocumentAsync(2);
@@ -620,7 +620,7 @@ namespace PnP.Core.Test.Security
                     UserLinkOptions.CreateDriveRecipient(testUser.Mail)
                 };
 
-                await Assert.ThrowsExceptionAsync<Exception>(async () =>
+                await Assert.ThrowsExactlyAsync<Exception>(async () =>
                 {
                     await permission.GrantUserPermissionsAsync(driveRecipients);
                 });
@@ -659,7 +659,7 @@ namespace PnP.Core.Test.Security
                     UserLinkOptions.CreateDriveRecipient(testUser.Mail)
                 };
 
-                await Assert.ThrowsExceptionAsync<Exception>(async () =>
+                await Assert.ThrowsExactlyAsync<Exception>(async () =>
                 {
                     await permission.RemoveUserPermissionsAsync(driveRecipients);
                 });
@@ -743,7 +743,7 @@ namespace PnP.Core.Test.Security
                 var permission = folder.CreateOrganizationalSharingLink(shareLinkRequestOptions);
 
                 Assert.IsNotNull(permission.Id);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Organization);
+                Assert.AreEqual(ShareScope.Organization, permission.Link.Scope);
 
                 var newSharingLinks = await folder.GetShareLinksAsync();
 
@@ -777,10 +777,10 @@ namespace PnP.Core.Test.Security
                 Assert.IsNotNull(permission.Id);
                 Assert.IsNotNull(permission.Link.WebUrl);
 
-                Assert.AreEqual(permission.Link.Type, ShareType.Edit);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Anonymous);
-                Assert.AreEqual(permission.Link.PreventsDownload, false);
-                Assert.AreEqual(permission.HasPassword, true);
+                Assert.AreEqual(ShareType.Edit, permission.Link.Type);
+                Assert.AreEqual(ShareScope.Anonymous, permission.Link.Scope);
+                Assert.AreEqual(false, permission.Link.PreventsDownload);
+                Assert.AreEqual(true, permission.HasPassword);
 
                 var newSharingLinks = await folder.GetShareLinksAsync();
 
@@ -809,7 +809,7 @@ namespace PnP.Core.Test.Security
                     Type = ShareType.BlocksDownload
                 };
 
-                await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
                 {
                     await folder.CreateAnonymousSharingLinkAsync(shareLinkRequestOptions);
                 });
@@ -861,14 +861,14 @@ namespace PnP.Core.Test.Security
                 Assert.IsNotNull(permission.Id);
                 Assert.IsNotNull(permission.Link.WebUrl);
 
-                Assert.AreEqual(permission.Link.Type, ShareType.View);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Anonymous);
-                Assert.AreEqual(permission.Link.PreventsDownload, false);
-                Assert.AreEqual(permission.HasPassword, true);
+                Assert.AreEqual(ShareType.View, permission.Link.Type);
+                Assert.AreEqual(ShareScope.Anonymous, permission.Link.Scope);
+                Assert.AreEqual(false, permission.Link.PreventsDownload);
+                Assert.AreEqual(true, permission.HasPassword);
                 Assert.AreEqual(permission.ExpirationDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture), shareLinkRequestOptions.ExpirationDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
                 var newSharingLinks = await folder.GetShareLinksAsync();
 
-                Assert.AreEqual(newSharingLinks.Count(), originalSharingLinks.Count() + 1);
+                Assert.AreEqual(originalSharingLinks.Count() + 1, newSharingLinks.Count());
 
                 await folder.DeleteAsync();
             }
@@ -893,7 +893,7 @@ namespace PnP.Core.Test.Security
                     Type = ShareType.Review
                 };
 
-                await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
                 {
                     await folder.CreateAnonymousSharingLinkAsync(shareLinkRequestOptions);
                 });
@@ -929,7 +929,7 @@ namespace PnP.Core.Test.Security
                     Recipients = driveRecipients
                 };
 
-                await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
                 {
                     await folder.CreateUserSharingLinkAsync(shareLinkRequestOptions);
                 });
@@ -991,7 +991,7 @@ namespace PnP.Core.Test.Security
                 {
                     Type = ShareType.View
                 };
-                await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
                 {
                     await folder.CreateUserSharingLinkAsync(shareLinkRequestOptions);
                 });
@@ -1033,10 +1033,10 @@ namespace PnP.Core.Test.Security
                 Assert.IsNotNull(permission.Id);
                 Assert.IsNotNull(permission.Link.WebUrl);
 
-                Assert.AreEqual(permission.Link.Type, ShareType.View);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Users);
-                Assert.AreEqual(permission.HasPassword, false);
-                Assert.AreEqual(permission.GrantedToIdentitiesV2.Count, 1);
+                Assert.AreEqual(ShareType.View, permission.Link.Type);
+                Assert.AreEqual(ShareScope.Users, permission.Link.Scope);
+                Assert.AreEqual(false, permission.HasPassword);
+                Assert.AreEqual(1, permission.GrantedToIdentitiesV2.Count);
 
                 driveRecipients = new List<IDriveRecipient>()
                 {
@@ -1045,7 +1045,7 @@ namespace PnP.Core.Test.Security
 
                 permission = permission.GrantUserPermissions(driveRecipients);
 
-                Assert.AreEqual(permission.GrantedToIdentitiesV2.Count, 2);
+                Assert.AreEqual(2, permission.GrantedToIdentitiesV2.Count);
 
                 await folder.DeleteAsync();
             }
@@ -1085,16 +1085,16 @@ namespace PnP.Core.Test.Security
                 Assert.IsNotNull(permission.Id);
                 Assert.IsNotNull(permission.Link.WebUrl);
 
-                Assert.AreEqual(permission.Link.Type, ShareType.View);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Users);
-                Assert.AreEqual(permission.HasPassword, false);
-                Assert.AreEqual(permission.GrantedToIdentitiesV2.Count, 2);
+                Assert.AreEqual(ShareType.View, permission.Link.Type);
+                Assert.AreEqual(ShareScope.Users, permission.Link.Scope);
+                Assert.AreEqual(false, permission.HasPassword);
+                Assert.AreEqual(2, permission.GrantedToIdentitiesV2.Count);
 
                 driveRecipients.RemoveAt(0);
 
                 permission = permission.RemoveUserPermissions(driveRecipients);
 
-                Assert.AreEqual(permission.GrantedToIdentitiesV2.Count, 1);
+                Assert.AreEqual(1, permission.GrantedToIdentitiesV2.Count);
 
                 await folder.DeleteAsync();
             }
@@ -1125,15 +1125,15 @@ namespace PnP.Core.Test.Security
 
                 Assert.IsNotNull(permission.Id);
                 Assert.IsNotNull(permission.Link.WebUrl);
-                Assert.AreEqual(permission.Link.Type, ShareType.View);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Anonymous);
+                Assert.AreEqual(ShareType.View, permission.Link.Type);
+                Assert.AreEqual(ShareScope.Anonymous, permission.Link.Scope);
                 
                 var driveRecipients = new List<IDriveRecipient>()
                 {
                     UserLinkOptions.CreateDriveRecipient(testUser.Mail)
                 };
 
-                await Assert.ThrowsExceptionAsync<Exception>(async () =>
+                await Assert.ThrowsExactlyAsync<Exception>(async () =>
                 {
                     await permission.GrantUserPermissionsAsync(driveRecipients);
                 });
@@ -1167,15 +1167,15 @@ namespace PnP.Core.Test.Security
 
                 Assert.IsNotNull(permission.Id);
                 Assert.IsNotNull(permission.Link.WebUrl);
-                Assert.AreEqual(permission.Link.Type, ShareType.View);
-                Assert.AreEqual(permission.Link.Scope, ShareScope.Anonymous);
+                Assert.AreEqual(ShareType.View, permission.Link.Type);
+                Assert.AreEqual(ShareScope.Anonymous, permission.Link.Scope);
 
                 var driveRecipients = new List<IDriveRecipient>()
                 {
                     UserLinkOptions.CreateDriveRecipient(testUser.Mail)
                 };
 
-                await Assert.ThrowsExceptionAsync<Exception>(async () =>
+                await Assert.ThrowsExactlyAsync<Exception>(async () =>
                 {
                     await permission.RemoveUserPermissionsAsync(driveRecipients);
                 });
@@ -1310,10 +1310,10 @@ namespace PnP.Core.Test.Security
                     Assert.IsNotNull(permission.Id);
                     Assert.IsNotNull(permission.Link.WebUrl);
 
-                    Assert.AreEqual(permission.Link.Type, ShareType.Edit);
-                    Assert.AreEqual(permission.Link.Scope, ShareScope.Anonymous);
-                    Assert.AreEqual(permission.Link.PreventsDownload, false);
-                    Assert.AreEqual(permission.HasPassword, true);
+                    Assert.AreEqual(ShareType.Edit, permission.Link.Type);
+                    Assert.AreEqual(ShareScope.Anonymous, permission.Link.Scope);
+                    Assert.AreEqual(false, permission.Link.PreventsDownload);
+                    Assert.AreEqual(true, permission.HasPassword);
 
                     // Does not (yet) work via Graph
                     //var permissions = listItem.GetShareLinks();
@@ -1390,11 +1390,11 @@ namespace PnP.Core.Test.Security
                     Assert.IsNotNull(permission.Id);
                     Assert.IsNotNull(permission.Link.WebUrl);
 
-                    Assert.AreEqual(permission.Link.Type, ShareType.Edit);
-                    Assert.AreEqual(permission.Link.Scope, ShareScope.Users);
-                    Assert.AreEqual(permission.Link.PreventsDownload, false);
-                    Assert.AreEqual(permission.HasPassword, false);
-                    Assert.AreEqual(permission.GrantedToIdentitiesV2.FirstOrDefault().SiteUser.Email, shareLinkRequestOptions.Recipients.First().Email);
+                    Assert.AreEqual(ShareType.Edit, permission.Link.Type);
+                    Assert.AreEqual(ShareScope.Users, permission.Link.Scope);
+                    Assert.AreEqual(false, permission.Link.PreventsDownload);
+                    Assert.AreEqual(false, permission.HasPassword);
+                    Assert.AreEqual(shareLinkRequestOptions.Recipients.First().Email, permission.GrantedToIdentitiesV2.FirstOrDefault().SiteUser.Email);
 
                     // Does not (yet) work via Graph
                     //var permissions = listItem.GetShareLinks();
@@ -1458,7 +1458,7 @@ namespace PnP.Core.Test.Security
                         Type = ShareType.BlocksDownload
                     };
 
-                    await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+                    await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
                     {
                         await listItem.CreateOrganizationalSharingLinkAsync(shareLinkRequestOptions);
                     });

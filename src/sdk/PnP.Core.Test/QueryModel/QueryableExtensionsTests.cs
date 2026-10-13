@@ -5,6 +5,7 @@ using PnP.Core.Test.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PnP.Core.Test.QueryModel
@@ -59,26 +60,26 @@ namespace PnP.Core.Test.QueryModel
                                 .AsBatch(batch);
                 await context.ExecuteAsync(batch);
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     IQueryable<Model.SharePoint.IList> bla = null;
                     bla.AsBatch();
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IQueryable<Model.SharePoint.IList> bla = null;
                     await bla.AsBatchAsync();
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     var batch = context.NewBatch();
                     IQueryable<Model.SharePoint.IList> bla = null;
                     bla.AsBatch(batch);
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     var batch = context.NewBatch();
                     IQueryable<Model.SharePoint.IList> bla = null;
@@ -93,19 +94,19 @@ namespace PnP.Core.Test.QueryModel
             //TestCommon.Instance.Mocking = false;
             using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
             {
-                Assert.ThrowsException<InvalidOperationException>(() =>
+                Assert.ThrowsExactly<InvalidOperationException>(() =>
                 {
                     ISupportQuery<Model.SharePoint.IList> bla = null;
                     bla.QueryProperties();
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     IQueryable<Model.SharePoint.IList> bla = null;
                     bla.QueryProperties();
                 });
 
-                Assert.ThrowsException<ArgumentNullException>(() =>
+                Assert.ThrowsExactly<ArgumentNullException>(() =>
                 {
                     IQueryable<Model.SharePoint.IList> bla = context.Web.Lists;
                     bla.QueryProperties(null);
@@ -137,31 +138,31 @@ namespace PnP.Core.Test.QueryModel
                                 .FirstOrDefaultAsync();
 
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IQueryable<Model.SharePoint.IList> bla = null;
                     await bla.FirstAsync();
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IQueryable<Model.SharePoint.IList> bla = null;
                     await bla.FirstAsync(null);
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IQueryable<Model.SharePoint.IList> bla = context.Web.Lists;
                     await bla.FirstAsync(null);
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IQueryable<Model.SharePoint.IList> bla = null;
                     await bla.FirstOrDefaultAsync(null);
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IQueryable<Model.SharePoint.IList> bla = context.Web.Lists;
                     await bla.FirstOrDefaultAsync(null);
@@ -191,20 +192,20 @@ namespace PnP.Core.Test.QueryModel
                                 .ToDictionaryAsync(o => o.Id, p => p.Title);
 
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IQueryable<Model.SharePoint.IList> bla = null;
                     await bla.ToDictionaryAsync(o => o.Id);
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IQueryable<Model.SharePoint.IList> bla = context.Web.Lists;
                     Func<Model.SharePoint.IList, int> keySelector = null;
                     await bla.ToDictionaryAsync(keySelector);
                 });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IQueryable<Model.SharePoint.IList> bla = context.Web.Lists;
                     Func<Model.SharePoint.IList, string> selector = null;
@@ -220,21 +221,31 @@ namespace PnP.Core.Test.QueryModel
             using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
             {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+                var tokenSource = new CancellationTokenSource();
+                //var cancelToken = new CancellationToken();
                 await context.Web.Lists.ForEachAsync(async x => 
                 {
-                    Assert.IsTrue(!string.IsNullOrEmpty(x.Title));
-                });
+                    //Assert.IsFalse(string.IsNullOrEmpty(x.Title));
+                    if (string.IsNullOrEmpty(x.Title))
+                    {
+                        tokenSource.Cancel();
+                        //tokenSource.Token.ThrowIfCancellationRequested();
+                    }                    
+                }, tokenSource.Token);
+
+                Assert.IsFalse(tokenSource.IsCancellationRequested);
+                
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                   {
                       IQueryable<Model.SharePoint.IList> bla = null;
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-                      await bla.ForEachAsync(async x => { });
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+//#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+                      await bla.ForEachAsync(async x => { await Task.Run(() => { }); });
+//#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
                   });
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     await context.Web.Lists.ForEachAsync(null);
                 });
@@ -250,7 +261,7 @@ namespace PnP.Core.Test.QueryModel
                 var b = context.Web.Lists.AsAsyncEnumerable();
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     IQueryable<Model.SharePoint.IList> bla = null;
                     var a = bla.AsAsyncEnumerable();
@@ -263,7 +274,7 @@ namespace PnP.Core.Test.QueryModel
         public async Task TestAsRequested()
         {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-            await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
             {
                 IDataModelCollection<Model.SharePoint.IList> bla = null;
                 var a = bla.AsRequested();

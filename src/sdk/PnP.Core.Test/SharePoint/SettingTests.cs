@@ -171,7 +171,7 @@ namespace PnP.Core.Test.SharePoint
 
                 var id = new Guid("fa6a1bcc-fb4b-446b-8460-f4de5f740000"); // Fake
 
-                await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentOutOfRangeException>(async () =>
                 {
                     await web.Features.EnableBatchAsync(id);
                     await web.Features.EnableBatchAsync(id);
@@ -206,7 +206,7 @@ namespace PnP.Core.Test.SharePoint
                     Assert.IsTrue(feature.DefinitionId != Guid.Empty);
                 }
 
-                await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentOutOfRangeException>(async () =>
                 {
                     await web.Features.EnableAsync(id);
                 });
@@ -226,7 +226,7 @@ namespace PnP.Core.Test.SharePoint
 
                 var id = new Guid("fa6a1bcc-fb4b-446b-8460-f4de5f700000"); // fake
 
-                await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentOutOfRangeException>(async () =>
                 {
                     await web.Features.DisableAsync(id);
                 });

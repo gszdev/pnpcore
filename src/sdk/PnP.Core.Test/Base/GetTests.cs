@@ -53,14 +53,17 @@ namespace PnP.Core.Test.Base
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ClientException))]
+        //[ExpectedException(typeof(ClientException))]
         public async Task GetSingleBadPropertyViaRest()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ClientException>(async () =>
             {
-                await context.Web.GetAsync(p => p.RootFolder.ServerRelativeUrl);
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    await context.Web.GetAsync(p => p.RootFolder.ServerRelativeUrl);
+                }
+            });
         }
 
         [TestMethod]
@@ -1070,16 +1073,19 @@ namespace PnP.Core.Test.Base
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ClientException))]
+        //[ExpectedException(typeof(ClientException))]
         public async Task LoadTeamPropertiesWithExpandExceptionViaGraph()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ClientException>(async () =>
             {
-                // Expand for an expandable property using a property that depends it's own graph query ==> 
-                // Not supported in Graph
-                var team = await context.Team.GetAsync(p => p.PrimaryChannel.QueryProperties(p => p.DisplayName, p => p.Messages));
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    // Expand for an expandable property using a property that depends it's own graph query ==> 
+                    // Not supported in Graph
+                    var team = await context.Team.GetAsync(p => p.PrimaryChannel.QueryProperties(p => p.DisplayName, p => p.Messages));
+                }
+            });
         }
 
         [TestMethod]
@@ -1104,16 +1110,19 @@ namespace PnP.Core.Test.Base
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ClientException))]
+        //[ExpectedException(typeof(ClientException))]
         public async Task LoadTeamPropertiesRecursiveViaGraph()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ClientException>(async () =>
             {
-                await context.Team.GetAsync(
-                    p => p.Channels.QueryProperties(
-                        p => p.Messages.QueryProperties(p => p.Body)));
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    await context.Team.GetAsync(
+                        p => p.Channels.QueryProperties(
+                            p => p.Messages.QueryProperties(p => p.Body)));
+                }
+            });
         }
 
 

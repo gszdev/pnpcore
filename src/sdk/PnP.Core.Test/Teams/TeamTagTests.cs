@@ -54,8 +54,8 @@ namespace PnP.Core.Test.Teams
                 var addedTag = await team.Tags.AddAsync(teamTagOptions);
 
                 Assert.IsNotNull(addedTag);
-                Assert.AreEqual(addedTag.DisplayName, "PnP Tag");
-                Assert.AreEqual(addedTag.MemberCount, 1);
+                Assert.AreEqual("PnP Tag", addedTag.DisplayName);
+                Assert.AreEqual(1, addedTag.MemberCount);
                 await addedTag.DeleteAsync();
             }
         }
@@ -90,8 +90,8 @@ namespace PnP.Core.Test.Teams
                 var addedTag = await team.Tags.AddAsync(teamTagOptions);
 
                 Assert.IsNotNull(addedTag);
-                Assert.AreEqual(addedTag.DisplayName, "PnP Tag");
-                Assert.AreEqual(addedTag.MemberCount, 2);
+                Assert.AreEqual("PnP Tag", addedTag.DisplayName);
+                Assert.AreEqual(2, addedTag.MemberCount);
                 await addedTag.DeleteAsync();
             }
         }
@@ -119,7 +119,7 @@ namespace PnP.Core.Test.Teams
                 };
 
                 var addedTag = await team.Tags.AddAsync(teamTagOptions);
-                Assert.AreEqual(addedTag.DisplayName, "PnP Tag");
+                Assert.AreEqual("PnP Tag", addedTag.DisplayName);
 
                 addedTag.DisplayName = "PnP Tag - Updated";
                 await addedTag.UpdateAsync();
@@ -127,7 +127,7 @@ namespace PnP.Core.Test.Teams
                 await context.Team.LoadAsync(y => y.Tags);
                 var updatedTag = context.Team.Tags.FirstOrDefault(y => y.Id == addedTag.Id);
                 Assert.IsNotNull(updatedTag);
-                Assert.AreEqual(updatedTag.DisplayName, "PnP Tag - Updated");
+                Assert.AreEqual("PnP Tag - Updated", updatedTag.DisplayName);
 
                 await addedTag.DeleteAsync();
             }

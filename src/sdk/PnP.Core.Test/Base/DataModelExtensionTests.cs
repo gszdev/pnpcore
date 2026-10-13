@@ -2,6 +2,7 @@
 using PnP.Core.Model;
 using PnP.Core.QueryModel;
 using PnP.Core.Test.Utilities;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -72,14 +73,17 @@ namespace PnP.Core.Test.Base
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ClientException))]
+        //[ExpectedException(typeof(ClientException))]
         public async Task EnsurePropertiesBadLamda()
         {
-            //TestCommon.Instance.Mocking = false;
-            using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+            await Assert.ThrowsExactlyAsync<ClientException>(async () =>
             {
-                await context.Web.EnsurePropertiesAsync(p => p.RootFolder.ServerRelativeUrl);
-            }
+                //TestCommon.Instance.Mocking = false;
+                using (var context = await TestCommon.Instance.GetContextAsync(TestCommon.TestSite))
+                {
+                    await context.Web.EnsurePropertiesAsync(p => p.RootFolder.ServerRelativeUrl);
+                }
+            });
         }
 
         [TestMethod]

@@ -151,7 +151,7 @@ namespace PnP.Core.Test.Me
             {
                 MailOptions mailOptions = null;
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     await context.Me.SendMailAsync(mailOptions);
                 });
@@ -162,21 +162,21 @@ namespace PnP.Core.Test.Me
                     UsingApplicationPermissions = false
                 };
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     await context.Me.SendMailAsync(mailOptions);
                 });
 
                 mailOptions.Message = new MessageOptions();
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
                 {
                     await context.Me.SendMailAsync(mailOptions);
                 });
 
                 mailOptions.Message.Body = "This is a mail body";
 
-                await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+                await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
                 {
                     await context.Me.SendMailAsync(mailOptions);
                 });
@@ -202,7 +202,7 @@ namespace PnP.Core.Test.Me
                     UsingApplicationPermissions = false
                 };
 
-                await Assert.ThrowsExceptionAsync<MicrosoftGraphServiceException>(async () =>
+                await Assert.ThrowsExactlyAsync<MicrosoftGraphServiceException>(async () =>
                 {
                     await graphUser.SendMailAsync(mailOptions);
                 });
@@ -225,7 +225,7 @@ namespace PnP.Core.Test.Me
                         UsingApplicationPermissions = true
                     };
 
-                    await Assert.ThrowsExceptionAsync<MicrosoftGraphServiceException>(async () =>
+                    await Assert.ThrowsExactlyAsync<MicrosoftGraphServiceException>(async () =>
                     {
                         await context.Me.SendMailAsync(mailOptions);
                     });

@@ -572,7 +572,7 @@ namespace PnP.Core.Test.SharePoint
                 Assert.IsTrue(addedField.Required);
                 Assert.IsTrue(addedField.AllowDisplay);
                 Assert.IsFalse(addedField.AllowMultipleValues);
-                Assert.AreEqual(addedField.SelectionMode, FieldUserSelectionMode.PeopleAndGroups);
+                Assert.AreEqual(FieldUserSelectionMode.PeopleAndGroups, addedField.SelectionMode);
                 // TODO Must be tested when support for SharePoint groups is implemented
                 //Assert.AreEqual(addedField.SelectionGroup, 1);
 
