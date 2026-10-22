@@ -1,6 +1,7 @@
 ﻿using PnP.Core.Model;
 using PnP.Core.Model.SharePoint;
 using PnP.Core.QueryModel;
+using PnP.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -629,9 +630,11 @@ namespace PnP.Core.Services
             // Store the SharePointType 
             if (!targetMetadataObject.Metadata.ContainsKey(PnPConstants.MetaDataType) && !string.IsNullOrEmpty(entity.SharePointType))
             {
-                if (string.Equals(entity.SharePointType, "SP.Field", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(entity.SharePointType, "SP.Field", StringComparison.OrdinalIgnoreCase)
+                    && contextAwareObject is Field field 
+                    && !string.IsNullOrEmpty(field.TypeAsString)
+                    && FieldTypeMap.TryGetFieldEntityType(field.TypeAsString, out var targetFieldMetadataType))
                 {
-                    string targetFieldMetadataType = TryToGetConcretFieldMetadataType(contextAwareObject, entity);
                     targetMetadataObject.Metadata.Add(PnPConstants.MetaDataType, targetFieldMetadataType);
                 }
                 else
@@ -671,88 +674,6 @@ namespace PnP.Core.Services
 
             // Additional metadata population to enable the transition from Rest to Graph
             await targetMetadataObject.SetRestToGraphMetadataAsync().ConfigureAwait(false);
-        }
-
-        private static string TryToGetConcretFieldMetadataType(IDataModelWithContext contextAwareObject, EntityInfo entity)
-        {
-            var targetFieldMetadataType = entity.SharePointType;
-
-            if (contextAwareObject is Field field && !string.IsNullOrEmpty(field.TypeAsString))
-            {
-                switch (field.TypeAsString)
-                {
-                    case "Note":
-                        targetFieldMetadataType = "SP.FieldMultiLineText";
-                        break;
-                    case "Choice":
-                        targetFieldMetadataType = "SP.FieldChoice";
-                        break;
-                    case "MultiChoice":
-                        targetFieldMetadataType = "SP.FieldMultiChoice";
-                        break;
-                    case "Number":
-                        targetFieldMetadataType = "SP.FieldNumber";
-                        break;
-                    case "Currency":
-                        targetFieldMetadataType = "SP.FieldCurrency";
-                        break;
-                    case "DateTime":
-                        targetFieldMetadataType = "SP.FieldDateTime";
-                        break;
-                    case "Integer":
-                        targetFieldMetadataType = "SP.FieldNumber";
-                        break;
-                    case "Lookup":
-                        targetFieldMetadataType = "SP.FieldLookup";
-                        break;
-                    case "LookupMulti":
-                        targetFieldMetadataType = "SP.FieldLookup";
-                        break;
-                    case "User":
-                        targetFieldMetadataType = "SP.FieldUser";
-                        break;
-                    case "UserMulti":
-                        targetFieldMetadataType = "SP.FieldUser";
-                        break;
-                    case "URL":
-                        targetFieldMetadataType = "SP.FieldUrl";
-                        break;
-                    case "Calculated":
-                        targetFieldMetadataType = "SP.FieldCalculated";
-                        break;
-                    case "TaxonomyFieldType":
-                        targetFieldMetadataType = "SP.Taxonomy.TaxonomyField";
-                        break;
-                    case "TaxonomyFieldTypeMulti":
-                        targetFieldMetadataType = "SP.Taxonomy.TaxonomyField";
-                        break;
-                    case "ContentTypeId":
-                        targetFieldMetadataType = "SP.FieldContentTypeId";
-                        break;
-                    case "Guid":
-                        targetFieldMetadataType = "SP.FieldGuid";
-                        break;
-
-                    //case "File":
-                    //    targetFieldMetadataType = "SP.Field";
-                    //    break;
-                    //case "Attachments":
-                    //    targetFieldMetadataType = "SP.Field";
-                    //    break;
-                    //case "Boolean":
-                    //    targetFieldMetadataType = "SP.Field";
-                    //    break;
-
-                    case "Computed":
-                        targetFieldMetadataType = "SP.FieldComputed";
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            return targetFieldMetadataType;
         }
 
         /// <summary>

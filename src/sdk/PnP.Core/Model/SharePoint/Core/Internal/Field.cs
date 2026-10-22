@@ -43,6 +43,8 @@ namespace PnP.Core.Model.SharePoint
                     }
                 }
 
+                RemoveMetadata(api);
+
                 return api;
             };
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
@@ -55,8 +57,8 @@ namespace PnP.Core.Model.SharePoint
                 if (IsContentTypeHub())
                 {
                     var request = ContentTypeHub.SwitchToContentTypeHubUrl(PnPContext.Uri, api.ApiCall.Request);
-                    api.ApiCall = new ApiCall(request, api.ApiCall.Type, api.ApiCall.JsonBody, api.ApiCall.ReceivingProperty);
-                } 
+                    api.ApiCall = new ApiCall(request, api.ApiCall.Type, api.ApiCall.JsonBody, api.ApiCall.ReceivingProperty);                    
+                }
                 else if (EntityManager.GetClassInfo(GetType(), this).SharePointTarget == typeof(ContentType))
                 {
                     if (IsContentTypeHubFromParent())
@@ -66,7 +68,8 @@ namespace PnP.Core.Model.SharePoint
                     }
                 }
 
-                
+                RemoveMetadata(api);
+
                 return api;
             };
 
@@ -91,6 +94,25 @@ namespace PnP.Core.Model.SharePoint
 
                 return api;
             };
+        }
+
+        private static void RemoveMetadata(ApiCallRequest api)
+        {
+            var body = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(api.ApiCall.JsonBody);
+            if (body != null && body.Remove("__metadata"))
+            {
+                var newCall = new ApiCall(api.ApiCall.Request, api.ApiCall.Type,
+                                          JsonSerializer.Serialize(body), api.ApiCall.ReceivingProperty)
+                {
+                    Commit = api.ApiCall.Commit,
+                    AddedViaBatchMethod = api.ApiCall.AddedViaBatchMethod,
+                    Headers = new Dictionary<string, string>
+                    {
+                        ["Content-Type"] = "application/json;odata=nometadata"
+                    }
+                };
+                api.ApiCall = newCall;
+            }
         }
         #endregion
 
