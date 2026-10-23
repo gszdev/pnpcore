@@ -24,14 +24,19 @@ namespace PnP.Core.Utilities
                 ["Currency"] = "SP.FieldCurrency",
                 ["DateTime"] = "SP.FieldDateTime",
                 ["Integer"] = "SP.FieldNumber",
+
                 ["Lookup"] = "SP.FieldLookup",
                 ["LookupMulti"] = "SP.FieldLookup",
+
                 ["User"] = "SP.FieldUser",
                 ["UserMulti"] = "SP.FieldUser",
+
                 ["URL"] = "SP.FieldUrl",
                 ["Calculated"] = "SP.FieldCalculated",
+
                 ["TaxonomyFieldType"] = "SP.Taxonomy.TaxonomyField",
                 ["TaxonomyFieldTypeMulti"] = "SP.Taxonomy.TaxonomyField",
+
                 ["ContentTypeId"] = "SP.FieldContentTypeId",
                 ["Guid"] = "SP.FieldGuid",
                 ["Computed"] = "SP.FieldComputed",

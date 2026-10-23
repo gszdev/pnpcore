@@ -630,17 +630,19 @@ namespace PnP.Core.Services
             // Store the SharePointType 
             if (!targetMetadataObject.Metadata.ContainsKey(PnPConstants.MetaDataType) && !string.IsNullOrEmpty(entity.SharePointType))
             {
-                if (string.Equals(entity.SharePointType, "SP.Field", StringComparison.OrdinalIgnoreCase)
-                    && contextAwareObject is Field field 
-                    && !string.IsNullOrEmpty(field.TypeAsString)
-                    && FieldTypeMap.TryGetFieldEntityType(field.TypeAsString, out var targetFieldMetadataType))
-                {
-                    targetMetadataObject.Metadata.Add(PnPConstants.MetaDataType, targetFieldMetadataType);
-                }
-                else
-                {
-                    targetMetadataObject.Metadata.Add(PnPConstants.MetaDataType, entity.SharePointType);
-                }
+                targetMetadataObject.Metadata.Add(PnPConstants.MetaDataType, entity.SharePointType);
+
+                //if (string.Equals(entity.SharePointType, "SP.Field", StringComparison.OrdinalIgnoreCase)
+                //    && contextAwareObject is Field field 
+                //    && !string.IsNullOrEmpty(field.TypeAsString)
+                //    && FieldTypeMap.TryGetFieldEntityType(field.TypeAsString, out var targetFieldMetadataType))
+                //{
+                //    targetMetadataObject.Metadata.Add(PnPConstants.MetaDataType, targetFieldMetadataType);
+                //}
+                //else
+                //{
+                //    targetMetadataObject.Metadata.Add(PnPConstants.MetaDataType, entity.SharePointType);
+                //}
             }
 
             // Store graph ID for transition to graph when needed. No point in doing this when we've disabled graph first behaviour or when the entity does not support rest + graph
