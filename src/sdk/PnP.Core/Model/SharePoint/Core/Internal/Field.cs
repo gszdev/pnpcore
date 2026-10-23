@@ -30,7 +30,7 @@ namespace PnP.Core.Model.SharePoint
             {
                 if (IsPropertyAvailable(x => x.TypeAsString)
                     && !string.IsNullOrEmpty(TypeAsString)
-                    && FieldTypeMap.TryGetFieldEntityType(TypeAsString, out var targetFieldMetadataType))
+                    && FieldTypeAsStringMap.TryGetFieldEntityType(TypeAsString, out var targetFieldMetadataType))
                 {
                     if (!Metadata.ContainsKey(PnPConstants.MetaDataType))
                     {

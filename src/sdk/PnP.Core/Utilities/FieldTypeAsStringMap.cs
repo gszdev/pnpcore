@@ -9,37 +9,68 @@ using System.Text;
 
 namespace PnP.Core.Utilities
 {
-    internal static class FieldTypeMap
+    internal static class FieldTypeAsStringMap
     {
         private static readonly Lazy<IDictionary<string, string>> mappings = new Lazy<IDictionary<string, string>>(BuildMappings);
 
         private static IDictionary<string, string> BuildMappings()
         {
+
+            // CSOM FieldType Enum - https://learn.microsoft.com/en-us/dotnet/api/microsoft.sharepoint.client.fieldtype?view=sharepoint-csom#microsoft-sharepoint-client-fieldtype-geolocation
+            // JavaScript API - https://learn.microsoft.com/en-us/previous-versions/office/sharepoint-visio/jj246996(v=office.15)
+            // PnP.Core.Model.SharePoint.FieldType
+
             var mappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
+                //["Invalid"] = "",
+                ["Integer"] = "SP.FieldNumber",
+                ["Text"] = "SP.FieldText",
                 ["Note"] = "SP.FieldMultiLineText",
+                ["DateTime"] = "SP.FieldDateTime",
+                //["Counter"] = ""
                 ["Choice"] = "SP.FieldChoice",
-                ["MultiChoice"] = "SP.FieldMultiChoice",
+                ["Lookup"] = "SP.FieldLookup",
+                //["Boolean"] = ""
                 ["Number"] = "SP.FieldNumber",
                 ["Currency"] = "SP.FieldCurrency",
-                ["DateTime"] = "SP.FieldDateTime",
-                ["Integer"] = "SP.FieldNumber",
-
-                ["Lookup"] = "SP.FieldLookup",
-                ["LookupMulti"] = "SP.FieldLookup",
-
-                ["User"] = "SP.FieldUser",
-                ["UserMulti"] = "SP.FieldUser",
-
                 ["URL"] = "SP.FieldUrl",
+                ["Computed"] = "SP.FieldComputed",
+                //["Threading"] = "",
+                ["Guid"] = "SP.FieldGuid",
+                ["MultiChoice"] = "SP.FieldMultiChoice",
+                //["GridChoice"] = "",
                 ["Calculated"] = "SP.FieldCalculated",
+                //["File"] = ""
+                //["Attachments"] = "",
+                ["User"] = "SP.FieldUser",
+                //["Recurrence"] = ""
+                //["CrossProjectLink"] = ""
+                //["ModStat"] = ""
+                //["Error"] = ""
+                ["ContentTypeId"] = "SP.FieldContentTypeId",
+                //["PageSeparator"] = ""
+                //["ThreadIndex"] = ""
+                //["WorkflowStatus"] = ""
+                //["AllDayEvent"] = ""
+                //["WorkflowEventType"] = ""
+                ["Geolocation"] = "SP.FieldGeolocation",
+                //["OutcomeChoice"] = ""
+                //["MaxItems"] = ""
 
+
+                ["LookupMulti"] = "SP.FieldLookup",
+                ["UserMulti"] = "SP.FieldUser",
                 ["TaxonomyFieldType"] = "SP.Taxonomy.TaxonomyField",
                 ["TaxonomyFieldTypeMulti"] = "SP.Taxonomy.TaxonomyField",
 
-                ["ContentTypeId"] = "SP.FieldContentTypeId",
-                ["Guid"] = "SP.FieldGuid",
-                ["Computed"] = "SP.FieldComputed",
+                //["HTML"] = "",
+                //["Overbook"] = "",
+                //["ContactInfo"] = "",
+
+                //SP.FieldRatingScale
+
+                //["Location"] = "",
+                //["Thumbnail"] = "",
             };
 
             /*
